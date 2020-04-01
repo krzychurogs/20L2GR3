@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #ADD8E6;" VBox.vgrow="ALWAYS">
+      <children>
+            <CheckBox fx:id="waterBox" layoutX="57.0" layoutY="86.0" mnemonicParsing="false" text="Woda mineralna" />
+            <CheckBox fx:id="colaBox" layoutX="57.0" layoutY="138.0" mnemonicParsing="false" text="Coca-Cola" />
+            <CheckBox fx:id="beerBox" layoutX="58.0" layoutY="182.0" mnemonicParsing="false" text="Piwo" />
+            <CheckBox fx:id="wineBox" layoutX="58.0" layoutY="229.0" mnemonicParsing="false" text="Wino" />
+            <Label layoutX="282.0" layoutY="14.0" text="Barek">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+            </Label>
+            <Button fx:id="confirmButton" layoutX="283.0" layoutY="302.0" mnemonicParsing="false" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Potwierdź" />
+            <CheckBox fx:id="champagneBox" layoutX="363.0" layoutY="86.0" mnemonicParsing="false" text="Szampan" />
+            <CheckBox fx:id="fantaBox" layoutX="362.0" layoutY="138.0" mnemonicParsing="false" text="Fanta" />
+            <CheckBox fx:id="teaBox" layoutX="361.0" layoutY="182.0" mnemonicParsing="false" text="Ice Tea" />
+            <CheckBox fx:id="whiskeyBox" layoutX="362.0" layoutY="229.0" mnemonicParsing="false" text="Whiskey" />
+            <Label layoutX="69.0" layoutY="345.0" text="*Proszę zaznaczyć napoje które zostały wykupione" textFill="#e80e0e" />
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
