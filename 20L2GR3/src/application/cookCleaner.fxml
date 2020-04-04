@@ -2,18 +2,18 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CookCleanerController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #ADD8E6;" VBox.vgrow="ALWAYS">
          <children>
-            <ListView fx:id="tasksListView" layoutX="81.0" layoutY="50.0" prefHeight="298.0" prefWidth="386.0" style="-fx-background-radius: 10;" />
-            <ScrollBar fx:id="tasksScrollBar" layoutX="460.0" layoutY="50.0" orientation="VERTICAL" prefHeight="298.0" prefWidth="0.0" />
+            <ScrollBar fx:id="tasksScrollBar" layoutX="480.0" layoutY="54.0" orientation="VERTICAL" prefHeight="298.0" prefWidth="0.0" />
             <Label layoutX="81.0" layoutY="14.0" prefHeight="26.0" prefWidth="72.0" text="Zadania:">
                <font>
                   <Font name="System Bold" size="17.0" />
@@ -22,6 +22,15 @@
             <Button fx:id="confirmButton" layoutX="498.0" layoutY="47.0" mnemonicParsing="false" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Zatwierdź wykonanie" />
             <Button fx:id="logoutButton" layoutX="495.0" layoutY="323.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Wyloguj" />
             <Button fx:id="cancelButton" layoutX="498.0" layoutY="95.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Anuluj zadanie" />
+            <TableView id="taskTableView" fx:id="taskTableView" layoutX="67.0" layoutY="54.0" prefHeight="292.0" prefWidth="413.0" style="-fx-background-radius: 10;">
+              <columns>
+                <TableColumn id="idColumn" fx:id="idColumn" prefWidth="58.4000244140625" text="id" />
+                <TableColumn id="userColumn" fx:id="userColumn" prefWidth="105.5999755859375" text="użytkownik" />
+                  <TableColumn id="roomColumn" fx:id="roomColumn" prefWidth="62.4000244140625" text="pokoje" />
+                  <TableColumn id="serviceColumn" fx:id="serviceColumn" prefWidth="75.0" text="usługa" />
+                  <TableColumn id="descriptionColumn" fx:id="descriptionColumn" prefWidth="109.60000000000002" text="opis" />
+              </columns>
+            </TableView>
          </children>
     </AnchorPane>
   </children>
