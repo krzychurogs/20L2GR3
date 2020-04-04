@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #ADD8E6;" VBox.vgrow="ALWAYS">
+            <children>
+                <Label layoutX="274.0" layoutY="14.0" prefHeight="26.0" prefWidth="72.0" text="Manager">
+                    <font>
+                        <Font name="System Bold" size="17.0" />
+                    </font>
+                </Label>
+            <ListView editable="true" layoutX="33.0" layoutY="52.0" prefHeight="272.0" prefWidth="149.0" style="-fx-background-color: #90EE90;" />
+            <TextField alignment="CENTER" layoutX="33.0" layoutY="54.0" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Rachunki klientów" />
+            <Button fx:id="editAccountButton" layoutX="67.0" layoutY="336.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="82.0" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Otwórz" />
+            <BubbleChart layoutX="228.0" layoutY="52.0" prefHeight="178.0" prefWidth="308.0" title="jakieś statystyki">
+              <xAxis>
+                <NumberAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BubbleChart>
+            <Button fx:id="logoutButton" layoutX="502.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="127.0" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Wyloguj" />
+            <Pane layoutX="245.0" layoutY="242.0" prefHeight="144.0" prefWidth="291.0">
+               <children>
+                  <Button layoutX="99.0" layoutY="99.0" mnemonicParsing="false" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Generuj raport" />
+                  <DatePicker layoutX="169.0" layoutY="60.0" prefHeight="25.0" prefWidth="108.0" promptText="do" />
+                  <DatePicker layoutX="14.0" layoutY="60.0" prefHeight="25.0" prefWidth="108.0" promptText="od" />
+                  <TextField layoutX="71.0" layoutY="14.0" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Generowanie raportu" />
+               </children>
+            </Pane>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
