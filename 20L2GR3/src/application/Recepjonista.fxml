@@ -11,11 +11,14 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.RecepjonistaController">
    <children>
-      <TableView fx:id="wolnepokoje" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="295.0" style="-fx-background-color: #90EE90;">
+      <TableView fx:id="wolnepokoje" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="235.0" style="-fx-background-color: #90EE90;">
         <columns>
-          <TableColumn prefWidth="75.0" text="Nr_Pokoju" />
-          <TableColumn prefWidth="197.0" text="Liczba Osób na pokój" />
-        </columns>
+                <TableColumn id="idRoomf" fx:id="idRoomf" prefWidth="50" text="Id" />
+                <TableColumn id="number_of_seatsf" fx:id="number_of_seatsf" prefWidth="80.0" text="Miejsca" />
+                <TableColumn id="room_numbefr" fx:id="room_numberf" prefWidth="62.4000244140625" text="Nr_Pokoju" />
+                <TableColumn id="lvlf" fx:id="lvlf" prefWidth="70.0" text="Poziom" />
+               
+       </columns>
       </TableView>
       <Label layoutX="192.0" layoutY="22.0" style="-fx-background-color: #DC143C;" text="Zalogowany recepjonista:">
          <font>
@@ -24,12 +27,14 @@
       <Button layoutX="506.0" layoutY="23.0" mnemonicParsing="false" onAction="#wyloguj" style="-fx-font-weight: bold; -fx-background-color: #90EE90;" text="Wyloguj sie" />
       
       <CheckBox fx:id="zmiana" layoutX="367.0" layoutY="61.0" mnemonicParsing="false" onAction="#zmien" style="-fx-background-color: #90EE90;" text="Zajęte Pokoje" />
-      <TableView fx:id="zajetepokoje" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="295.0" style="-fx-background-color: #90EE90;">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Nr_Pokoju" />
-          <TableColumn prefWidth="90.0" text="Liczba_Osob" />
-           <TableColumn prefWidth="129.0" text="Data_konca_rezerwacji" />
-        </columns>
+      <TableView fx:id="zajetepokoje" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #90EE90;">
+		<columns>
+                <TableColumn id="idRoom" fx:id="idRoom" prefWidth="50" text="Id" />
+                <TableColumn id="number_of_seats" fx:id="number_of_seats" prefWidth="80.0" text="Miejsca" />
+                  <TableColumn id="room_number" fx:id="room_number" prefWidth="62.4000244140625" text="Nr_Pokoju" />
+                  <TableColumn id="lvl" fx:id="lvl" prefWidth="70.0" text="Poziom" />
+                  <TableColumn id="dates" fx:id="dates" prefWidth="160.0" text="Data_zabukowania" />
+              </columns>
       </TableView>
       <TextArea layoutX="14.0" layoutY="117.0" prefHeight="200.0" prefWidth="158.0" />
       <Label layoutX="29.0" layoutY="87.0" prefHeight="17.0" prefWidth="128.0" text="Zamowienia dla kuchni" />
