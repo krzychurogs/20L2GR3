@@ -1,0 +1,24 @@
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        
+
+<hibernate-mapping>
+    <class name="application.Rooms" table="pokoj">
+        <id name="id" type="int">
+            <column name="ID" />
+            <generator class="assigned" />
+        </id>
+        <property name="number_of_seats" type="int">
+            <column name="NUMBER_OF_SEATS" />
+        </property>
+        <property name="room_number" type="int">
+            <column name="ROOM_NUMBER" />
+        </property>
+        <property name="lvl" type="java.lang.String">
+            <column name="LVL" />
+        </property>
+      
+    </class>
+</hibernate-mapping>

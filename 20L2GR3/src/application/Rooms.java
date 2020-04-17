@@ -2,6 +2,13 @@ package application;
 
 import java.sql.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table(name = "POKOJ")
 public class Rooms {
 	public Rooms(int id, int number_of_seats, int room_number, String lvl) {
 		super();
@@ -10,10 +17,16 @@ public class Rooms {
 		this.room_number = room_number;
 		this.lvl = lvl;
 	}
+ @Id @GeneratedValue
+@Column(name = "id_pokoju")
 	private int id;
+ @Column(name = "liczba_miejsc")
 	private int number_of_seats;
+ @Column(name = "nr")
 	private int room_number;
+ @Column(name = "lvl")
 	private String lvl;
+ 
 	private java.util.Date data;
 	
 	
