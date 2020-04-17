@@ -8,7 +8,6 @@ package application.model;
 
 public class Gosc {
 
-//jd
 
     private long id;
     private String imie;
