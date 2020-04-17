@@ -131,7 +131,7 @@ public class Main extends Application {
         Main hbTest = new Main();
         hbTest.insertUser(1,412,"wysoko",4);
         
-        
+        System.out.print("test");
 		try {
 			
 			Button btnButton=new Button();
