@@ -17,8 +17,6 @@ import javafx.stage.Stage;
 
 public class CookCleanerController {
 	@FXML
-	//jd
-
 	private Button confirmButton;
 	
 	@FXML
