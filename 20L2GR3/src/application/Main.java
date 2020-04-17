@@ -30,6 +30,7 @@ import javafx.scene.layout.Pane;
 import org.hibernate.service.ServiceRegistry;
 
 public class Main extends Application {
+	//pr
 	private static SessionFactory factory;
     private static ServiceRegistry serviceRegistry;
 	@FXML 
