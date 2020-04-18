@@ -20,24 +20,24 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
-public class RecepjonistaController implements Initializable{
+public class ReceptionistController implements Initializable{
 
 	 @FXML
-	    private CheckBox zmiana;
+	    private CheckBox change;
 	 @FXML 
 		private Pane pane;
 	    @FXML
-	    private TableView<Rooms> zajetepokoje;
+	    private TableView<Rooms> takenRooms;
 	    @FXML
-	    private TableView<Rooms> wolnepokoje;
+	    private TableView<Rooms> freeRooms;
 		@FXML
 		private TableColumn<Rooms,Integer> idRoom;
 		
 		@FXML
-		private TableColumn<Rooms,Integer> number_of_seats;
+		private TableColumn<Rooms,Integer> numberOfSeats;
 		
 		@FXML
-		private TableColumn <Rooms,Integer>room_number;
+		private TableColumn <Rooms,Integer>roomNumber;
 				
 		@FXML
 		private TableColumn<Rooms,String> lvl;
@@ -47,13 +47,13 @@ public class RecepjonistaController implements Initializable{
 		private TableColumn<Rooms,Integer> idRoomf;
 		
 		@FXML
-		private TableColumn<Rooms,Integer> number_of_seatsf;
+		private TableColumn<Rooms,Integer> numberOfSeatsF;
 		
 		@FXML
-		private TableColumn <Rooms,Integer>room_numberf;
+		private TableColumn <Rooms,Integer>roomNumberF;
 				
 		@FXML
-		private TableColumn<Rooms,String> lvlf;
+		private TableColumn<Rooms,String> lvlF;
 		
 		@FXML
 		private TableColumn<Rooms,Date> dates;
@@ -61,24 +61,24 @@ public class RecepjonistaController implements Initializable{
 		
 		public ObservableList <Rooms> list;
 		public ObservableList <Rooms> list1;
-	 @FXML
+		@FXML
 	    void zmien(ActionEvent event) throws Exception {
 	    	
-		 boolean isSelected = zmiana.isSelected();
+		 boolean isSelected = change.isSelected();
 		 if(isSelected == true)
 		 {	 
 			 
-			 zajetepokoje.setVisible(true);
-			 wolnepokoje.setVisible(false);
-			 zmiana.setText("Wolne Pokoje");
+			 takenRooms.setVisible(true);
+			 freeRooms.setVisible(false);
+			 change.setText("Wolne Pokoje");
 		 }
 		 if(isSelected == false)
 		 {
 			 
 			
-			 zajetepokoje.setVisible(false);
-			 wolnepokoje.setVisible(true);
-			 zmiana.setText("Zajête Pokoje");
+			 takenRooms.setVisible(false);
+			 freeRooms.setVisible(true);
+			 change.setText("Zajête Pokoje");
 		 }
 	    	
 	    }
@@ -103,27 +103,27 @@ public class RecepjonistaController implements Initializable{
 
 		 Date data= new Date();
 		 data.getTime();	
-	     Rooms test = new Rooms(1,2,312,"High",data);
+	     Rooms test = new Rooms(1,2,312,"High");
 	     Rooms test1 = new Rooms(2,2,314,"Medium");
 	     list.add(test);
 	     list1.add(test1);
 	    	
 	    	idRoom.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("id"));
-	    	number_of_seats.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));
-	    	room_number.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("room_number"));
+	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));
+	    	roomNumber.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("room_number"));
 	    	lvl.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
 	    	dates.setCellValueFactory(new PropertyValueFactory<Rooms, Date>("data"));
 	    	
 	    	
 	    	idRoomf.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("id"));
-	    	number_of_seatsf.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));
-	    	room_numberf.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("room_number"));
-	    	lvlf.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
+	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));
+	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("room_number"));
+	    	lvlF.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
 	    	
 	    	
-	    	zajetepokoje.setItems(list);	
-	    	wolnepokoje.setItems(list1);
-	    	zajetepokoje.setVisible(false);
+	    	takenRooms.setItems(list);	
+	    	freeRooms.setItems(list1);
+	    	takenRooms.setVisible(false);
 	    	
 	    	
 	    	

@@ -30,7 +30,7 @@ import javafx.scene.layout.Pane;
 import org.hibernate.service.ServiceRegistry;
 
 public class Main extends Application {
-	//pr
+	
 	private static SessionFactory factory;
     private static ServiceRegistry serviceRegistry;
 	@FXML 
@@ -44,10 +44,10 @@ public class Main extends Application {
 	public void Login(ActionEvent event)throws Exception
 	
 	{
-		if(loginfield.getText().equals("recepjonista") && passwordfield.getText().equals("pass"))
+		if(loginfield.getText().equals("recepcjonista") && passwordfield.getText().equals("pass"))
 		{
 			
-			Pane panes = FXMLLoader.load(this.getClass().getResource("Recepjonista.fxml"));
+			Pane panes = FXMLLoader.load(this.getClass().getResource("Receptionist.fxml"));
 	        pane.getChildren().setAll(panes);
 			
 		}
@@ -133,23 +133,8 @@ public class Main extends Application {
         hbTest.insertUser(1,412,"wysoko",4);
         
         System.out.print("test");
-		try {
-			
-			Button btnButton=new Button();
-			Connection con=getconnection();
-			String queryimie = " select nr from pokoj";
-			 Statement stm=con.createStatement();
-			 
-			 ResultSet result=stm.executeQuery(queryimie);
-			 while(result.next())
-			 {
-			 System.out.print(result.getString("nr"));
-			 
-			 }
-			
-			 
-			
-			 Parent root=FXMLLoader.load(getClass().getResource("Uzytkownik.fxml"));
+		try {	
+			 Parent root=FXMLLoader.load(getClass().getResource("Login.fxml"));
 			Scene scene = new Scene(root,600,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			

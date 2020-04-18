@@ -10,10 +10,10 @@
             <column name="ID" />
             <generator class="assigned" />
         </id>
-        <property name="number_of_seats" type="int">
+        <property name="numberOfSeats" type="int">
             <column name="NUMBER_OF_SEATS" />
         </property>
-        <property name="room_number" type="int">
+        <property name="roomNumber" type="int">
             <column name="ROOM_NUMBER" />
         </property>
         <property name="lvl" type="java.lang.String">

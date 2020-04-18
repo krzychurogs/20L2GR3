@@ -10,65 +10,64 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "POKOJ")
 public class Rooms {
-	public Rooms(int id, int number_of_seats, int room_number, String lvl) {
-		super();
-		this.id = id;
-		this.number_of_seats = number_of_seats;
-		this.room_number = room_number;
-		this.lvl = lvl;
-	}
  @Id @GeneratedValue
 @Column(name = "id_pokoju")
 	private int id;
  @Column(name = "liczba_miejsc")
-	private int number_of_seats;
+	private int numberOfSeats;
  @Column(name = "nr")
-	private int room_number;
+	private int roomNumber;
  @Column(name = "lvl")
 	private String lvl;
  
-	private java.util.Date data;
-	
-	
-	
-	public Rooms(int id, int number_of_seats, int room_number, String lvl, java.util.Date data) {
-		super();
-		this.id = id;
-		this.number_of_seats = number_of_seats;
-		this.room_number = room_number;
-		this.lvl = lvl;
-		this.data = data;
-	}
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getNumber_of_seats() {
-		return number_of_seats;
+
+	public int getNumberOfSeats() {
+		return numberOfSeats;
 	}
-	public void setNumber_of_seats(int number_of_seats) {
-		this.number_of_seats = number_of_seats;
+
+	public void setNumberOfSeats(int numberOfSeats) {
+		this.numberOfSeats = numberOfSeats;
 	}
-	public int getRoom_number() {
-		return room_number;
+
+	public int getRoomNumber() {
+		return roomNumber;
 	}
-	public void setRoom_number(int room_number) {
-		this.room_number = room_number;
+
+	public void setRoomNumber(int roomNumber) {
+		this.roomNumber = roomNumber;
 	}
+
 	public String getLvl() {
 		return lvl;
 	}
+
 	public void setLvl(String lvl) {
 		this.lvl = lvl;
 	}
-	public java.util.Date getData() {
-		return data;
+
+
+
+	public Rooms(int id, int numberOfSeats, int roomNumber, String lvl) {
+		super();
+		this.id = id;
+		this.numberOfSeats = numberOfSeats;
+		this.roomNumber = roomNumber;
+		this.lvl = lvl;
 	}
-	public void setData(Date data) {
-		this.data = data;
-	}
+	
+	
+	
+	
+	
+	
 	
 
 	
