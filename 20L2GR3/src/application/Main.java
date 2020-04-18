@@ -5,10 +5,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
 import javax.security.auth.login.LoginContext;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -42,97 +44,71 @@ public class Main extends Application {
 	private PasswordField passwordfield;
 	Pane content;
 	public void Login(ActionEvent event)throws Exception
-	
-	{
-		if(loginfield.getText().equals("recepcjonista") && passwordfield.getText().equals("pass"))
+	{	
+		SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
+		Session session=factory.openSession();
+		User loggedUser = null;
+		try {
+		session.beginTransaction();	
+		Query query = session.createQuery("from User u WHERE u.login=:username");
+		query.setParameter("username",loginfield.getText());
+		List<User>users = query.list();
+		if(users.isEmpty()==false)
+		loggedUser=users.get(0);
+		
+		session.getTransaction().commit();
+		
+		
+		}
+		finally {
+			
+		}
+		
+        
+		if(loggedUser!=null) {
+            
+		if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==1)
 		{
 			
 			Pane panes = FXMLLoader.load(this.getClass().getResource("Receptionist.fxml"));
 	        pane.getChildren().setAll(panes);
 			
 		}
-		else if(loginfield.getText().equals("kucharz") && passwordfield.getText().equals("pass"))
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==2)
 		{
 			
 			Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
 	        pane.getChildren().setAll(panes);
 			
 		}
-		else if(loginfield.getText().equals("manager") && passwordfield.getText().equals("pass"))
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==3)
 		{
 			
 			Pane panes = FXMLLoader.load(this.getClass().getResource("manager.fxml"));
 	        pane.getChildren().setAll(panes);
 			
 		}
-		else if(loginfield.getText().equals("admin") && passwordfield.getText().equals("pass"))
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==4)
 		{
 			
 			Pane panes = FXMLLoader.load(this.getClass().getResource("admin.fxml"));
 	        pane.getChildren().setAll(panes);
 			
 		}
-		else if(loginfield.getText().equals("konto") && passwordfield.getText().equals("pass"))
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==5)
 		{
 			
 			Pane panes = FXMLLoader.load(this.getClass().getResource("account.fxml"));
 	        pane.getChildren().setAll(panes);
 			
 		}
-		
-	}
-	
-	
-	public static Connection getconnection()throws Exception
-	{
-		try {
-			String url="jdbc:mysql://localhost:3306/hotel";
-			String user = "root";
-		     String password = "";
-		       Class.forName("com.mysql.cj.jdbc.Driver");
-		        Connection con=DriverManager.getConnection(url, user, password);
-		      	return con;
-			
-		} catch (Exception e) {
-			System.out.println(e);
 		}
-		return null;
 		
 	}
-    private int insertUser(int id, int nr,String lvl,int liczba_miejsc)
-    {
-        Session session = factory.openSession();
-        Transaction tx = null;
-        Integer userIdSaved = null;
-        try {
-            tx = session.beginTransaction();
-            Rooms u = new Rooms(id,nr,liczba_miejsc,lvl);
-            userIdSaved = (Integer) session.save(u);
-            tx.commit();
-        } catch(HibernateException ex) {
-            if(tx != null)
-                tx.rollback();
-            ex.printStackTrace();
-        } finally {
-            session.close();
-        }
-         
-        return userIdSaved;
-    }
-         
+	      
 	@Override
 	public void start(Stage primaryStage) {
-		Configuration config = new Configuration();
-        config.configure();
-        config.addAnnotatedClass(Rooms.class);
-        config.addResource("User.hbm.xml");
-        serviceRegistry = new StandardServiceRegistryBuilder().applySettings(config.getProperties()).build();
-        factory = config.buildSessionFactory(serviceRegistry);
-         
-        Main hbTest = new Main();
-        hbTest.insertUser(1,412,"wysoko",4);
-        
-        System.out.print("test");
+		
 		try {	
 			 Parent root=FXMLLoader.load(getClass().getResource("Login.fxml"));
 			Scene scene = new Scene(root,600,400);
@@ -144,13 +120,26 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		
+		
+		SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
+		Session session=factory.openSession();
+		try {
+		//User tempuser=new User(1,"user","12345",1);
+		//session.beginTransaction();
+			//session.save(tempuser);
+			//session.getTransaction().commit();
+		}
+		finally {
+			factory.close();
+		}
+		
+		
+		
+		
 	}
 	
 
 	public static void main(String[] args)  {
-		
-		
-		System.out.println("dziala");
 		launch(args);
 	}
 }

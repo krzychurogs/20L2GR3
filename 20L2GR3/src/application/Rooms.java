@@ -8,14 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
-@Table(name = "POKOJ")
+@Table(name = "room")
 public class Rooms {
  @Id @GeneratedValue
-@Column(name = "id_pokoju")
+@Column(name = "ID")
 	private int id;
- @Column(name = "liczba_miejsc")
+ @Column(name = "NUMBER_OF_SEATS")
 	private int numberOfSeats;
- @Column(name = "nr")
+ @Column(name = "ROOM_NUMBER")
 	private int roomNumber;
  @Column(name = "lvl")
 	private String lvl;
