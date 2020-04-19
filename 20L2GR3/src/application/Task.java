@@ -1,11 +1,32 @@
 package application;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "task")
 public class Task {
 	
+	@Id 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private int id;
+	
+	@Column(name = "user_id")
 	private int user;
+	
+	@Column(name = "room_number")
 	private int room;
+	
+	@Column(name = "service_id")
 	private int service;
+	
+	@Column(name = "description")
 	private String description;
 	
 	public Task(int id, int user, int room, int service, String description) {
@@ -16,6 +37,16 @@ public class Task {
 		this.description = description;
 	}
 	
+
+
+	public Task() {
+		this.id = 0;
+		this.user = 0;
+		this.room = 0;
+		this.service = 0;
+		this.description = "";
+	}
+
 
 
 	public int getId() {

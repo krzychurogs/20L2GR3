@@ -1,5 +1,15 @@
 package application;
 
+import java.util.List;
+import java.util.prefs.Preferences;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+import com.sun.jmx.snmp.tasks.TaskServer;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,7 +49,8 @@ public class CookCleanerController {
 	
 	public ObservableList <Task> list;
 	
-	
+	private String loggedUserName;
+	private String loggedId;
 	
 	
 	public CookCleanerController() 
@@ -49,11 +60,32 @@ public class CookCleanerController {
     @FXML
     private void initialize() 
     {
-    	list=FXCollections.observableArrayList();
-    	Task test = new Task(1,1,1,1,"Pizza");
-    	Task dwa = new Task(2,2,2,2,"Hamburger");
-    	list.add(test);
-    	list.add(dwa);
+    	Preferences userPreferences = Preferences.userRoot();
+    	loggedUserName = userPreferences.get("loggedUsername","");
+    	loggedId=userPreferences.get("loggedId","o");
+    	SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Task.class).buildSessionFactory();
+		Session session=factory.openSession();
+		list=FXCollections.observableArrayList();
+		try {
+		session.beginTransaction();	
+		Query query = session.createQuery("from Task t WHERE t.user=:userid");
+		query.setParameter("userid",Integer.parseInt(loggedId));
+		List<Task>tasks = query.list();		
+		session.getTransaction().commit();
+		
+		for(int i=0;i<tasks.size();i++) {
+			list.add(tasks.get(i));
+		}
+		
+		
+		}
+		finally {
+			factory.close();
+		}
+    	
+    	
+    	
+    	
     	idColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
     	userColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("user"));
     	roomColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("room"));

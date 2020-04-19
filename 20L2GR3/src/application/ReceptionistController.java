@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 public class ReceptionistController implements Initializable{
 
 	 @FXML
@@ -58,6 +59,7 @@ public class ReceptionistController implements Initializable{
 		@FXML
 		private TableColumn<Rooms,Date> dates;
 		
+		String loggedUserName;
 		
 		public ObservableList <Rooms> list;
 		public ObservableList <Rooms> list1;
@@ -101,6 +103,10 @@ public class ReceptionistController implements Initializable{
 		 list=FXCollections.observableArrayList();
 		 list1=FXCollections.observableArrayList();
 
+		 Preferences userPreferences = Preferences.userRoot();
+		 loggedUserName = userPreferences.get("logged","");
+		
+		 
 		 Date data= new Date();
 		 data.getTime();	
 	     Rooms test = new Rooms(1,2,312,"High");

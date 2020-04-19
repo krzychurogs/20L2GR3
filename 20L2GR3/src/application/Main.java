@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import javax.security.auth.login.LoginContext;
 
@@ -61,46 +62,63 @@ public class Main extends Application {
 		
 		}
 		finally {
-			
+			factory.close();
 		}
 		
         
 		if(loggedUser!=null) {
             
 		if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==1)
-		{
-			
+		{			
+			Preferences userPreferences = Preferences.userRoot();
+	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
+	        userPreferences.put("loggedUsername",loggedUser.login);
 			Pane panes = FXMLLoader.load(this.getClass().getResource("Receptionist.fxml"));
 	        pane.getChildren().setAll(panes);
+	        
 			
 		}
 		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==2)
 		{
 			
-			Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
-	        pane.getChildren().setAll(panes);
+			
+	        Preferences userPreferences = Preferences.userRoot();
+	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
+	        userPreferences.put("loggedUsername",loggedUser.login);
+	        Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
+			pane.getChildren().setAll(panes);
 			
 		}
 		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==3)
 		{
 			
+			Preferences userPreferences = Preferences.userRoot();
+	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
+	        userPreferences.put("loggedUsername",loggedUser.login);
 			Pane panes = FXMLLoader.load(this.getClass().getResource("manager.fxml"));
 	        pane.getChildren().setAll(panes);
+	        
 			
 		}
 		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==4)
 		{
-			
+			Preferences userPreferences = Preferences.userRoot();
+	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
+	        userPreferences.put("loggedUsername",loggedUser.login);
 			Pane panes = FXMLLoader.load(this.getClass().getResource("admin.fxml"));
 	        pane.getChildren().setAll(panes);
+	        
 			
 		}
 		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==5)
 		{
 			
+			Preferences userPreferences = Preferences.userRoot();
+	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
+	        userPreferences.put("loggedUsername",loggedUser.login);
 			Pane panes = FXMLLoader.load(this.getClass().getResource("account.fxml"));
 	        pane.getChildren().setAll(panes);
-			
+	     		
 		}
 		}
 		
