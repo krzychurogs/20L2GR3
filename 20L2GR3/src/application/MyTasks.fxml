@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" fx:id="AnchorPaneMain" prefHeight="670.0" prefWidth="850.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controll.MyTasksController">
+    <stylesheets>
+        <URL value="@/styles/myprojects.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane prefHeight="112.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Separator fx:id="separator" prefHeight="2.0" prefWidth="957.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+            <Text fill="#2b579a" strokeType="OUTSIDE" strokeWidth="0.0" text="Moje Zadania" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="30.0">
+               <font>
+                  <Font name="Segoe UI Semilight" size="48.0" />
+               </font>
+            </Text>
+         </children>
+      </AnchorPane>
+      <TableView fx:id="tableViewTasks" layoutX="5.0" layoutY="105.0" prefHeight="558.0" prefWidth="800.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="130.0">
+        <columns>
+          <TableColumn fx:id="tableColumnName" prefWidth="138.0" text="Nazwa " />
+          <TableColumn fx:id="tableColumnDescription" prefWidth="137.0" text="Opis" />
+            <TableColumn fx:id="tableColumnStatus" prefWidth="158.0" text="Status" />
+            <TableColumn fx:id="tableColumnTimeStart" prefWidth="233.0" text="Czas rozpoczęcia" />
+            <TableColumn fx:id="tableColumnTimeEnd" prefWidth="201.0" text="Czas zakończenia" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
