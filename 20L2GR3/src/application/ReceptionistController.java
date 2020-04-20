@@ -19,8 +19,14 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 public class ReceptionistController implements Initializable{
 
 	 @FXML
@@ -58,6 +64,8 @@ public class ReceptionistController implements Initializable{
 		
 		@FXML
 		private TableColumn<Rooms,Date> dates;
+		@FXML
+		 private Label nick;
 		
 		String loggedUserName;
 		
@@ -103,16 +111,23 @@ public class ReceptionistController implements Initializable{
 		 list=FXCollections.observableArrayList();
 		 list1=FXCollections.observableArrayList();
 
-		 Preferences userPreferences = Preferences.userRoot();
-		 loggedUserName = userPreferences.get("logged","");
-		
-		 
-		 Date data= new Date();
-		 data.getTime();	
-	     Rooms test = new Rooms(1,2,312,"High");
-	     Rooms test1 = new Rooms(2,2,314,"Medium");
-	     list.add(test);
-	     list1.add(test1);
+			Preferences userPreferences = Preferences.userRoot();
+	    	loggedUserName = userPreferences.get("loggedUsername","");
+	    	nick.setText("Zalogowany Recepjonista: "+loggedUserName);
+
+	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		    Query query = session.createQuery("SELECT r.numberOfSeats FROM Rooms as r JOIN Reservation as re"
+		    		+ " ON r.reservation=re.id");	
+		    List<Task>tasks = query.list();		
+		    session.getTransaction().commit();
+		    for(int i=0;i<tasks.size();i++) {
+				System.out.println((tasks.get(i)));
+			}
+	    		
+
+	
 	    	
 	    	idRoom.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("id"));
 	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));

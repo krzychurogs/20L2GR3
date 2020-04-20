@@ -20,7 +20,7 @@
                
        </columns>
       </TableView>
-      <Label layoutX="192.0" layoutY="22.0" style="-fx-background-color: #DC143C;" text="Zalogowany recepjonista:">
+      <Label fx:id="nick" layoutX="192.0" layoutY="22.0" style="-fx-background-color: #DC143C;" text="Zalogowany recepjonista:">
          <font>
             <Font size="18.0" />
          </font></Label>
