@@ -1,25 +1,39 @@
 package application;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 //test
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 @Entity
 @Table(name = "room")
 public class Rooms {
- @Id @GeneratedValue
-@Column(name = "ID")
+	
+	@Id @GeneratedValue
+ 	@Column(name = "ID")
 	private int id;
- @Column(name = "NUMBER_OF_SEATS")
+ 	
+	@Column(name = "NUMBER_OF_SEATS")
 	private int numberOfSeats;
- @Column(name = "ROOM_NUMBER")
+ 	
+ 	@Column(name = "ROOM_NUMBER")
 	private int roomNumber;
- @Column(name = "lvl")
+ 	
+ 	@Column(name = "lvl")
 	private String lvl;
- 
+ 	
+ 	@OneToMany(cascade=CascadeType.ALL)
+ 	@JoinColumn(name = "ID")
+    private List<Task> tasks;
 
 	public int getId() {
 		return id;
