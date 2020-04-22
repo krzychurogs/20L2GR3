@@ -13,10 +13,10 @@
    <children>
       <TableView fx:id="freeRooms" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="235.0" style="-fx-background-color: #90EE90;">
         <columns>
-                <TableColumn id="idRoomf" fx:id="idRoomf" prefWidth="50" text="Id" />
+              
+              	<TableColumn id="room_numbefr" fx:id="roomNumberF" prefWidth="62.4000244140625" text="Nr_Pokoju" />
                 <TableColumn id="number_of_seatsf" fx:id="numberOfSeatsF" prefWidth="80.0" text="Miejsca" />
-                <TableColumn id="room_numbefr" fx:id="roomNumberF" prefWidth="62.4000244140625" text="Nr_Pokoju" />
-                <TableColumn id="lvlf" fx:id="lvlF" prefWidth="70.0" text="Poziom" />
+                <TableColumn id="lvlf" fx:id="lvlF" prefWidth="115" text="Poziom" />
                
        </columns>
       </TableView>
@@ -29,11 +29,11 @@
       <CheckBox fx:id="change" layoutX="367.0" layoutY="61.0" mnemonicParsing="false" onAction="#zmien" style="-fx-background-color: #90EE90;" text="Zajęte Pokoje" />
       <TableView fx:id="takenRooms" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #90EE90;">
 		<columns>
-                <TableColumn id="idRoom" fx:id="idRoom" prefWidth="50" text="Id" />
-                <TableColumn id="number_of_seats" fx:id="numberOfSeats" prefWidth="80.0" text="Miejsca" />
+                
                   <TableColumn id="room_number" fx:id="roomNumber" prefWidth="62.4000244140625" text="Nr_Pokoju" />
+                  <TableColumn id="number_of_seats" fx:id="numberOfSeats" prefWidth="80.0" text="Miejsca" />
                   <TableColumn id="lvl" fx:id="lvl" prefWidth="70.0" text="Poziom" />
-                  <TableColumn id="dates" fx:id="dates" prefWidth="160.0" text="Data_zabukowania" />
+                  <TableColumn id="dates" fx:id="dates" prefWidth="215.0" text="Data_zabukowania" />
               </columns>
       </TableView>
       <TextArea layoutX="14.0" layoutY="117.0" prefHeight="200.0" prefWidth="158.0" />

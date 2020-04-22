@@ -1,6 +1,10 @@
 package application;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 //test
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -25,9 +30,47 @@ public class Rooms {
 	private int roomNumber;
  @Column(name = "lvl")
 	private String lvl;
- @ManyToOne
- @JoinColumn(name="reservation")
- private Reservation reservation;
+@OneToMany(cascade=CascadeType.ALL)
+@JoinColumn(name="reservation")
+ private List<Reservation> reservation;
+
+
+
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public int getNumberOfSeats() {
+	return numberOfSeats;
+}
+public void setNumberOfSeats(int numberOfSeats) {
+	this.numberOfSeats = numberOfSeats;
+}
+public int getRoomNumber() {
+	return roomNumber;
+}
+public void setRoomNumber(int roomNumber) {
+	this.roomNumber = roomNumber;
+}
+public String getLvl() {
+	return lvl;
+}
+public void setLvl(String lvl) {
+	this.lvl = lvl;
+}
+
+
+public List<Reservation> getReservation() {
+	return reservation;
+}
+public void setReservation(List<Reservation> reservation) {
+	this.reservation = reservation;
+}
+public Rooms() {
+	super();
+}
  
 	
 	

@@ -16,12 +16,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.converter.DateStringConverter;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
+
+import javax.persistence.EntityManager;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -34,21 +38,20 @@ public class ReceptionistController implements Initializable{
 	 @FXML 
 		private Pane pane;
 	    @FXML
-	    private TableView<Rooms> takenRooms;
+	    private TableView<MenuItem> takenRooms;
 	    @FXML
 	    private TableView<Rooms> freeRooms;
-		@FXML
-		private TableColumn<Rooms,Integer> idRoom;
 		
 		@FXML
-		private TableColumn<Rooms,Integer> numberOfSeats;
+		private TableColumn<MenuItem,Integer> numberOfSeats;
 		
 		@FXML
-		private TableColumn <Rooms,Integer>roomNumber;
-				
+		private TableColumn <MenuItem,Integer>roomNumber;
+			
 		@FXML
-		private TableColumn<Rooms,String> lvl;
-		
+		private TableColumn<MenuItem,String> lvl;
+		@FXML
+		private TableColumn<MenuItem,Date> dates;
 		
 		@FXML
 		private TableColumn<Rooms,Integer> idRoomf;
@@ -62,15 +65,14 @@ public class ReceptionistController implements Initializable{
 		@FXML
 		private TableColumn<Rooms,String> lvlF;
 		
-		@FXML
-		private TableColumn<Rooms,Date> dates;
+
 		@FXML
 		 private Label nick;
 		
 		String loggedUserName;
-		
+		public ObservableList <MenuItem> item;
 		public ObservableList <Rooms> list;
-		public ObservableList <Rooms> list1;
+	
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
 	    	
@@ -104,12 +106,9 @@ public class ReceptionistController implements Initializable{
 	    }
 	 
 	 
-	 
-	 
-	 
 	 public void initialize(URL url, ResourceBundle rbl) {
+		 item=FXCollections.observableArrayList();
 		 list=FXCollections.observableArrayList();
-		 list1=FXCollections.observableArrayList();
 
 			Preferences userPreferences = Preferences.userRoot();
 	    	loggedUserName = userPreferences.get("loggedUsername","");
@@ -118,41 +117,44 @@ public class ReceptionistController implements Initializable{
 	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
-		    Query query = session.createQuery("SELECT r.numberOfSeats FROM Rooms as r JOIN Reservation as re"
-		    		+ " ON r.reservation=re.id");	
-		    List<Task>tasks = query.list();		
+		    Query query = session.createQuery("from Rooms");	
+		    
+		    List<Rooms>rooms = query.list();		
 		    session.getTransaction().commit();
-		    for(int i=0;i<tasks.size();i++) {
-				System.out.println((tasks.get(i)));
-			}
-	    		
-
-	
+		    for(int i=0;i<rooms.size();i++)
+		    {
+		    	list.add(rooms.get(i));
+		    }
+		
+		    for(int i=0;i<rooms.size();i++)
+		    {
+		    for(int j=0;j<rooms.get(i).getReservation().size();j++)
+		    {
+		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates());
+		    	item.add(pomocnicza2);
+		    
+		    }
+		    
+		    }
+		
+	    	roomNumber.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("roomNumber"));
+	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("numberOfSeats"));
+	    	lvl.setCellValueFactory(new PropertyValueFactory<MenuItem, String>("lvl"));
+	    	dates.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("dates"));
 	    	
-	    	idRoom.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("id"));
-	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));
-	    	roomNumber.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("room_number"));
-	    	lvl.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
-	    	dates.setCellValueFactory(new PropertyValueFactory<Rooms, Date>("data"));
-	    	
-	    	
-	    	idRoomf.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("id"));
-	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("number_of_seats"));
-	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("room_number"));
+	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
+	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
 	    	lvlF.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
 	    	
 	    	
-	    	takenRooms.setItems(list);	
-	    	freeRooms.setItems(list1);
+	    	takenRooms.setItems(item);	
+	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
+	    		    	
 		}
 	
 }
+
+
+
+

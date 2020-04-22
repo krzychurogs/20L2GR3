@@ -21,5 +21,6 @@
   		 <mapping class="application.Reservation"/>
 
     </session-factory>
+    
 
 </hibernate-configuration>

@@ -14,13 +14,40 @@ public class Reservation {
 @Column(name="ID")
 private int id;
 
-@OneToMany(cascade=CascadeType.ALL)
+@ManyToOne
 @JoinColumn(name="reservation")
-private Set<Rooms> rooms;
+private Rooms room;
 @Column(name = "guest_id")
 	private int guest_id;
 @Column(name = "date_reservation")
-	private java.util.Date date;
+	private Date dates;
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public Rooms getRoom() {
+	return room;
+}
+public void setRoom(Rooms room) {
+	this.room = room;
+}
+public int getGuest_id() {
+	return guest_id;
+}
+public void setGuest_id(int guest_id) {
+	this.guest_id = guest_id;
+}
+public Date getDates() {
+	return dates;
+}
+public void setDates(Date dates) {
+	this.dates = dates;
+}
+
+
+
 
 
 
