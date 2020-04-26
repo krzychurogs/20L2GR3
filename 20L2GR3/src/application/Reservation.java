@@ -17,8 +17,9 @@ private int id;
 @ManyToOne
 @JoinColumn(name="reservation")
 private Rooms room;
-@Column(name = "guest_id")
-	private int guest_id;
+@ManyToOne
+@JoinColumn(name="guest")
+	private Guest guest;
 @Column(name = "date_reservation")
 	private Date dates;
 public int getId() {
@@ -33,11 +34,12 @@ public Rooms getRoom() {
 public void setRoom(Rooms room) {
 	this.room = room;
 }
-public int getGuest_id() {
-	return guest_id;
+
+public Guest getGuest() {
+	return guest;
 }
-public void setGuest_id(int guest_id) {
-	this.guest_id = guest_id;
+public void setGuest(Guest guest) {
+	this.guest = guest;
 }
 public Date getDates() {
 	return dates;

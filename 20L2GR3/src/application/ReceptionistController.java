@@ -9,7 +9,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -19,6 +21,10 @@ import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +32,8 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 import javax.persistence.EntityManager;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -69,9 +77,15 @@ public class ReceptionistController implements Initializable{
 		@FXML
 		 private Label nick;
 		
+		 @FXML
+		    private Button dodajroom;
+		 @FXML
+		   private ChoiceBox<String> choiceroom;
+		
 		String loggedUserName;
 		public ObservableList <MenuItem> item;
 		public ObservableList <Rooms> list;
+		
 	
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
@@ -117,6 +131,8 @@ public class ReceptionistController implements Initializable{
 	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
+		    List<Reservation>reservation = new ArrayList<Reservation>() ;
+		 	
 		    Query query = session.createQuery("from Rooms");	
 		    
 		    List<Rooms>rooms = query.list();		
@@ -136,6 +152,7 @@ public class ReceptionistController implements Initializable{
 		    }
 		    
 		    }
+		    
 		
 	    	roomNumber.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("roomNumber"));
 	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("numberOfSeats"));
@@ -150,8 +167,90 @@ public class ReceptionistController implements Initializable{
 	    	takenRooms.setItems(item);	
 	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
+	    	
+	    	 for(int i=0;i<rooms.size();i++)
+			    {
+	    		 	int roomnumber=rooms.get(i).getRoomNumber();
+	    		 	int numberOfSeats=rooms.get(i).getNumberOfSeats();
+	    		 	String lvl=rooms.get(i).getLvl();
+	    		 	String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
+	    		 	choiceroom.getItems().add(roomnumbe);
+			    }
+	    	
+	    	
+	    	 dodajroom.setOnAction((event) -> {
+	 		    // Button was clicked, do something...
+	 		    try {
+	 				usun(choiceroom);
+	 				
+	 			} catch (SQLException e) {
+	 				// TODO Auto-generated catch block
+	 				e.printStackTrace();
+	 			}
+	 		});
+	    	
 	    		    	
 		}
+	 private void usun(ChoiceBox<String> choiceroom) throws SQLException
+		{
+			
+			
+			//ResultSet result= con.createStatement().executeQuery()
+			String dane=choiceroom.getValue();
+			String wynik1[] = null;
+			wynik1 = dane.split("_");
+			
+			//	System.out.print(wynik1[0]);
+			SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		    
+		 	
+		    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
+			query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
+			List<Rooms>rooms = query.list();	
+			int id = 0;
+			for(int i=0;i<rooms.size();i++) {
+				id=rooms.get(i).getId(); //id roomu wybranego
+			}
+			
+			
+			String imie=JOptionPane.showInputDialog(null,"Imie",JOptionPane.OK_CANCEL_OPTION);
+			String nazwisko=JOptionPane.showInputDialog(null,"Nazwisko",JOptionPane.OK_CANCEL_OPTION);
+			
+		
+		 	Guest ge=new Guest();
+		 	ge.setName(imie);
+		 	ge.setSurname(nazwisko);
+		 	 session.save(ge);
+			
+			Query query1 = session.createQuery("from Guest g WHERE g.name=:name AND g.surname=:surname");
+			query1.setParameter("name",imie);	
+			query1.setParameter("surname",nazwisko);	
+			List <Guest>guest=query1.list();
+			int idguest = 0;
+			for(int i=0;i<guest.size();i++) {
+			guest.get(i).getName();//imie wyszukanego
+				idguest=guest.get(i).getId();//nazwisko
+			}
+			String url="jdbc:mysql://localhost:3306/hotel";
+			String user = "root";
+		     String password = "";
+		       
+		      Connection con=DriverManager.getConnection(url, user, password);
+		      String query2 = " insert into reservation(date_reservation,reservation,guest)"
+  			        + " values (?,?,?)";
+  			 PreparedStatement preparedStmt = con.prepareStatement(query2);
+  			 preparedStmt.setString(1, "2020-04-22");
+  		      preparedStmt.setInt(2, id);
+  		      preparedStmt.setInt(3 ,idguest);
+  		   
+  		      preparedStmt.executeUpdate();
+		
+  		      
+  		      
+		}
+	 
 	
 }
 

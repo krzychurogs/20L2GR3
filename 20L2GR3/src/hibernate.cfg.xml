@@ -19,6 +19,7 @@
 
   		 <mapping class="application.Rooms"/>
   		 <mapping class="application.Reservation"/>
+  		  <mapping class="application.Guest"/>
 
     </session-factory>
     

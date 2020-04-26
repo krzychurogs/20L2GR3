@@ -1,63 +1,79 @@
 package application;
 
-/**
- * Autor:Damian
- *
- * Gosc
- */
+import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
+//test
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "guest")
 public class Guest {
 
+	 @Id 
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @Column(name = "ID")
+		private int id;
+	 @Column(name = "Name")
+	    private String name;
+	 @Column(name = "Surname")
+	    private String surname;
+   
 
-    private long id;
-    private String name;
-    private String lastName;
-    private String email;
-    private String address;
-    private String country;
-    private String phone;
-    
-	public long getId() {
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="guest")
+    private List<Reservation> reservation;
+
+
+	public int getId() {
 		return id;
 	}
-	public void setId(long id) {
+
+
+	public void setId(int id) {
 		this.id = id;
 	}
+
+
 	public String getName() {
 		return name;
 	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getLastName() {
-		return lastName;
+
+
+	public String getSurname() {
+		return surname;
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+
+
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
-	public String getEmail() {
-		return email;
+
+
+	public List<Reservation> getReservation() {
+		return reservation;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+
+
+	public void setReservation(List<Reservation> reservation) {
+		this.reservation = reservation;
 	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getCountry() {
-		return country;
-	}
-	public void setCountry(String country) {
-		this.country = country;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+   
+ 
 
 }
