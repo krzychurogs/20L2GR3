@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -23,6 +24,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class CookCleanerController {
@@ -51,7 +53,7 @@ public class CookCleanerController {
 	
 	private String loggedUserName;
 	private int loggedId;
-	
+	private int loggedJobId;
 	
 	public CookCleanerController() 
     {
@@ -63,6 +65,7 @@ public class CookCleanerController {
     	Preferences userPreferences = Preferences.userRoot();
     	loggedUserName = userPreferences.get("loggedUsername","");
     	loggedId=Integer.parseInt(userPreferences.get("loggedId","o"));
+    	loggedJobId=Integer.parseInt(userPreferences.get("loggedJobId","o"));
     	populateTable();
     	
      	
@@ -88,6 +91,7 @@ public class CookCleanerController {
     		list.add(tasks.get(i));
     		}
     	taskTableView.setItems(list);
+    
     }
     
     @FXML
@@ -103,20 +107,38 @@ public class CookCleanerController {
     
     @FXML
     void confirmTask(ActionEvent event) throws Exception {
-    	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
-    	System.out.println(taskTableView.getSelectionModel().getSelectedItems().get(0).getId()+"lalala");
-    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();	
-    	Session session=sessionFactory.openSession();		 	
-    	session.beginTransaction();			   
-    	Query query = session.createSQLQuery(
-    	    "update Task set status =false where id = :taskid");
-    	query.setParameter("taskid", taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
-    	int result = query.executeUpdate();
-    	session.getTransaction().commit();
+    	if(loggedJobId==2) {
+    		confirmCookTask();
     	}
-    	populateTable();
+    	else {
+    		confirmCleanerTask();
+    	}
     }
-    
+    private void confirmCleanerTask() throws IOException {
+    	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
+    		 FXMLLoader fxmlLoader = new FXMLLoader();
+    	        fxmlLoader.setLocation(getClass().getResource("cabinet.fxml"));
+    	        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+    	        Stage stage = new Stage();
+    	        stage.setTitle("New Window");
+    	        stage.setScene(scene);
+    	        stage.show();
+    	}
+    }
+    private void confirmCookTask() {
+    	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
+			System.out.println(taskTableView.getSelectionModel().getSelectedItems().get(0).getId()+"lalala");
+			SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();	
+			Session session=sessionFactory.openSession();		 	
+			session.beginTransaction();			   
+			Query query = session.createSQLQuery(
+					"update Task set status =false where id = :taskid");
+			query.setParameter("taskid", taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
+			int result = query.executeUpdate();
+			session.getTransaction().commit();
+		}
+		populateTable();
+    }
     @FXML
     private void printOutput() 
     {

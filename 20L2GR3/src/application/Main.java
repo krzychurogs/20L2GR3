@@ -73,18 +73,18 @@ public class Main extends Application {
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
+	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("Receptionist.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
 			
 		}
 		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==2)
-		{
-			
-			
+		{		
 	        Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
+	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 	        Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
 			pane.getChildren().setAll(panes);
 			
@@ -95,6 +95,7 @@ public class Main extends Application {
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
+	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("manager.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
@@ -105,6 +106,7 @@ public class Main extends Application {
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
+	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("admin.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
@@ -116,8 +118,19 @@ public class Main extends Application {
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
+	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("account.fxml"));
 	        pane.getChildren().setAll(panes);
+	     		
+		}
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==6)
+		{			
+	        Preferences userPreferences = Preferences.userRoot();
+	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
+	        userPreferences.put("loggedUsername",loggedUser.login);
+	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
+	        Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
+			pane.getChildren().setAll(panes);
 	     		
 		}
 		}
