@@ -44,6 +44,18 @@ public class Task {
 		this.description = description;
 		this.status = status;
 	}
+	
+
+	public Task() {
+		super();
+		this.id =0;
+		this.user = null;
+		this.room = null;
+		this.service = 0;
+		this.description = "";
+		this.status = false;
+	}
+
 
 	public int getId() {
 		return id;
@@ -83,6 +95,16 @@ public class Task {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+
+	public boolean isStatus() {
+		return status;
+	}
+
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	
 	

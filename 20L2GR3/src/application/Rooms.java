@@ -76,6 +76,15 @@ public class Rooms {
 		this.roomNumber = roomNumber;
 		this.lvl = lvl;
 	}
+
+	public Rooms() {
+		super();
+	}
+
+	@Override
+	public String toString() {
+		return  roomNumber+"" ;
+	}
 	
 	
 	

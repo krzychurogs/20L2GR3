@@ -79,6 +79,12 @@ public class User {
 	public void setIdJob(int idJob) {
 		this.idJob = idJob;
 	}
+
+	@Override
+	public String toString() {
+		return login;
+	}
+	
 	
 }
 
