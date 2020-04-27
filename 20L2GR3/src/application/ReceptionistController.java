@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -168,63 +169,88 @@ public class ReceptionistController implements Initializable{
 	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
 	    	
-	    	 for(int i=0;i<rooms.size();i++)
+	    	 Query query1 = session.createQuery("from Rooms r WHERE NOT EXISTS ( SELECT room FROM Reservation l WHERE r.id = l.room )");	
+	    	  List<Rooms>rooms1 = query1.list();	
+	    	  for(int i=0;i<rooms1.size();i++)
 			    {
-	    		 	int roomnumber=rooms.get(i).getRoomNumber();
-	    		 	int numberOfSeats=rooms.get(i).getNumberOfSeats();
-	    		 	String lvl=rooms.get(i).getLvl();
-	    		 	String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
-	    		 	choiceroom.getItems().add(roomnumbe);
+	    		 	int roomnumber=rooms1.get(i).getRoomNumber();
+	    			int numberOfSeats=rooms1.get(i).getNumberOfSeats();
+	    		 	String lvl=rooms1.get(i).getLvl();
+	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
+	    			choiceroom.getItems().add(roomnumbe);
+	    		 
 			    }
-	    	
 	    	
 	    	 dodajroom.setOnAction((event) -> {
 	 		    // Button was clicked, do something...
 	 		    try {
 	 				usun(choiceroom);
 	 				
-	 			} catch (SQLException e) {
+	 			} catch (Throwable e) {
 	 				// TODO Auto-generated catch block
 	 				e.printStackTrace();
 	 			}
 	 		});
+	    	 
 	    	
 	    		    	
 		}
-	 private void usun(ChoiceBox<String> choiceroom) throws SQLException
+	 private void usun(ChoiceBox<String> choiceroom) throws Exception
 		{
 			
 			
-			//ResultSet result= con.createStatement().executeQuery()
-			String dane=choiceroom.getValue();
-			String wynik1[] = null;
-			wynik1 = dane.split("_");
-			
-			//	System.out.print(wynik1[0]);
-			SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+	
+					String dane=choiceroom.getValue();
+					String wynik1[] = null;
+					wynik1 = dane.split("_");
+					
+					//	System.out.print(wynik1[0]);
+					SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+				 	Session session=sessionFactory.openSession();
+				 	session.beginTransaction();	
+				    
+				 	
+				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
+					query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
+					List<Rooms>rooms = query.list();	
+					int id = 0;
+					for(int i=0;i<rooms.size();i++) {
+						id=rooms.get(i).getId(); //id roomu wybranego
+					}
+					String url="jdbc:mysql://localhost:3306/hotel";
+					String user = "root";
+				     String password = "";
+				       
+				     Connection con=DriverManager.getConnection(url, user, password);
+					
+					
+					String imie=JOptionPane.showInputDialog(null,"Imie",JOptionPane.OK_CANCEL_OPTION);
+					String nazwisko=JOptionPane.showInputDialog(null,"Nazwisko",JOptionPane.OK_CANCEL_OPTION);
+					
+
+				      String query3 = " insert into guest(name,surname)"
+					        + " values (?,?)";
+					 PreparedStatement preparedStmt1 = con.prepareStatement(query3);
+					 preparedStmt1.setString(1, imie);
+				      preparedStmt1.setString(2, nazwisko);
+				   
+				   
+				      preparedStmt1.executeUpdate();
+					input(imie, nazwisko, id);
+					
+					
+					
+		
+  		      
+  		      
+		}
+	 public void input(String imie,String nazwisko,int id) throws Exception
+	 {
+		 Connection con=getconnection();
+		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
-		    
-		 	
-		    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
-			query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
-			List<Rooms>rooms = query.list();	
-			int id = 0;
-			for(int i=0;i<rooms.size();i++) {
-				id=rooms.get(i).getId(); //id roomu wybranego
-			}
-			
-			
-			String imie=JOptionPane.showInputDialog(null,"Imie",JOptionPane.OK_CANCEL_OPTION);
-			String nazwisko=JOptionPane.showInputDialog(null,"Nazwisko",JOptionPane.OK_CANCEL_OPTION);
-			
-		
-		 	Guest ge=new Guest();
-		 	ge.setName(imie);
-		 	ge.setSurname(nazwisko);
-		 	 session.save(ge);
-			
-			Query query1 = session.createQuery("from Guest g WHERE g.name=:name AND g.surname=:surname");
+		 Query query1 = session.createQuery("from Guest g WHERE g.name=:name AND g.surname=:surname");
 			query1.setParameter("name",imie);	
 			query1.setParameter("surname",nazwisko);	
 			List <Guest>guest=query1.list();
@@ -233,27 +259,36 @@ public class ReceptionistController implements Initializable{
 			guest.get(i).getName();//imie wyszukanego
 				idguest=guest.get(i).getId();//nazwisko
 			}
-			String url="jdbc:mysql://localhost:3306/hotel";
-			String user = "root";
-		     String password = "";
-		       
-		      Connection con=DriverManager.getConnection(url, user, password);
-		      String query2 = " insert into reservation(date_reservation,reservation,guest)"
-  			        + " values (?,?,?)";
-  			 PreparedStatement preparedStmt = con.prepareStatement(query2);
-  			 preparedStmt.setString(1, "2020-04-22");
-  		      preparedStmt.setInt(2, id);
-  		      preparedStmt.setInt(3 ,idguest);
-  		   
-  		      preparedStmt.executeUpdate();
 		
-  		      
-  		      
+		      String query2 = " insert into reservation(date_reservation,reservation,guest)"
+			        + " values (?,?,?)";
+			 PreparedStatement preparedStmt = con.prepareStatement(query2);
+			 preparedStmt.setString(1, "2020-04-22");
+		      preparedStmt.setInt(2, id);
+		      preparedStmt.setInt(3 ,idguest);
+		   
+		      preparedStmt.executeUpdate();
+		      
+	 }
+	 public static Connection getconnection()throws Exception
+		{
+				try {
+					String url="jdbc:mysql://localhost:3306/hotel";
+					String user = "root";
+				     String password = "";;
+			     Connection con=DriverManager.getConnection(url, user, password);
+			      return con;
+				
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			return null;
+			
 		}
 	 
 	
+	
 }
-
 
 
 
