@@ -129,57 +129,9 @@ public class ReceptionistController implements Initializable{
 	    	loggedUserName = userPreferences.get("loggedUsername","");
 	    	nick.setText("Zalogowany Recepjonista: "+loggedUserName);
 
-	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-		 	Session session=sessionFactory.openSession();
-		 	session.beginTransaction();	
-		    List<Reservation>reservation = new ArrayList<Reservation>() ;
-		 	
-		    Query query = session.createQuery("from Rooms");	
-		    
-		    List<Rooms>rooms = query.list();		
-		    session.getTransaction().commit();
-		    for(int i=0;i<rooms.size();i++)
-		    {
-		    	list.add(rooms.get(i));
-		    }
-		
-		    for(int i=0;i<rooms.size();i++)
-		    {
-		    for(int j=0;j<rooms.get(i).getReservation().size();j++)
-		    {
-		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates());
-		    	item.add(pomocnicza2);
-		    
-		    }
-		    
-		    }
-		    
-		
-	    	roomNumber.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("roomNumber"));
-	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("numberOfSeats"));
-	    	lvl.setCellValueFactory(new PropertyValueFactory<MenuItem, String>("lvl"));
-	    	dates.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("dates"));
 	    	
-	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
-	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
-	    	lvlF.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
+	    	setTables();
 	    	
-	    	
-	    	takenRooms.setItems(item);	
-	    	freeRooms.setItems(list);
-	    	takenRooms.setVisible(false);
-	    	
-	    	 Query query1 = session.createQuery("from Rooms r WHERE NOT EXISTS ( SELECT room FROM Reservation l WHERE r.id = l.room )");	
-	    	  List<Rooms>rooms1 = query1.list();	
-	    	  for(int i=0;i<rooms1.size();i++)
-			    {
-	    		 	int roomnumber=rooms1.get(i).getRoomNumber();
-	    			int numberOfSeats=rooms1.get(i).getNumberOfSeats();
-	    		 	String lvl=rooms1.get(i).getLvl();
-	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
-	    			choiceroom.getItems().add(roomnumbe);
-	    		 
-			    }
 	    	
 	    	 dodajroom.setOnAction((event) -> {
 	 		    // Button was clicked, do something...
@@ -268,6 +220,10 @@ public class ReceptionistController implements Initializable{
 		      preparedStmt.setInt(3 ,idguest);
 		   
 		      preparedStmt.executeUpdate();
+		      takenRooms.getItems().clear();
+		      freeRooms.getItems().clear();
+		      choiceroom.getItems().clear();
+		      setTables();
 		      
 	 }
 	 public static Connection getconnection()throws Exception
@@ -285,7 +241,65 @@ public class ReceptionistController implements Initializable{
 			return null;
 			
 		}
-	 
+	 public void setTables()
+	 {
+		 
+		 item=FXCollections.observableArrayList();
+		 list=FXCollections.observableArrayList();
+		 
+		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		    List<Reservation>reservation = new ArrayList<Reservation>() ;
+		 	
+		    Query query = session.createQuery("from Rooms");	
+		    
+		    List<Rooms>rooms = query.list();		
+		    session.getTransaction().commit();
+		    for(int i=0;i<rooms.size();i++)
+		    {
+		    	list.add(rooms.get(i));
+		    }
+		
+		    for(int i=0;i<rooms.size();i++)
+		    {
+		    for(int j=0;j<rooms.get(i).getReservation().size();j++)
+		    {
+		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates());
+		    	item.add(pomocnicza2);
+		    
+		    }
+		    
+		    }
+		    
+		
+	    	roomNumber.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("roomNumber"));
+	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("numberOfSeats"));
+	    	lvl.setCellValueFactory(new PropertyValueFactory<MenuItem, String>("lvl"));
+	    	dates.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("dates"));
+	    	
+	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
+	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
+	    	lvlF.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
+	    	
+	    	
+	    	takenRooms.setItems(item);	
+	    	freeRooms.setItems(list);
+	    	takenRooms.setVisible(false);
+	    	
+	    	 Query query1 = session.createQuery("from Rooms r WHERE NOT EXISTS ( SELECT room FROM Reservation l WHERE r.id = l.room )");	
+	    	  List<Rooms>rooms1 = query1.list();	
+	    	  for(int i=0;i<rooms1.size();i++)
+			    {
+	    		 	int roomnumber=rooms1.get(i).getRoomNumber();
+	    			int numberOfSeats=rooms1.get(i).getNumberOfSeats();
+	    		 	String lvl=rooms1.get(i).getLvl();
+	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
+	    			choiceroom.getItems().add(roomnumbe);
+	    		 
+			    }
+		 
+	 }
 	
 	
 }
