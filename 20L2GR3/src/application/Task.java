@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -17,68 +18,90 @@ public class Task {
 	@Column(name = "ID")
 	private int id;
 	
-	@Column(name = "user_id")
-	private int user;
+	@ManyToOne
+    private User user;
 	
-	@Column(name = "room_number")
-	private int room;
+	@ManyToOne
+    private Rooms room;
 	
-	@Column(name = "service_id")
-	private int service;
+	@ManyToOne
+    private Services services;
 	
 	@Column(name = "description")
 	private String description;
 	
-	public Task(int id, int user, int room, int service, String description) {
+	@Column(name="status")
+	private boolean status;
+
+	
+
+	public Task(int id, User user, Rooms room, int service, String description, boolean status) {
+		super();
 		this.id = id;
 		this.user = user;
 		this.room = room;
-		this.service = service;
+		this.services = services;
 		this.description = description;
+		this.status = status;
 	}
 	
 
-
 	public Task() {
-		this.id = 0;
-		this.user = 0;
-		this.room = 0;
-		this.service = 0;
-		this.description = "";
+		super();
+		
 	}
-
 
 
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	public long getUser() {
+
+	public User getUser() {
 		return user;
 	}
-	public void setUser(int user) {
+
+	public void setUser(User user) {
 		this.user = user;
 	}
-	public int getRoom() {
+
+	public Rooms getRoom() {
 		return room;
 	}
-	public void setRoom(int room) {
+
+	public void setRoom(Rooms room) {
 		this.room = room;
 	}
-	public int getService() {
-		return service;
+
+	public Services getService() {
+		return services;
 	}
-	public void setService(int service) {
-		this.service = service;
+
+	public void setService(Services service) {
+		this.services = service;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+
+	public boolean isStatus() {
+		return status;
+	}
+
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
 	
 	
 	
