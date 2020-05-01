@@ -16,9 +16,16 @@
       <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
       <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>  
       <property name="hibernate.hbm2ddl.auto">update</property>
-		<mapping class="application.User"/>
+
+		<mapping class="application.Guest"/>
 		<mapping class="application.Rooms"/>
-		<mapping class="application.Task"/>
+		<mapping class="application.User"/>
+			<mapping class="application.Task"/>
+		<mapping class="application.Reservation"/>
+		<mapping class="application.Services"/>
+		<mapping class="application.Bill"/>
+		
+		
 		
     </session-factory>
 

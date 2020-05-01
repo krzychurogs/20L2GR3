@@ -34,6 +34,10 @@ public class Rooms {
  	@OneToMany(cascade=CascadeType.ALL)
  	@JoinColumn(name = "ID")
     private List<Task> tasks;
+ 	
+ 	@OneToMany(cascade=CascadeType.ALL)
+ 	@JoinColumn(name="reservation")
+ 	 private List<Reservation> reservation;
 
 	public int getId() {
 		return id;
@@ -66,7 +70,12 @@ public class Rooms {
 	public void setLvl(String lvl) {
 		this.lvl = lvl;
 	}
-
+	public List<Reservation> getReservation() {
+		return reservation;
+	}
+	public void setReservation(List<Reservation> reservation) {
+		this.reservation = reservation;
+	}
 
 
 	public Rooms(int id, int numberOfSeats, int roomNumber, String lvl) {
@@ -84,15 +93,6 @@ public class Rooms {
 	@Override
 	public String toString() {
 		return  roomNumber+"" ;
-	}
-	
-	
-	
-	
-	
-	
-	
-
-	
+	}	
 	
 }

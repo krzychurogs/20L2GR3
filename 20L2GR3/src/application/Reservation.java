@@ -1,50 +1,67 @@
 package application;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
-/**
- * Autor:Damian
- *
- * Rezerwacja
- */
+@Entity
+@Table(name ="reservation")
 public class Reservation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="RESERVATION_ID")
-    private long id;
-    @Column(name="ROOM_ID")
-    private long roomId;
-    @Column(name="GUEST_ID")
-    private long guestId;
-    @Column(name="REZERWATION_DATE")
-    private Date date;
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public long getRoomId() {
-		return roomId;
-	}
-	public void setRoomId(long roomId) {
-		this.roomId = roomId;
-	}
-	public long getGuestId() {
-		return guestId;
-	}
-	public void setGuestId(long guestId) {
-		this.guestId = guestId;
-	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
+	
+@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name="ID")
+private int id;
 
-  
+@ManyToOne
+@JoinColumn(name="reservation")
+private Rooms room;
+
+@ManyToOne
+@JoinColumn(name="guest")
+	private Guest guest;
+
+@Column(name = "date_reservation")
+	private Date dates;
+
+@JoinColumn(name = "bill_id")
+@OneToOne(cascade = CascadeType.ALL)
+private Bill bill;
+
+
+
+public int getId() {
+	return id;
+}
+public void setId(int id) {
+	this.id = id;
+}
+public Rooms getRoom() {
+	return room;
+}
+public void setRoom(Rooms room) {
+	this.room = room;
 }
 
+public Guest getGuest() {
+	return guest;
+}
+public void setGuest(Guest guest) {
+	this.guest = guest;
+}
+public Date getDates() {
+	return dates;
+}
+public void setDates(Date dates) {
+	this.dates = dates;
+}
+
+
+
+
+
+
+
+
+}

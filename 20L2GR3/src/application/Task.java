@@ -24,8 +24,8 @@ public class Task {
 	@ManyToOne
     private Rooms room;
 	
-	@Column(name = "service_id")
-	private int service;
+	@ManyToOne
+    private Services service;
 	
 	@Column(name = "description")
 	private String description;
@@ -35,7 +35,10 @@ public class Task {
 
 	
 
-	public Task(int id, User user, Rooms room, int service, String description, boolean status) {
+
+	
+
+	public Task(int id, User user, Rooms room, Services service, String description, boolean status) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -44,14 +47,24 @@ public class Task {
 		this.description = description;
 		this.status = status;
 	}
-	
+
+
+	public Services getService() {
+		return service;
+	}
+
+
+	public void setService(Services service) {
+		this.service = service;
+	}
+
 
 	public Task() {
 		super();
 		this.id =0;
 		this.user = null;
 		this.room = null;
-		this.service = 0;
+		this.service = null;
 		this.description = "";
 		this.status = false;
 	}
@@ -81,13 +94,7 @@ public class Task {
 		this.room = room;
 	}
 
-	public int getService() {
-		return service;
-	}
-
-	public void setService(int service) {
-		this.service = service;
-	}
+	
 
 	public String getDescription() {
 		return description;
