@@ -19,7 +19,10 @@
 
   		 <mapping class="application.Rooms"/>
   		 <mapping class="application.Reservation"/>
-  		  <mapping class="application.Guest"/>
+  		 <mapping class="application.Guest"/>
+  		 <mapping class="application.Task"/>
+  		 <mapping class="application.User"/>
+  		 <mapping class="application.Services"/>
 
     </session-factory>
     

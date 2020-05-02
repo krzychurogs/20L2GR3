@@ -25,7 +25,7 @@ public class Task {
     private Rooms room;
 	
 	@ManyToOne
-    private Services services;
+    private Services service;
 	
 	@Column(name = "description")
 	private String description;
@@ -35,12 +35,12 @@ public class Task {
 
 	
 
-	public Task(int id, User user, Rooms room, int service, String description, boolean status) {
+	public Task(int id, User user, Rooms room, Services service, String description, boolean status) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.room = room;
-		this.services = services;
+		this.service = service;
 		this.description = description;
 		this.status = status;
 	}
@@ -77,11 +77,11 @@ public class Task {
 	}
 
 	public Services getService() {
-		return services;
+		return service;
 	}
 
 	public void setService(Services service) {
-		this.services = service;
+		this.service = service;
 	}
 
 	public String getDescription() {
