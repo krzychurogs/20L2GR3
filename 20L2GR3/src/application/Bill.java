@@ -40,7 +40,32 @@ public class Bill {
 	    )
  	private List<Services> services;
 	
-	 public void addServices(Services services) {
+	
+	 public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
+	}
+
+	public List<Services> getServices() {
+		return services;
+	}
+
+	public void setServices(List<Services> services) {
+		this.services = services;
+	}
+
+	public void addServices(Services services) {
 	        this.services.add(services);
 	        services.getBill().add(this);
 	    }

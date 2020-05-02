@@ -57,6 +57,25 @@ public void setDates(Date dates) {
 	this.dates = dates;
 }
 
+public Bill getBill() {
+	return bill;
+}
+public void setBill(Bill bill) {
+	this.bill = bill;
+}
+public Reservation(int id, Rooms room, Guest guest, Date dates, Bill bill) {
+	super();
+	this.id = id;
+	this.room = room;
+	this.guest = guest;
+	this.dates = dates;
+	this.bill = bill;
+}
+public Reservation() {
+	super();
+}
+
+
 
 
 

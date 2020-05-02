@@ -31,11 +31,27 @@ public class Services {
 	private float price;
 	
 	@OneToMany(cascade=CascadeType.ALL)
- 	@JoinColumn(name="service")
+ 	@JoinColumn(name="ID")
     private List<Task> task;
 	
 	@ManyToMany(mappedBy = "services")
  	private List<Bill> bill;
+
+	
+	
+	public Services() {
+		super();
+		
+	}
+
+	public Services(int id, String name, float price, List<Task> task, List<Bill> bill) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.task = task;
+		this.bill = bill;
+	}
 
 	@Override
 	public String toString() {

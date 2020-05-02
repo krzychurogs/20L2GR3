@@ -118,7 +118,10 @@ public class CookCleanerController {
     	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
     		 FXMLLoader fxmlLoader = new FXMLLoader();
     	        fxmlLoader.setLocation(getClass().getResource("cabinet.fxml"));
-    	        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+    	        Parent root = fxmlLoader.load();
+    	        CabinetController controller = fxmlLoader.getController();
+    	        controller.setTaskId(taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
+    	        Scene scene = new Scene(root, 600, 400);
     	        Stage stage = new Stage();
     	        stage.setTitle("New Window");
     	        stage.setScene(scene);

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.CabinetController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #ADD8E6;" VBox.vgrow="ALWAYS">
       <children>
@@ -20,7 +20,7 @@
                   <Font name="System Bold" size="26.0" />
                </font>
             </Label>
-            <Button fx:id="confirmButton" layoutX="283.0" layoutY="302.0" mnemonicParsing="false" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Potwierdź" />
+            <Button fx:id="confirmButton" layoutX="283.0" layoutY="302.0" mnemonicParsing="false" onAction="#confirmTask" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="Potwierdź" />
             <CheckBox fx:id="champagneBox" layoutX="363.0" layoutY="86.0" mnemonicParsing="false" text="Szampan" />
             <CheckBox fx:id="fantaBox" layoutX="362.0" layoutY="138.0" mnemonicParsing="false" text="Fanta" />
             <CheckBox fx:id="teaBox" layoutX="361.0" layoutY="182.0" mnemonicParsing="false" text="Ice Tea" />

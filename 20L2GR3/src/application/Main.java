@@ -2,6 +2,7 @@
 	
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -140,6 +141,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
+		
 		try {	
 			 Parent root=FXMLLoader.load(getClass().getResource("Login.fxml"));
 			Scene scene = new Scene(root,600,400);
@@ -154,6 +156,21 @@ public class Main extends Application {
 		
 		SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
 		Session session=factory.openSession();
+		Reservation reservation=session.get(Reservation.class,1);
+		//Guest guest=session.get(Guest.class,1);
+		//Date data=new Date(1,2,2000);
+		//Bill bill=new Bill();
+		//Reservation reservation = new Reservation(3,room,guest,data,bill);
+		//session.save(reservation);
+		//List<Services> services=reservation.getBill().getServices();
+		//session.beginTransaction();
+		//session.getTransaction().commit();
+		
+		//for(int i=0;i<services.size();i++)
+		//	System.out.print("cena"+services.get(i).getPrice());
+		 session.close();
+		factory.close();
+	
 		try {
 		//User tempuser=new User(1,"user","12345",1);
 		//session.beginTransaction();
@@ -161,7 +178,7 @@ public class Main extends Application {
 			//session.getTransaction().commit();
 		}
 		finally {
-			factory.close();
+		//	factory.close();
 		}
 		
 		
