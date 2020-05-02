@@ -32,7 +32,7 @@ public class Services {
 	private float price;
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="service")
+	@JoinColumn(name="ID")
 	private List<Task> task;
 
 	public int getId() {

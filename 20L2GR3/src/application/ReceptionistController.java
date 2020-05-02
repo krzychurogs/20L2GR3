@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -171,9 +172,7 @@ public class ReceptionistController implements Initializable{
 		}
 	 private void usun(ChoiceBox<String> choiceroom) throws Exception
 		{
-			
-			
-	
+		 			try {
 					String dane=choiceroom.getValue();
 					String wynik1[] = null;
 					wynik1 = dane.split("_");
@@ -183,7 +182,6 @@ public class ReceptionistController implements Initializable{
 				 	Session session=sessionFactory.openSession();
 				 	session.beginTransaction();	
 				    
-				 	
 				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
 					query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
 					List<Rooms>rooms = query.list();	
@@ -206,6 +204,14 @@ public class ReceptionistController implements Initializable{
 				   
 				      preparedStmt1.executeUpdate();
 					input(imie, nazwisko, id);
+		 			}
+		 			catch (Exception e) {
+		 				Alert a1=new Alert(Alert.AlertType.ERROR);
+		 				a1.setContentText("Nie wybra³es pokoju");
+		 				a1.setTitle("Blad");
+		 				a1.setHeaderText(null);
+		 				a1.show();
+					}
 						     
 		}
 	 
@@ -213,6 +219,9 @@ public class ReceptionistController implements Initializable{
 	 private void addTask(ChoiceBox<String> choiceservice,ChoiceBox<String> choiceroomfortask) throws Exception
 		{
 			
+		 			try {
+						
+					
 		 			String opis=opistask.getText();
 					String dane=choiceservice.getValue();
 					String wynik1[] = null;
@@ -267,30 +276,55 @@ public class ReceptionistController implements Initializable{
 					}
 					
 					inputTask(idroom,iduser,idservice,opis);
-					     
+		 			}
+		 			catch (Exception e) {
+		 				Alert a1=new Alert(Alert.AlertType.ERROR);
+		 				a1.setContentText("Z³e wype³nione dane");
+		 				a1.setTitle("Blad");
+		 				a1.setHeaderText(null);
+		 				a1.show();
+					}
 		}
 	 
 	 
 	public void inputTask(int idroom,int iduser,int idservice,String opis) throws Exception
 	{
 		 Connection con=getconnection();
-		 String query = " insert into task(description,user,status,room,service"
+		 String query = " insert into task(description,status,room_ID,service_ID,user_ID)"
 				 + " values (?,?,?,?,?)";
 			 PreparedStatement preparedStmt = con.prepareStatement(query);
 			 preparedStmt.setString(1, opis);
-		     preparedStmt.setInt(2, iduser);
-		     preparedStmt.setBoolean(3, true);
-		     preparedStmt.setInt(4, idroom);
-		     preparedStmt.setInt(5, idservice);
+		     preparedStmt.setBoolean(2, true);
+		     preparedStmt.setInt(3, idroom);
+		     preparedStmt.setInt(4, idservice);
+		     preparedStmt.setInt(5, iduser);
 		  
 		   
-		      preparedStmt.executeUpdate();
+		    int i=preparedStmt.executeUpdate();
+		    if(i>0)
+		    {
+		    	glowna();
+		    }
+		    
 		 
 	}
 	 
 	 
 	 
 	 
+	    void glowna() {
+		  	takenRooms.setVisible(true);
+		  	freeRooms.setVisible(true);
+		  	takenRooms.setVisible(true);
+		  	change.setVisible(true);
+		  	dodajroom.setVisible(true);
+		  	opistask.setVisible(false);
+		  	choiceroom.setVisible(false);
+		  	choiceroomfortask.setVisible(false);
+		  	choiceservice.setVisible(false);
+		  	addtask.setVisible(false);
+		  	choiceuser.setVisible(false);
+	    }
 	 
 	 
 	 public void input(String imie,String nazwisko,int id) throws Exception
