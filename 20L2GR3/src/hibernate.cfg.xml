@@ -23,6 +23,7 @@
   		 <mapping class="application.Task"/>
   		 <mapping class="application.User"/>
   		 <mapping class="application.Services"/>
+  		 <mapping class="application.Job"/>
 
     </session-factory>
     

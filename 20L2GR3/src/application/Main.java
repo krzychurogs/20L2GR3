@@ -68,7 +68,7 @@ public class Main extends Application {
         
 		if(loggedUser!=null) {
             
-		if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==1)
+		if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==2)
 		{			
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
@@ -78,7 +78,7 @@ public class Main extends Application {
 	        
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==2)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==1)
 		{
 			
 			
@@ -89,7 +89,7 @@ public class Main extends Application {
 			pane.getChildren().setAll(panes);
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==3)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==5)
 		{
 			
 			Preferences userPreferences = Preferences.userRoot();
@@ -100,7 +100,7 @@ public class Main extends Application {
 	        
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==4)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==4)
 		{
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
@@ -110,7 +110,7 @@ public class Main extends Application {
 	        
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==5)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==3)
 		{
 			
 			Preferences userPreferences = Preferences.userRoot();
