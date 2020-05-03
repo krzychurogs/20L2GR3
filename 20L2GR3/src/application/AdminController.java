@@ -14,7 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -79,10 +82,27 @@ public class AdminController implements Initializable{
 
     @FXML
     private Label lbjob;
+    
+    @FXML
+    private TableView<User> accounts;
+
+    @FXML
+    private TableColumn<User,String> tablename;
+
+    @FXML
+    private TableColumn<User,String> tablenazwisko;
+
+    @FXML
+    private TableColumn<User,String> tablelogin;
+
+    @FXML
+    private TableColumn<User,Job> tablezawod;
+    public ObservableList <User> list;
 	 
 	 public void initialize(URL url, ResourceBundle rbl) {
 	
-	    	
+		 			list=FXCollections.observableArrayList();
+		 			
 	    		    setChoiceJobs();	
 	    		    btncreate.setOnAction((event) -> {
 			 		    // Button was clicked, do something...
@@ -94,7 +114,26 @@ public class AdminController implements Initializable{
 			 				e.printStackTrace();
 			 			}
 			 		});
-	 
+	    		  
+	    		    SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+	    		 	Session session=sessionFactory.openSession();
+	    		 	session.beginTransaction();	
+	    		   
+	    		    Query query = session.createQuery("from User");	
+	    		    
+	    		    List<User>users = query.list();		
+	    		    for(int i=0;i<users.size();i++)
+	    		    {
+	    		    	list.add(users.get(i));
+	    		    }
+	    		   
+	    		    
+	    		    tablename.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
+	    		    tablenazwisko.setCellValueFactory(new PropertyValueFactory<User, String>("surname"));
+	    	    	tablelogin.setCellValueFactory(new PropertyValueFactory<User, String>("login"));
+	    	    	tablezawod.setCellValueFactory(new PropertyValueFactory<User, Job>("job"));
+	    	    	accounts.setItems(list);
+	    		    
 	 }
 	 
 
@@ -205,6 +244,8 @@ public class AdminController implements Initializable{
 		  	lbjob.setVisible(false);
 		  	back.setVisible(false);
 		  	header.setVisible(false);
+		  	accounts.setVisible(true);
+		  
 	    }
 	 @FXML
 	    void showCreate(ActionEvent event) {
@@ -223,6 +264,8 @@ public class AdminController implements Initializable{
 		  	lbjob.setVisible(true);
 		  	back.setVisible(true);
 		  	header.setVisible(true);
+		  	accounts.setVisible(false);
+		 
 	    }
 	
 	

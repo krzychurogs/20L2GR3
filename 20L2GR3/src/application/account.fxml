@@ -7,6 +7,8 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -43,5 +45,13 @@
           </Menu>
         </menus>
       </MenuBar>
+      <TableView fx:id="accounts" layoutX="166.0" layoutY="64.0" prefHeight="200.0" prefWidth="269.0" visible="false">
+        <columns>
+          <TableColumn fx:id="tablename" prefWidth="53.0" text="Imie" />
+          <TableColumn fx:id="tablenazwisko" prefWidth="64.0" text="Nazwisko" />
+            <TableColumn fx:id="tablelogin" prefWidth="53.0" text="Login" />
+            <TableColumn fx:id="tablezawod" prefWidth="98.0" text="Zawód" />
+        </columns>
+      </TableView>
    </children>
 </Pane>

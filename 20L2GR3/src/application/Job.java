@@ -64,6 +64,9 @@ public class Job {
 		super();
 	}
 	
-	
+	@Override
+	public String toString() {
+		return  name+"" ;
+	}	
 	
 }
