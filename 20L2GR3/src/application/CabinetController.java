@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
+import javafx.stage.Stage;
 
 public class CabinetController {
 	
@@ -67,7 +68,7 @@ public class CabinetController {
 	@FXML
 	void confirmTask(ActionEvent event)  throws Exception {
 		Reservation current;
-		SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();
 	 	Session session=sessionFactory.openSession();
 	 	Task task=session.get(Task.class,taskId);
 	 	
@@ -117,6 +118,9 @@ public class CabinetController {
 	 	session.save(bill);
 		session.getTransaction().commit();
 		session.close();
+		Stage stage = (Stage) confirmButton.getScene().getWindow();
+	    stage.close();
+		
 	}
 
 }

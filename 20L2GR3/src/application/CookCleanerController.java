@@ -1,6 +1,7 @@
 package application;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -79,7 +80,7 @@ public class CookCleanerController {
     	roomColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("room"));
     	serviceColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("service"));
     	descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));     
-    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();	
+    	SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
     	Session session=sessionFactory.openSession();		 	
     	session.beginTransaction();			   
     	Query query = session.createQuery("from Task where user.id=:userid");	
@@ -91,7 +92,7 @@ public class CookCleanerController {
     		list.add(tasks.get(i));
     		}
     	taskTableView.setItems(list);
-    
+    	session.close();
     }
     
     @FXML
@@ -130,15 +131,30 @@ public class CookCleanerController {
     }
     private void confirmCookTask() {
     	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
+    		Reservation current;
 			System.out.println(taskTableView.getSelectionModel().getSelectedItems().get(0).getId()+"lalala");
-			SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();	
+			SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
 			Session session=sessionFactory.openSession();		 	
-			session.beginTransaction();			   
-			Query query = session.createSQLQuery(
-					"update Task set status =false where id = :taskid");
-			query.setParameter("taskid", taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
-			int result = query.executeUpdate();
+			session.beginTransaction();		
+			Task task=session.get(Task.class,taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
+			task.setStatus(false);
 			session.getTransaction().commit();
+			session.beginTransaction();
+			session.getTransaction().commit();
+			int roomId =task.getRoom().getId(); 
+		 	Calendar calobj = Calendar.getInstance();
+		 	session.beginTransaction();	
+		 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and r.dates=:todaydate");
+		 	query.setParameter("roomid", roomId);
+		 	query.setParameter("todaydate",calobj.getTime() );
+		 	List<Reservation>reservations =(List<Reservation>) query.list();	
+		 	current=reservations.get(0);
+			session.getTransaction().commit();
+			session.beginTransaction();	
+		 	Bill bill=session.get(Bill.class, current.getId());
+		 	bill.addServices(task.getService());
+		 	session.getTransaction().commit();
+			session.close();
 		}
 		populateTable();
     }

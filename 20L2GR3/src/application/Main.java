@@ -60,7 +60,7 @@ public class Main extends Application {
 		
 		session.getTransaction().commit();
 		
-		
+		session.close();
 		}
 		finally {
 			factory.close();
@@ -154,9 +154,6 @@ public class Main extends Application {
 		}
 		
 		
-		SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
-		Session session=factory.openSession();
-		Reservation reservation=session.get(Reservation.class,1);
 		//Guest guest=session.get(Guest.class,1);
 		//Date data=new Date(1,2,2000);
 		//Bill bill=new Bill();
@@ -168,8 +165,7 @@ public class Main extends Application {
 		
 		//for(int i=0;i<services.size();i++)
 		//	System.out.print("cena"+services.get(i).getPrice());
-		 session.close();
-		factory.close();
+	
 	
 		try {
 		//User tempuser=new User(1,"user","12345",1);
