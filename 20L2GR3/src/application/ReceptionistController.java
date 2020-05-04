@@ -31,8 +31,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -224,11 +225,11 @@ public class ReceptionistController implements Initializable{
 									
 				     Connection con=getconnection();	   
 				     datapick.setOnAction((event) -> {
-				 					String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		
+				    	 		Date data = Date.valueOf(datapick.getValue());
+				 					//String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		
 				    	 			enddatepicker.setOnAction((event3) -> {
-				 		     
-				 		    		String enddata=enddatepicker.getValue().toString();
-				 		    		
+				 		    		//String enddata=enddatepicker.getValue().toString();
+				 		    		Date enddata = Date.valueOf(enddatepicker.getValue());
 								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
 								 		   
 								 		    try {
@@ -238,15 +239,15 @@ public class ReceptionistController implements Initializable{
 													}
 													String imie=nameguest.getText();
 													String nazwisko=surnameguest.getText();
-													String query3 = " insert into guest(name,surname)"
-															+ " values (?,?)";
+
+													Guest guest=new Guest(0,imie,nazwisko,null);
+													
 													if(!nameguest.getText().equals("") && !surnameguest.getText().equals(""))
 													{
-														PreparedStatement preparedStmt1 = con.prepareStatement(query3);
-														preparedStmt1.setString(1, imie);
-														preparedStmt1.setString(2, nazwisko);
-														preparedStmt1.executeUpdate();
-														input(imie, nazwisko,id,data,enddata);//stworzenie rezerwacji
+	
+														session.save(guest);
+														
+														input(guest,id,data,enddata);//stworzenie rezerwacji
 													}
 													else {
 														Alert a1=new Alert(Alert.AlertType.ERROR);
@@ -403,40 +404,23 @@ public class ReceptionistController implements Initializable{
 		  	}
 	 
 	 
-	 public void input(String imie,String nazwisko,int id,String data,String enddata) throws Exception
+	 public void input(Guest guest,int roomId,Date data,Date enddata) throws Exception
 	 {
 		 Connection con=getconnection();
-		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 SessionFactory sessionFactory=new Configuration().configure("").buildSessionFactory();
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
-		 Query query1 = session.createQuery("from Guest g WHERE g.name=:name AND g.surname=:surname");
-			query1.setParameter("name",imie);	
-			query1.setParameter("surname",nazwisko);	
-			List <Guest>guest=query1.list();
-			int idguest = 0;
-			for(int i=0;i<guest.size();i++) {
-			guest.get(i).getName();//imie wyszukanego
-				idguest=guest.get(i).getId();//nazwisko
-			}
-		
-		      String query2 = " insert into reservation(date_reservation,reservation,guest,enddate_reservation)"
-			        + " values (?,?,?,?)";
-			 PreparedStatement preparedStmt = con.prepareStatement(query2);
-			 preparedStmt.setString(1, data);
-		      preparedStmt.setInt(2, id);
-		      preparedStmt.setInt(3 ,idguest);
-		      preparedStmt.setString(4 ,enddata);
-		   
-		      int i=preparedStmt.executeUpdate();
+			Rooms room=session.get(Rooms.class, roomId);
+			Bill bill =new Bill();
+			Reservation reservation = new Reservation(0,room,data,enddata,guest,bill);
+			session.save(bill);
+			session.save(reservation);	   
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
 		      choiceroom.getItems().clear();
 		      setTables();
-		      if(i>0)
-			    {
-			    	glowna();
-			    }
-		      
+		      session.getTransaction().commit();
+		      session.close();  		      
 	 }
 	 public static Connection getconnection()throws Exception
 		{

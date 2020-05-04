@@ -77,7 +77,7 @@ public class CabinetController {
 		int roomId =task.getRoom().getId(); 
 	 	Calendar calobj = Calendar.getInstance();
 	 	session.beginTransaction();	
-	 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and r.dates=:todaydate");
+	 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and :todaydate BETWEEN r.dates AND r.endDate");
 	 	query.setParameter("roomid", roomId);
 	 	query.setParameter("todaydate",calobj.getTime() );
 	 	List<Reservation>reservations =(List<Reservation>) query.list();	
@@ -86,9 +86,7 @@ public class CabinetController {
 		
 		session.beginTransaction();	
 	 	Bill bill=session.get(Bill.class, current.getId());
-	 	if(waterBox.isSelected()) {
-	 		
-	 	}
+	 	
 	 	if(colaBox.isSelected()) {
 	 	Services service=session.get(Services.class, 1);
 		bill.addServices(service);
@@ -98,19 +96,28 @@ public class CabinetController {
 		bill.addServices(service);
 	 	}
 	 	if(wineBox.isSelected()) {
-			
+	 		Services service=session.get(Services.class, 3);
+			bill.addServices(service);
 	 	}
 	 	if(champagneBox.isSelected()) {
-			
+	 		Services service=session.get(Services.class, 4);
+			bill.addServices(service);
 	 	}
 	 	if(fantaBox.isSelected()) {
-			
+	 		Services service=session.get(Services.class, 5);
+			bill.addServices(service);
 	 	}
 	 	if(teaBox.isSelected()) {
-			
+	 		Services service=session.get(Services.class, 6);
+			bill.addServices(service);
 	 	}
 	 	if(whiskeyBox.isSelected()) {
-			
+	 		Services service=session.get(Services.class, 7);
+			bill.addServices(service);
+	 	}
+	 	if(waterBox.isSelected()) {
+	 		Services service=session.get(Services.class, 8);
+			bill.addServices(service);
 	 	}
 	 	task.setStatus(false);
 	 	bill.addServices(task.getService());

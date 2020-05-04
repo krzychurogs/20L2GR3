@@ -39,6 +39,11 @@ public class Guest {
 	}
 
 
+	public Guest() {
+		super();
+	}
+
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -70,6 +75,15 @@ public class Guest {
 
 
 	public void setReservation(List<Reservation> reservation) {
+		this.reservation = reservation;
+	}
+
+
+	public Guest(int id, String name, String surname, List<Reservation> reservation) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
 		this.reservation = reservation;
 	}
    

@@ -9,7 +9,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import com.sun.jmx.snmp.tasks.TaskServer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -143,7 +142,7 @@ public class CookCleanerController {
 			int roomId =task.getRoom().getId(); 
 		 	Calendar calobj = Calendar.getInstance();
 		 	session.beginTransaction();	
-		 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and r.dates=:todaydate");
+		 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and :todaydate BETWEEN r.dates AND r.endDate ");
 		 	query.setParameter("roomid", roomId);
 		 	query.setParameter("todaydate",calobj.getTime() );
 		 	List<Reservation>reservations =(List<Reservation>) query.list();	

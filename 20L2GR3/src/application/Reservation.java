@@ -18,7 +18,7 @@ private int id;
 @JoinColumn(name="reservation")
 private Rooms room;
 @Column(name = "date_reservation")
-	private Date dates;
+private Date dates;
 @Column(name = "enddate_reservation")
 private Date endDate;
 public Date getEndDate() {
@@ -32,8 +32,7 @@ public void setEndDate(Date endDate) {
 @JoinColumn(name="guest")
 	private Guest guest;
 
-@Column(name = "date_reservation")
-	private Date dates;
+
 
 @JoinColumn(name = "bill_id")
 @OneToOne(cascade = CascadeType.ALL)
@@ -80,12 +79,14 @@ public Bill getBill() {
 public void setBill(Bill bill) {
 	this.bill = bill;
 }
-public Reservation(int id, Rooms room, Guest guest, Date dates, Bill bill) {
+
+public Reservation(int id, Rooms room, Date data, Date enddata, Guest guest, Bill bill) {
 	super();
 	this.id = id;
 	this.room = room;
+	this.dates = data;
+	this.endDate = enddata;
 	this.guest = guest;
-	this.dates = dates;
 	this.bill = bill;
 }
 public Reservation() {
