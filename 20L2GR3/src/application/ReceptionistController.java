@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -21,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
+import net.bytebuddy.asm.Advice.Local;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +30,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,11 +46,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 public class ReceptionistController implements Initializable{
-
+	@FXML
+    private DatePicker datapick;
 	 @FXML
 	    private CheckBox change;
-	 @FXML 
-		private Pane pane;
+	  @FXML
+	    private Pane paneorder;
+	  @FXML
+	    private Pane mainpane;
+	    @FXML
+	    private Button createreservation;
+
 	    @FXML
 	    private TableView<MenuItem> takenRooms;
 	    @FXML
@@ -91,7 +100,11 @@ public class ReceptionistController implements Initializable{
 		    private ChoiceBox<String> choiceroomfortask;
 		    @FXML
 		    private Button addtask;
-		    
+		    @FXML
+		    private TextField nameguest;
+
+		    @FXML
+		    private TextField surnameguest;
 
 		    @FXML
 		    private ChoiceBox<String> choiceuser;    
@@ -141,6 +154,8 @@ public class ReceptionistController implements Initializable{
 			Preferences userPreferences = Preferences.userRoot();
 	    	loggedUserName = userPreferences.get("loggedUsername","");
 	    	nick.setText("Zalogowany Recepjonista: "+loggedUserName);
+	    	nameguest.setVisible(false);
+	    	surnameguest.setVisible(false);
 
 	    	
 	    	setTables();
@@ -149,6 +164,7 @@ public class ReceptionistController implements Initializable{
 	    	 dodajroom.setOnAction((event) -> {
 	 		    // Button was clicked, do something...
 	 		    try {
+	 		    	
 	 				usun(choiceroom);
 	 				
 	 			} catch (Throwable e) {
@@ -173,6 +189,9 @@ public class ReceptionistController implements Initializable{
 	 private void usun(ChoiceBox<String> choiceroom) throws Exception
 		{
 		 			try {
+						
+					
+		 			daneguesta();//panel dodawania goscia wraz z data
 					String dane=choiceroom.getValue();
 					String wynik1[] = null;
 					wynik1 = dane.split("_");
@@ -185,34 +204,58 @@ public class ReceptionistController implements Initializable{
 				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
 					query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
 					List<Rooms>rooms = query.list();	
-					int id = 0;
-					for(int i=0;i<rooms.size();i++) {
-						id=rooms.get(i).getId(); //id roomu wybranego
-					}
-					
-				     Connection con=getconnection();
-					String imie=JOptionPane.showInputDialog(null,"Imie",JOptionPane.OK_CANCEL_OPTION);
-					String nazwisko=JOptionPane.showInputDialog(null,"Nazwisko",JOptionPane.OK_CANCEL_OPTION);
-					
+									
+				     Connection con=getconnection();	   
+				     datapick.setOnAction((event) -> {
+				 		    		   
+				 		    		String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		    	
+								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
+								 		   
+								 		    try {
+									 		    	int id = 0;
+													for(int i=0;i<rooms.size();i++) {
+														id=rooms.get(i).getId(); //id roomu wybranego
+													}
+													String imie=nameguest.getText();
+													String nazwisko=surnameguest.getText();
+													String query3 = " insert into guest(name,surname)"
+															+ " values (?,?)";
+													if(!nameguest.getText().equals("") && !surnameguest.getText().equals(""))
+													{
+														PreparedStatement preparedStmt1 = con.prepareStatement(query3);
+														preparedStmt1.setString(1, imie);
+														preparedStmt1.setString(2, nazwisko);
+														preparedStmt1.executeUpdate();
+														input(imie, nazwisko, id,data);//stworzenie rezerwacji
+													}
+													else {
+														Alert a1=new Alert(Alert.AlertType.ERROR);
+										 				a1.setContentText("Nie poda³es danych");
+										 				a1.setTitle("Blad");
+										 				a1.setHeaderText(null);
+										 				a1.show();
+													}
+													
+												
+								 		    	
+								 				
+								 			} catch (Exception e) {
 
-				      String query3 = " insert into guest(name,surname)"
-					        + " values (?,?)";
-					 PreparedStatement preparedStmt1 = con.prepareStatement(query3);
-					 preparedStmt1.setString(1, imie);
-				      preparedStmt1.setString(2, nazwisko);
-				   
-				   
-				      preparedStmt1.executeUpdate();
-					input(imie, nazwisko, id);
+								 				
+								 			}
+								 		});			
+				 			
+				 		});
+				     
 		 			}
 		 			catch (Exception e) {
 		 				Alert a1=new Alert(Alert.AlertType.ERROR);
-		 				a1.setContentText("Nie wybra³es pokoju");
+		 				a1.setContentText("Nie wybrales pokoju");
 		 				a1.setTitle("Blad");
 		 				a1.setHeaderText(null);
 		 				a1.show();
 					}
-						     
+								    			     
 		}
 	 
 	 
@@ -221,6 +264,7 @@ public class ReceptionistController implements Initializable{
 			
 		 			try {
 						
+		 				
 					
 		 			String opis=opistask.getText();
 					String dane=choiceservice.getValue();
@@ -327,7 +371,7 @@ public class ReceptionistController implements Initializable{
 	    }
 	 
 	 
-	 public void input(String imie,String nazwisko,int id) throws Exception
+	 public void input(String imie,String nazwisko,int id,String data) throws Exception
 	 {
 		 Connection con=getconnection();
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -346,7 +390,7 @@ public class ReceptionistController implements Initializable{
 		      String query2 = " insert into reservation(date_reservation,reservation,guest)"
 			        + " values (?,?,?)";
 			 PreparedStatement preparedStmt = con.prepareStatement(query2);
-			 preparedStmt.setString(1, "2020-04-22");
+			 preparedStmt.setString(1, data);
 		      preparedStmt.setInt(2, id);
 		      preparedStmt.setInt(3 ,idguest);
 		   
@@ -476,11 +520,15 @@ public class ReceptionistController implements Initializable{
 		  	change.setVisible(true);
 		  	dodajroom.setVisible(true);
 		  	opistask.setVisible(false);
-		  	choiceroom.setVisible(false);
+		  	choiceroom.setVisible(true);
 		  	choiceroomfortask.setVisible(false);
 		  	choiceservice.setVisible(false);
 		  	addtask.setVisible(false);
 		  	choiceuser.setVisible(false);
+		  	datapick.setVisible(false);
+		  	nameguest.setVisible(false);
+		  	surnameguest.setVisible(false);
+		  	createreservation.setVisible(false);
 	    }
 	  @FXML
 	    void dodajzadanie(ActionEvent event) {
@@ -494,7 +542,31 @@ public class ReceptionistController implements Initializable{
 		  	choiceroomfortask.setVisible(true);
 		  	addtask.setVisible(true);
 		  	choiceuser.setVisible(true);
+		  	datapick.setVisible(false);
+		  	nameguest.setVisible(false);
+		  	surnameguest.setVisible(false);
+		  	createreservation.setVisible(false);
 	    }
+	  
+	  
+	    void daneguesta() {
+		  	takenRooms.setVisible(false);
+		  	freeRooms.setVisible(false);
+		  	takenRooms.setVisible(false);
+		  	change.setVisible(false);
+		  	dodajroom.setVisible(false);
+		  	opistask.setVisible(false);
+		  	choiceroom.setVisible(false);
+		  	choiceroomfortask.setVisible(false);
+		  	choiceservice.setVisible(false);
+		  	addtask.setVisible(false);
+		  	choiceuser.setVisible(false);
+		  	datapick.setVisible(true);
+		  	nameguest.setVisible(true);
+		  	surnameguest.setVisible(true);
+		  	createreservation.setVisible(true);
+	    }
+	    
 	
 }
 
