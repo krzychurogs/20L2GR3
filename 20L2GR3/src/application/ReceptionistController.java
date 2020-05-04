@@ -246,7 +246,7 @@ public class ReceptionistController implements Initializable{
 													{
 	
 														session.save(guest);
-														
+														session.close();
 														input(guest,id,data,enddata);//stworzenie rezerwacji
 													}
 													else {
@@ -406,21 +406,23 @@ public class ReceptionistController implements Initializable{
 	 
 	 public void input(Guest guest,int roomId,Date data,Date enddata) throws Exception
 	 {
-		 Connection con=getconnection();
-		 SessionFactory sessionFactory=new Configuration().configure("").buildSessionFactory();
+		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
 			Rooms room=session.get(Rooms.class, roomId);
+			 session.getTransaction().commit();
+			 session.beginTransaction();	
 			Bill bill =new Bill();
 			Reservation reservation = new Reservation(0,room,data,enddata,guest,bill);
 			session.save(bill);
-			session.save(reservation);	   
+			session.save(reservation);	
+		    session.getTransaction().commit();
+		    session.close();  
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
 		      choiceroom.getItems().clear();
 		      setTables();
-		      session.getTransaction().commit();
-		      session.close();  		      
+				      
 	 }
 	 public static Connection getconnection()throws Exception
 		{
@@ -531,7 +533,7 @@ public class ReceptionistController implements Initializable{
 			    }
 	    	  
 	    	  
-	    	  
+	    	  session.close();
 		 
 	 }
 	  @FXML
