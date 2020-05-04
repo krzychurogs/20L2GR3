@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
+
 import javax.persistence.CascadeType;
-//test
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +33,6 @@ public class Guest {
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="guest")
     private List<Reservation> reservation;
-
 
 	public int getId() {
 		return id;

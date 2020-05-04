@@ -9,15 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-
 @Entity
 @Table(name = "task")
 public class Task {
@@ -44,6 +35,9 @@ public class Task {
 
 	
 
+
+	
+
 	public Task(int id, User user, Rooms room, Services service, String description, boolean status) {
 		super();
 		this.id = id;
@@ -53,11 +47,26 @@ public class Task {
 		this.description = description;
 		this.status = status;
 	}
-	
+
+
+	public Services getService() {
+		return service;
+	}
+
+
+	public void setService(Services service) {
+		this.service = service;
+	}
+
 
 	public Task() {
 		super();
-		
+		this.id =0;
+		this.user = null;
+		this.room = null;
+		this.service = null;
+		this.description = "";
+		this.status = false;
 	}
 
 
@@ -85,13 +94,7 @@ public class Task {
 		this.room = room;
 	}
 
-	public Services getService() {
-		return service;
-	}
-
-	public void setService(Services service) {
-		this.service = service;
-	}
+	
 
 	public String getDescription() {
 		return description;

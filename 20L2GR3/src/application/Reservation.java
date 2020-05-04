@@ -17,9 +17,6 @@ private int id;
 @ManyToOne
 @JoinColumn(name="reservation")
 private Rooms room;
-@ManyToOne
-@JoinColumn(name="guest")
-	private Guest guest;
 @Column(name = "date_reservation")
 	private Date dates;
 @Column(name = "enddate_reservation")
@@ -30,6 +27,18 @@ public Date getEndDate() {
 public void setEndDate(Date endDate) {
 	this.endDate = endDate;
 }
+
+@ManyToOne
+@JoinColumn(name="guest")
+	private Guest guest;
+
+@Column(name = "date_reservation")
+	private Date dates;
+
+@JoinColumn(name = "bill_id")
+@OneToOne(cascade = CascadeType.ALL)
+private Bill bill;
+
 public int getId() {
 	return id;
 }
@@ -63,5 +72,33 @@ public void setDates(Date dates) {
 
 
 
+
+
+public Bill getBill() {
+	return bill;
 }
+public void setBill(Bill bill) {
+	this.bill = bill;
+}
+public Reservation(int id, Rooms room, Guest guest, Date dates, Bill bill) {
+	super();
+	this.id = id;
+	this.room = room;
+	this.guest = guest;
+	this.dates = dates;
+	this.bill = bill;
+}
+public Reservation() {
+	super();
+}
+
+
+
+}
+
+
+
+
+
+
 

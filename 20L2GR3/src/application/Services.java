@@ -1,17 +1,16 @@
 package application;
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-//test
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -32,8 +31,32 @@ public class Services {
 	private float price;
 	
 	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="ID")
-	private List<Task> task;
+ 	@JoinColumn(name="ID")
+    private List<Task> task;
+	
+	@ManyToMany(mappedBy = "services")
+ 	private List<Bill> bill;
+
+	
+	
+	public Services() {
+		super();
+		
+	}
+
+	public Services(int id, String name, float price, List<Task> task, List<Bill> bill) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.task = task;
+		this.bill = bill;
+	}
+
+	@Override
+	public String toString() {
+		return name;
+	}
 
 	public int getId() {
 		return id;
@@ -66,8 +89,16 @@ public class Services {
 	public void setTask(List<Task> task) {
 		this.task = task;
 	}
+
+	public List<Bill> getBill() {
+		return bill;
+	}
+
+	public void setBill(List<Bill> bill) {
+		this.bill = bill;
+	}
 	
 
- 
+	
 
 }

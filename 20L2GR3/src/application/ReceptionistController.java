@@ -148,7 +148,7 @@ public class ReceptionistController implements Initializable{
 			
 			 takenRooms.setVisible(false);
 			 freeRooms.setVisible(true);
-			 change.setText("Zajête Pokoje");
+			 change.setText("Zajete Pokoje");
 		 }
 	    	
 	    }
@@ -250,7 +250,7 @@ public class ReceptionistController implements Initializable{
 													}
 													else {
 														Alert a1=new Alert(Alert.AlertType.ERROR);
-										 				a1.setContentText("Nie poda³es danych");
+										 				a1.setContentText("Nie poda3es danych");
 										 				a1.setTitle("Blad");
 										 				a1.setHeaderText(null);
 										 				a1.show();
@@ -346,7 +346,7 @@ public class ReceptionistController implements Initializable{
 		 			}
 		 			catch (Exception e) {
 		 				Alert a1=new Alert(Alert.AlertType.ERROR);
-		 				a1.setContentText("Z³e wype³nione dane");
+		 				a1.setContentText("Z3e wype3nione dane");
 		 				a1.setTitle("Blad");
 		 				a1.setHeaderText(null);
 		 				a1.show();
@@ -618,6 +618,3 @@ public class ReceptionistController implements Initializable{
 	    
 	
 }
-
-
-

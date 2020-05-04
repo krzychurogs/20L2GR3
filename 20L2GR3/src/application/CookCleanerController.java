@@ -1,4 +1,6 @@
 package application;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -7,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.sun.jmx.snmp.tasks.TaskServer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +24,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class CookCleanerController {
@@ -34,10 +38,10 @@ public class CookCleanerController {
 	private TableColumn<Task,Integer> idColumn;
 	
 	@FXML
-	private TableColumn<Task,Integer> userColumn;
+	private TableColumn<Task,String> userColumn;
 	
 	@FXML
-	private TableColumn <Task,Integer>roomColumn;
+	private TableColumn <Task,String>roomColumn;
 	
 	@FXML
 	private TableColumn<Task,Integer> serviceColumn;
@@ -48,8 +52,8 @@ public class CookCleanerController {
 	public ObservableList <Task> list;
 	
 	private String loggedUserName;
-	private String loggedId;
-	
+	private int loggedId;
+	private int loggedJobId;
 	
 	public CookCleanerController() 
     {
@@ -60,41 +64,36 @@ public class CookCleanerController {
     {
     	Preferences userPreferences = Preferences.userRoot();
     	loggedUserName = userPreferences.get("loggedUsername","");
-    	loggedId=userPreferences.get("loggedId","o");
-    	SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Task.class).buildSessionFactory();
-		Session session=factory.openSession();
-		list=FXCollections.observableArrayList();
-		try {
-		session.beginTransaction();	
-		Query query = session.createQuery("from Task t WHERE t.user=:userid");
-		query.setParameter("userid",Integer.parseInt(loggedId));
-		List<Task>tasks = query.list();		
-		session.getTransaction().commit();
-		
-		for(int i=0;i<tasks.size();i++) {
-			list.add(tasks.get(i));
-		}
-		
-		
-		}
-		finally {
-			factory.close();
-		}
+    	loggedId=Integer.parseInt(userPreferences.get("loggedId","o"));
+    	loggedJobId=Integer.parseInt(userPreferences.get("loggedJobId","o"));
+    	populateTable();
     	
-    	
-    	
-    	
-    	idColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
-    	userColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("user"));
-    	roomColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("room"));
-    	serviceColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("service"));
-    	descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-        
-    	taskTableView.setItems(list);
-    	
-    	
-    	
+     	
     }
+    
+    private void populateTable() {
+    	System.out.println("id"+loggedId);
+		list=FXCollections.observableArrayList();  	
+    	idColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
+    	userColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("user"));
+    	roomColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("room"));
+    	serviceColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("service"));
+    	descriptionColumn.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));     
+    	SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
+    	Session session=sessionFactory.openSession();		 	
+    	session.beginTransaction();			   
+    	Query query = session.createQuery("from Task where user.id=:userid");	
+    	query.setParameter("userid",loggedId);
+    	List<Task>tasks = query.list();				  
+    	session.getTransaction().commit();		    
+    	for(int i=0;i<tasks.size();i++) {	
+    		if(tasks.get(i).isStatus())
+    		list.add(tasks.get(i));
+    		}
+    	taskTableView.setItems(list);
+    	session.close();
+    }
+    
     @FXML
     void wyloguj(ActionEvent event) throws Exception {	
 	 Parent application = FXMLLoader.load(getClass().getResource("Uzytkownik.fxml"));
@@ -105,6 +104,59 @@ public class CookCleanerController {
      window.show();
     	
     } 
+    
+    @FXML
+    void confirmTask(ActionEvent event) throws Exception {
+    	if(loggedJobId==2) {
+    		confirmCookTask();
+    	}
+    	else {
+    		confirmCleanerTask();
+    	}
+    }
+    private void confirmCleanerTask() throws IOException {
+    	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
+    		 FXMLLoader fxmlLoader = new FXMLLoader();
+    	        fxmlLoader.setLocation(getClass().getResource("cabinet.fxml"));
+    	        Parent root = fxmlLoader.load();
+    	        CabinetController controller = fxmlLoader.getController();
+    	        controller.setTaskId(taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
+    	        Scene scene = new Scene(root, 600, 400);
+    	        Stage stage = new Stage();
+    	        stage.setTitle("New Window");
+    	        stage.setScene(scene);
+    	        stage.show();
+    	}
+    }
+    private void confirmCookTask() {
+    	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
+    		Reservation current;
+			System.out.println(taskTableView.getSelectionModel().getSelectedItems().get(0).getId()+"lalala");
+			SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
+			Session session=sessionFactory.openSession();		 	
+			session.beginTransaction();		
+			Task task=session.get(Task.class,taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
+			task.setStatus(false);
+			session.getTransaction().commit();
+			session.beginTransaction();
+			session.getTransaction().commit();
+			int roomId =task.getRoom().getId(); 
+		 	Calendar calobj = Calendar.getInstance();
+		 	session.beginTransaction();	
+		 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and r.dates=:todaydate");
+		 	query.setParameter("roomid", roomId);
+		 	query.setParameter("todaydate",calobj.getTime() );
+		 	List<Reservation>reservations =(List<Reservation>) query.list();	
+		 	current=reservations.get(0);
+			session.getTransaction().commit();
+			session.beginTransaction();	
+		 	Bill bill=session.get(Bill.class, current.getId());
+		 	bill.addServices(task.getService());
+		 	session.getTransaction().commit();
+			session.close();
+		}
+		populateTable();
+    }
     @FXML
     private void printOutput() 
     {
