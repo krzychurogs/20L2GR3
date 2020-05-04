@@ -24,6 +24,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -120,6 +121,14 @@ public class Main extends Application {
 	        pane.getChildren().setAll(panes);
 	     		
 		}
+		
+		}
+		else {
+			Alert a1=new Alert(Alert.AlertType.ERROR);
+			a1.setContentText("Bledne dane logowania");
+			a1.setTitle("Blad");
+			a1.setHeaderText(null);
+			a1.show();
 		}
 		
 	}

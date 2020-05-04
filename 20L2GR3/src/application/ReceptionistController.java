@@ -72,6 +72,8 @@ public class ReceptionistController implements Initializable{
 		private TableColumn<MenuItem,String> lvl;
 		@FXML
 		private TableColumn<MenuItem,Date> dates;
+		@FXML
+		private TableColumn<MenuItem,Date> enddate;
 		
 		@FXML
 		private TableColumn<Rooms,Integer> idRoomf;
@@ -108,7 +110,22 @@ public class ReceptionistController implements Initializable{
 
 		    @FXML
 		    private ChoiceBox<String> choiceuser;    
-		
+		    @FXML
+		    private DatePicker enddatepicker;
+
+		    @FXML
+		    private Label lbldatereser;
+
+		    @FXML
+		    private Label lbldateend;
+
+		    @FXML
+		    private Label lblimie;
+
+		    @FXML
+		    private Label lblnazwisko;
+		    
+		    
 		String loggedUserName;
 		public ObservableList <MenuItem> item;
 		public ObservableList <Rooms> list;
@@ -207,8 +224,11 @@ public class ReceptionistController implements Initializable{
 									
 				     Connection con=getconnection();	   
 				     datapick.setOnAction((event) -> {
-				 		    		   
-				 		    		String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		    	
+				 					String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		
+				    	 			enddatepicker.setOnAction((event3) -> {
+				 		     
+				 		    		String enddata=enddatepicker.getValue().toString();
+				 		    		
 								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
 								 		   
 								 		    try {
@@ -226,7 +246,7 @@ public class ReceptionistController implements Initializable{
 														preparedStmt1.setString(1, imie);
 														preparedStmt1.setString(2, nazwisko);
 														preparedStmt1.executeUpdate();
-														input(imie, nazwisko, id,data);//stworzenie rezerwacji
+														input(imie, nazwisko,id,data,enddata);//stworzenie rezerwacji
 													}
 													else {
 														Alert a1=new Alert(Alert.AlertType.ERROR);
@@ -244,6 +264,7 @@ public class ReceptionistController implements Initializable{
 								 				
 								 			}
 								 		});			
+				     		});
 				 			
 				 		});
 				     
@@ -254,6 +275,8 @@ public class ReceptionistController implements Initializable{
 		 				a1.setTitle("Blad");
 		 				a1.setHeaderText(null);
 		 				a1.show();
+		 				glowna();
+		 			
 					}
 								    			     
 		}
@@ -363,15 +386,24 @@ public class ReceptionistController implements Initializable{
 		  	change.setVisible(true);
 		  	dodajroom.setVisible(true);
 		  	opistask.setVisible(false);
-		  	choiceroom.setVisible(false);
+		  	choiceroom.setVisible(true);
 		  	choiceroomfortask.setVisible(false);
 		  	choiceservice.setVisible(false);
 		  	addtask.setVisible(false);
 		  	choiceuser.setVisible(false);
-	    }
+		  	datapick.setVisible(false);
+		  	nameguest.setVisible(false);
+		  	surnameguest.setVisible(false);
+		  	createreservation.setVisible(false);
+		 	enddatepicker.setVisible(false);
+		 	lbldateend.setVisible(false);
+		  	lbldatereser.setVisible(false);
+		  	lblimie.setVisible(false);
+		  	lblnazwisko.setVisible(false);
+		  	}
 	 
 	 
-	 public void input(String imie,String nazwisko,int id,String data) throws Exception
+	 public void input(String imie,String nazwisko,int id,String data,String enddata) throws Exception
 	 {
 		 Connection con=getconnection();
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -387,18 +419,23 @@ public class ReceptionistController implements Initializable{
 				idguest=guest.get(i).getId();//nazwisko
 			}
 		
-		      String query2 = " insert into reservation(date_reservation,reservation,guest)"
-			        + " values (?,?,?)";
+		      String query2 = " insert into reservation(date_reservation,reservation,guest,enddate_reservation)"
+			        + " values (?,?,?,?)";
 			 PreparedStatement preparedStmt = con.prepareStatement(query2);
 			 preparedStmt.setString(1, data);
 		      preparedStmt.setInt(2, id);
 		      preparedStmt.setInt(3 ,idguest);
+		      preparedStmt.setString(4 ,enddata);
 		   
-		      preparedStmt.executeUpdate();
+		      int i=preparedStmt.executeUpdate();
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
 		      choiceroom.getItems().clear();
 		      setTables();
+		      if(i>0)
+			    {
+			    	glowna();
+			    }
 		      
 	 }
 	 public static Connection getconnection()throws Exception
@@ -441,7 +478,7 @@ public class ReceptionistController implements Initializable{
 		    {
 		    for(int j=0;j<rooms.get(i).getReservation().size();j++)
 		    {
-		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates());
+		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates(),rooms.get(i).getReservation().get(j).getEndDate());
 		    	item.add(pomocnicza2);
 		    
 		    }
@@ -453,6 +490,7 @@ public class ReceptionistController implements Initializable{
 	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("numberOfSeats"));
 	    	lvl.setCellValueFactory(new PropertyValueFactory<MenuItem, String>("lvl"));
 	    	dates.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("dates"));
+	    	enddate.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("enddate"));
 	    	
 	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
 	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
@@ -529,6 +567,7 @@ public class ReceptionistController implements Initializable{
 		  	nameguest.setVisible(false);
 		  	surnameguest.setVisible(false);
 		  	createreservation.setVisible(false);
+		  	enddatepicker.setVisible(false);
 	    }
 	  @FXML
 	    void dodajzadanie(ActionEvent event) {
@@ -546,6 +585,11 @@ public class ReceptionistController implements Initializable{
 		  	nameguest.setVisible(false);
 		  	surnameguest.setVisible(false);
 		  	createreservation.setVisible(false);
+		  	enddatepicker.setVisible(false);
+			lbldateend.setVisible(false);
+		  	lbldatereser.setVisible(false);
+		  	lblimie.setVisible(false);
+		  	lblnazwisko.setVisible(false);
 	    }
 	  
 	  
@@ -565,6 +609,11 @@ public class ReceptionistController implements Initializable{
 		  	nameguest.setVisible(true);
 		  	surnameguest.setVisible(true);
 		  	createreservation.setVisible(true);
+		  	enddatepicker.setVisible(true);
+		  	lbldateend.setVisible(true);
+		  	lbldatereser.setVisible(true);
+		  	lblimie.setVisible(true);
+		  	lblnazwisko.setVisible(true);
 	    }
 	    
 	

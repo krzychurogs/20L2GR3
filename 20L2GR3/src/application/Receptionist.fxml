@@ -32,13 +32,14 @@
       <Button layoutX="506.0" layoutY="23.0" mnemonicParsing="false" onAction="#wyloguj" style="-fx-font-weight: bold; -fx-background-color: #90EE90;" text="Wyloguj sie" />
       
       <CheckBox fx:id="change" layoutX="367.0" layoutY="61.0" mnemonicParsing="false" onAction="#zmien" style="-fx-background-color: #90EE90;" text="Zajęte Pokoje" />
-      <TableView fx:id="takenRooms" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #90EE90;">
+      <TableView fx:id="takenRooms" layoutX="97.0" layoutY="87.0" prefHeight="200.0" prefWidth="483.0" style="-fx-background-color: #90EE90;">
 		<columns>
                 
                   <TableColumn id="room_number" fx:id="roomNumber" prefWidth="62.4000244140625" text="Nr_Pokoju" />
                   <TableColumn id="number_of_seats" fx:id="numberOfSeats" prefWidth="80.0" text="Miejsca" />
-                  <TableColumn id="lvl" fx:id="lvl" prefWidth="70.0" text="Poziom" />
-                  <TableColumn id="dates" fx:id="dates" prefWidth="215.0" text="Data_zabukowania" />
+                  <TableColumn id="lvl" fx:id="lvl" prefWidth="52.0" text="Poziom" />
+                  <TableColumn id="dates" fx:id="dates" minWidth="0.0" prefWidth="123.0" text="Data_zabukowania" />
+           		 <TableColumn id="dates" fx:id="enddate" prefWidth="200.0" text="Data_zakonczenia" />
               </columns>
       </TableView>
       <Button fx:id="dodajroom" layoutX="506.0" layoutY="339.0" mnemonicParsing="false" text="Zarezerwuj" />
@@ -62,10 +63,15 @@
       <ChoiceBox fx:id="choiceroomfortask" layoutX="223.0" layoutY="180.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceuser" layoutX="223.0" layoutY="220.0" prefWidth="169.0" visible="false" />
       <Button fx:id="addtask" layoutX="348.0" layoutY="305.0" mnemonicParsing="false" text="Dodaj zadanie" visible="false" />
-      <DatePicker fx:id="datapick" layoutX="245.0" layoutY="143.0" visible="false" />
+      <DatePicker fx:id="datapick" layoutX="245.0" layoutY="113.0" visible="false" />
       <TextField fx:id="nameguest" layoutX="245.0" layoutY="173.0" visible="false" />
       <TextField fx:id="surnameguest" layoutX="245.0" layoutY="203.0" visible="false" />
       <Button fx:id="createreservation" layoutX="354.0" layoutY="233.0" mnemonicParsing="false" text="Wyslij" visible="false" />
+      <DatePicker fx:id="enddatepicker" layoutX="245.0" layoutY="143.0" visible="false" />
+      <Label fx:id="lbldatereser" layoutX="110.0" layoutY="113.0" text="Data Poczatku Rezerwacji" visible="false" />
+      <Label fx:id="lbldateend" layoutX="110.0" layoutY="143.0" text="Data Końca Rezerwacji" visible="false" />
+      <Label fx:id="lblimie" layoutX="140.00" layoutY="173.0" prefWidth="23.0" text="Imie" visible="false" />
+      <Label fx:id="lblnazwisko" layoutX="140.0" layoutY="203.0" text="Nazwisko" visible="false" />
      
     
    </children>

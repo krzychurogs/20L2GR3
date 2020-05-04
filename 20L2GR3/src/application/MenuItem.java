@@ -8,6 +8,14 @@ public class MenuItem
 	public int numberOfSeats;
 	public String lvl;
 	public Date dates;
+	public Date enddate;
+	
+	public Date getEnddate() {
+		return enddate;
+	}
+	public void setEnddate(Date enddate) {
+		this.enddate = enddate;
+	}
 	public int getRoomNumber() {
 		return roomNumber;
 	}
@@ -32,13 +40,15 @@ public class MenuItem
 	public void setDates(Date dates) {
 		this.dates = dates;
 	}
-	public MenuItem(int roomNumber, int numberOfSeats, String lvl, Date dates) {
+	public MenuItem(int roomNumber, int numberOfSeats, String lvl, Date dates, Date enddate) {
 		super();
 		this.roomNumber = roomNumber;
 		this.numberOfSeats = numberOfSeats;
 		this.lvl = lvl;
 		this.dates = dates;
+		this.enddate = enddate;
 	}
+	
 																												
 	
 
