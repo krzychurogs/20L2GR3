@@ -22,6 +22,14 @@ private Rooms room;
 	private Guest guest;
 @Column(name = "date_reservation")
 	private Date dates;
+@Column(name = "enddate_reservation")
+private Date endDate;
+public Date getEndDate() {
+	return endDate;
+}
+public void setEndDate(Date endDate) {
+	this.endDate = endDate;
+}
 public int getId() {
 	return id;
 }

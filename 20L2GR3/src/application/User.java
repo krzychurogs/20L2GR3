@@ -1,20 +1,14 @@
 package application;
 
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,34 +20,30 @@ public class User {
 	@Column(name = "ID")
 	int id;
 	
+	@Column(name = "Name")
+	String name;
+	@Column(name = "Surname")
+	String surname;
 	@Column(name = "login")
 	String login;
 	
 	@Column(name = "password")
 	String password;
 	
-	@Column(name = "job_id")
-	int idJob;
+
+	@ManyToOne
+    private Job job;
 	
-	@OneToMany(cascade=CascadeType.ALL)
- 	@JoinColumn(name = "ID")
-    private List<Task> tasks;
 	
-	public User(int id, String login, String password, int idJob) {
-		super();
-		this.id = id;
-		this.login = login;
-		this.password = password;
-		this.idJob = idJob;
+	public Job getJob() {
+		return job;
 	}
-	
-	public User() {
-		super();
-		this.id=1;
-		this.login="";
-		this.password="";
-		this.idJob=1;
+
+	public void setJob(Job job) {
+		this.job = job;
 	}
+
+	
 
 	public int getId() {
 		return id;
@@ -73,18 +63,38 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getIdJob() {
-		return idJob;
-	}
-	public void setIdJob(int idJob) {
-		this.idJob = idJob;
+	
+
+	public String getName() {
+		return name;
 	}
 
-	@Override
-	public String toString() {
-		return login;
+	public void setName(String name) {
+		this.name = name;
 	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+	
+	public User() {
+		super();
+	}
+
+	public User(String name, String surname, String login, String password, Job job) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.login = login;
+		this.password = password;
+		this.job = job;
+	}
+
+	
 	
 	
 }
-

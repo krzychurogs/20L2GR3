@@ -9,16 +9,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
+import net.bytebuddy.asm.Advice.Local;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +30,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,11 +46,17 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 public class ReceptionistController implements Initializable{
-
+	@FXML
+    private DatePicker datapick;
 	 @FXML
 	    private CheckBox change;
-	 @FXML 
-		private Pane pane;
+	  @FXML
+	    private Pane paneorder;
+	  @FXML
+	    private Pane mainpane;
+	    @FXML
+	    private Button createreservation;
+
 	    @FXML
 	    private TableView<MenuItem> takenRooms;
 	    @FXML
@@ -61,6 +72,8 @@ public class ReceptionistController implements Initializable{
 		private TableColumn<MenuItem,String> lvl;
 		@FXML
 		private TableColumn<MenuItem,Date> dates;
+		@FXML
+		private TableColumn<MenuItem,Date> enddate;
 		
 		@FXML
 		private TableColumn<Rooms,Integer> idRoomf;
@@ -74,7 +87,8 @@ public class ReceptionistController implements Initializable{
 		@FXML
 		private TableColumn<Rooms,String> lvlF;
 		
-
+		  @FXML
+		    private TextField opistask;
 		@FXML
 		 private Label nick;
 		
@@ -82,11 +96,40 @@ public class ReceptionistController implements Initializable{
 		    private Button dodajroom;
 		 @FXML
 		   private ChoiceBox<String> choiceroom;
-		
+		 @FXML
+		    private ChoiceBox<String> choiceservice;
+		    @FXML
+		    private ChoiceBox<String> choiceroomfortask;
+		    @FXML
+		    private Button addtask;
+		    @FXML
+		    private TextField nameguest;
+
+		    @FXML
+		    private TextField surnameguest;
+
+		    @FXML
+		    private ChoiceBox<String> choiceuser;    
+		    @FXML
+		    private DatePicker enddatepicker;
+
+		    @FXML
+		    private Label lbldatereser;
+
+		    @FXML
+		    private Label lbldateend;
+
+		    @FXML
+		    private Label lblimie;
+
+		    @FXML
+		    private Label lblnazwisko;
+		    
+		    
 		String loggedUserName;
 		public ObservableList <MenuItem> item;
 		public ObservableList <Rooms> list;
-		
+	  
 	
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
@@ -128,6 +171,8 @@ public class ReceptionistController implements Initializable{
 			Preferences userPreferences = Preferences.userRoot();
 	    	loggedUserName = userPreferences.get("loggedUsername","");
 	    	nick.setText("Zalogowany Recepjonista: "+loggedUserName);
+	    	nameguest.setVisible(false);
+	    	surnameguest.setVisible(false);
 
 	    	
 	    	setTables();
@@ -136,6 +181,7 @@ public class ReceptionistController implements Initializable{
 	    	 dodajroom.setOnAction((event) -> {
 	 		    // Button was clicked, do something...
 	 		    try {
+	 		    	
 	 				usun(choiceroom);
 	 				
 	 			} catch (Throwable e) {
@@ -144,14 +190,25 @@ public class ReceptionistController implements Initializable{
 	 			}
 	 		});
 	    	 
+	    	 addtask.setOnAction((event) -> {
+		 		    // Button was clicked, do something...
+		 		    try {
+		 				addTask(choiceservice, choiceroomfortask);
+		 				
+		 			} catch (Throwable e) {
+		 				// TODO Auto-generated catch block
+		 				e.printStackTrace();
+		 			}
+		 		});
 	    	
 	    		    	
 		}
 	 private void usun(ChoiceBox<String> choiceroom) throws Exception
 		{
-			
-			
-	
+		 			try {
+						
+					
+		 			daneguesta();//panel dodawania goscia wraz z data
 					String dane=choiceroom.getValue();
 					String wynik1[] = null;
 					wynik1 = dane.split("_");
@@ -161,42 +218,192 @@ public class ReceptionistController implements Initializable{
 				 	Session session=sessionFactory.openSession();
 				 	session.beginTransaction();	
 				    
-				 	
 				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
 					query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
 					List<Rooms>rooms = query.list();	
-					int id = 0;
-					for(int i=0;i<rooms.size();i++) {
-						id=rooms.get(i).getId(); //id roomu wybranego
-					}
-					String url="jdbc:mysql://localhost:3306/hotel";
-					String user = "root";
-				     String password = "";
-				       
-				     Connection con=DriverManager.getConnection(url, user, password);
-					
-					
-					String imie=JOptionPane.showInputDialog(null,"Imie",JOptionPane.OK_CANCEL_OPTION);
-					String nazwisko=JOptionPane.showInputDialog(null,"Nazwisko",JOptionPane.OK_CANCEL_OPTION);
-					
+									
+				     Connection con=getconnection();	   
+				     datapick.setOnAction((event) -> {
+				 					String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		
+				    	 			enddatepicker.setOnAction((event3) -> {
+				 		     
+				 		    		String enddata=enddatepicker.getValue().toString();
+				 		    		
+								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
+								 		   
+								 		    try {
+									 		    	int id = 0;
+													for(int i=0;i<rooms.size();i++) {
+														id=rooms.get(i).getId(); //id roomu wybranego
+													}
+													String imie=nameguest.getText();
+													String nazwisko=surnameguest.getText();
+													String query3 = " insert into guest(name,surname)"
+															+ " values (?,?)";
+													if(!nameguest.getText().equals("") && !surnameguest.getText().equals(""))
+													{
+														PreparedStatement preparedStmt1 = con.prepareStatement(query3);
+														preparedStmt1.setString(1, imie);
+														preparedStmt1.setString(2, nazwisko);
+														preparedStmt1.executeUpdate();
+														input(imie, nazwisko,id,data,enddata);//stworzenie rezerwacji
+													}
+													else {
+														Alert a1=new Alert(Alert.AlertType.ERROR);
+										 				a1.setContentText("Nie poda³es danych");
+										 				a1.setTitle("Blad");
+										 				a1.setHeaderText(null);
+										 				a1.show();
+													}
+													
+												
+								 		    	
+								 				
+								 			} catch (Exception e) {
 
-				      String query3 = " insert into guest(name,surname)"
-					        + " values (?,?)";
-					 PreparedStatement preparedStmt1 = con.prepareStatement(query3);
-					 preparedStmt1.setString(1, imie);
-				      preparedStmt1.setString(2, nazwisko);
-				   
-				   
-				      preparedStmt1.executeUpdate();
-					input(imie, nazwisko, id);
-					
-					
-					
-		
-  		      
-  		      
+								 				
+								 			}
+								 		});			
+				     		});
+				 			
+				 		});
+				     
+		 			}
+		 			catch (Exception e) {
+		 				Alert a1=new Alert(Alert.AlertType.ERROR);
+		 				a1.setContentText("Nie wybrales pokoju");
+		 				a1.setTitle("Blad");
+		 				a1.setHeaderText(null);
+		 				a1.show();
+		 				glowna();
+		 			
+					}
+								    			     
 		}
-	 public void input(String imie,String nazwisko,int id) throws Exception
+	 
+	 
+	 private void addTask(ChoiceBox<String> choiceservice,ChoiceBox<String> choiceroomfortask) throws Exception
+		{
+			
+		 			try {
+						
+		 				
+					
+		 			String opis=opistask.getText();
+					String dane=choiceservice.getValue();
+					String wynik1[] = null;
+					wynik1 = dane.split("_");
+					
+					//	System.out.print(wynik1[0]);
+					SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+				 	Session session=sessionFactory.openSession();
+				 	session.beginTransaction();	
+				    
+				 	
+				    Query query = session.createQuery("from Services s WHERE s.name=:servicename");
+					query.setParameter("servicename",wynik1[0]);
+					
+					
+					List<Services>service=query.list();
+					int idservice = 0;
+					for(int i=0;i<service.size();i++) {
+						idservice=service.get(i).getId(); 
+					}
+					
+				
+					String daneroom=choiceroomfortask.getValue();
+					String wynik2[]=null;
+					wynik2 = daneroom.split("_");
+					
+					Query query1 = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
+					query1.setParameter("roomnumber",Integer.parseInt(wynik2[0]));
+					List <Rooms>rooms=query1.list();
+					int idroom=0;
+					
+					for(int i=0;i<rooms.size();i++)
+					{
+						idroom=rooms.get(i).getId();
+					}
+					
+					String daneuser=choiceuser.getValue();
+					String wynik3[]=null;
+					wynik3 = daneuser.split("_");
+					
+					Query query2 = session.createQuery("from User u WHERE u.login=:login");
+					query2.setParameter("login",(wynik3[0]));
+					
+					
+					
+					List<User>users=query2.list();
+					int iduser=0;
+					
+					for(int i=0;i<users.size();i++)
+					{
+						iduser=users.get(i).getId();
+					}
+					
+					inputTask(idroom,iduser,idservice,opis);
+		 			}
+		 			catch (Exception e) {
+		 				Alert a1=new Alert(Alert.AlertType.ERROR);
+		 				a1.setContentText("Z³e wype³nione dane");
+		 				a1.setTitle("Blad");
+		 				a1.setHeaderText(null);
+		 				a1.show();
+					}
+		}
+	 
+	 
+	public void inputTask(int idroom,int iduser,int idservice,String opis) throws Exception
+	{
+		 Connection con=getconnection();
+		 String query = " insert into task(description,status,room_ID,service_ID,user_ID)"
+				 + " values (?,?,?,?,?)";
+			 PreparedStatement preparedStmt = con.prepareStatement(query);
+			 preparedStmt.setString(1, opis);
+		     preparedStmt.setBoolean(2, true);
+		     preparedStmt.setInt(3, idroom);
+		     preparedStmt.setInt(4, idservice);
+		     preparedStmt.setInt(5, iduser);
+		  
+		   
+		    int i=preparedStmt.executeUpdate();
+		    if(i>0)
+		    {
+		    	glowna();
+		    }
+		    
+		 
+	}
+	 
+	 
+	 
+	 
+	    void glowna() {
+		  	takenRooms.setVisible(true);
+		  	freeRooms.setVisible(true);
+		  	takenRooms.setVisible(true);
+		  	change.setVisible(true);
+		  	dodajroom.setVisible(true);
+		  	opistask.setVisible(false);
+		  	choiceroom.setVisible(true);
+		  	choiceroomfortask.setVisible(false);
+		  	choiceservice.setVisible(false);
+		  	addtask.setVisible(false);
+		  	choiceuser.setVisible(false);
+		  	datapick.setVisible(false);
+		  	nameguest.setVisible(false);
+		  	surnameguest.setVisible(false);
+		  	createreservation.setVisible(false);
+		 	enddatepicker.setVisible(false);
+		 	lbldateend.setVisible(false);
+		  	lbldatereser.setVisible(false);
+		  	lblimie.setVisible(false);
+		  	lblnazwisko.setVisible(false);
+		  	}
+	 
+	 
+	 public void input(String imie,String nazwisko,int id,String data,String enddata) throws Exception
 	 {
 		 Connection con=getconnection();
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -212,18 +419,23 @@ public class ReceptionistController implements Initializable{
 				idguest=guest.get(i).getId();//nazwisko
 			}
 		
-		      String query2 = " insert into reservation(date_reservation,reservation,guest)"
-			        + " values (?,?,?)";
+		      String query2 = " insert into reservation(date_reservation,reservation,guest,enddate_reservation)"
+			        + " values (?,?,?,?)";
 			 PreparedStatement preparedStmt = con.prepareStatement(query2);
-			 preparedStmt.setString(1, "2020-04-22");
+			 preparedStmt.setString(1, data);
 		      preparedStmt.setInt(2, id);
 		      preparedStmt.setInt(3 ,idguest);
+		      preparedStmt.setString(4 ,enddata);
 		   
-		      preparedStmt.executeUpdate();
+		      int i=preparedStmt.executeUpdate();
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
 		      choiceroom.getItems().clear();
 		      setTables();
+		      if(i>0)
+			    {
+			    	glowna();
+			    }
 		      
 	 }
 	 public static Connection getconnection()throws Exception
@@ -262,10 +474,11 @@ public class ReceptionistController implements Initializable{
 		    }
 		
 		    for(int i=0;i<rooms.size();i++)
+		    	
 		    {
 		    for(int j=0;j<rooms.get(i).getReservation().size();j++)
 		    {
-		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates());
+		    	MenuItem pomocnicza2=new MenuItem(rooms.get(i).getRoomNumber(),rooms.get(i).getNumberOfSeats(),rooms.get(i).getLvl(),rooms.get(i).getReservation().get(j).getDates(),rooms.get(i).getReservation().get(j).getEndDate());
 		    	item.add(pomocnicza2);
 		    
 		    }
@@ -277,6 +490,7 @@ public class ReceptionistController implements Initializable{
 	    	numberOfSeats.setCellValueFactory(new PropertyValueFactory<MenuItem, Integer>("numberOfSeats"));
 	    	lvl.setCellValueFactory(new PropertyValueFactory<MenuItem, String>("lvl"));
 	    	dates.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("dates"));
+	    	enddate.setCellValueFactory(new PropertyValueFactory<MenuItem, Date>("enddate"));
 	    	
 	    	roomNumberF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
 	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
@@ -294,13 +508,114 @@ public class ReceptionistController implements Initializable{
 	    		 	int roomnumber=rooms1.get(i).getRoomNumber();
 	    			int numberOfSeats=rooms1.get(i).getNumberOfSeats();
 	    		 	String lvl=rooms1.get(i).getLvl();
-	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
+	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl; //choicebox tych pokoi,ktore nie sa zarezerowane
 	    			choiceroom.getItems().add(roomnumbe);
 	    		 
 			    }
+	    	  
+	    	  Query query3 = session.createQuery("from Rooms");	
+	    	  List<Rooms>rooms2 = query3.list();	
+	    	  for(int i=0;i<rooms2.size();i++)
+			    {
+	    		 	int roomnumber=rooms2.get(i).getRoomNumber();                            //choicebox wolnych pokoi
+	    			int numberOfSeats=rooms2.get(i).getNumberOfSeats();
+	    		 	String lvl=rooms2.get(i).getLvl();
+	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
+	    			choiceroomfortask.getItems().add(roomnumbe);
+	    		 
+			    }
+	    	  
+	    	  Query query4 = session.createQuery("from Services");	
+	    	  List<Services>services = query4.list();	
+	    	  for(int i=0;i<services.size();i++)
+			    {
+	    		  	String nameService=services.get(i).getName();
+	    		 	float priceService=services.get(i).getPrice();                           //choicebox wolnych pokoi
+	    			
+	    			String service=nameService+ "_" + String.valueOf(priceService);
+	    			choiceservice.getItems().add(service);
+	    		 
+			    }
+	    	  
+	    	  Query query5 = session.createQuery("from User");	
+	    	  List<User>users = query5.list();	
+	    	  for(int i=0;i<users.size();i++)
+			    {
+	    		  	String name=users.get(i).getLogin();
+	    		  	choiceuser.getItems().add(name);
+	  
+			    }
+	    	  
+	    	  
+	    	  
 		 
 	 }
-	
+	  @FXML
+	    void glowna(ActionEvent event) {
+		  	takenRooms.setVisible(true);
+		  	freeRooms.setVisible(true);
+		  	takenRooms.setVisible(true);
+		  	change.setVisible(true);
+		  	dodajroom.setVisible(true);
+		  	opistask.setVisible(false);
+		  	choiceroom.setVisible(true);
+		  	choiceroomfortask.setVisible(false);
+		  	choiceservice.setVisible(false);
+		  	addtask.setVisible(false);
+		  	choiceuser.setVisible(false);
+		  	datapick.setVisible(false);
+		  	nameguest.setVisible(false);
+		  	surnameguest.setVisible(false);
+		  	createreservation.setVisible(false);
+		  	enddatepicker.setVisible(false);
+	    }
+	  @FXML
+	    void dodajzadanie(ActionEvent event) {
+		  	takenRooms.setVisible(false);
+		  	freeRooms.setVisible(false);
+		  	choiceroom.setVisible(false);
+		  	change.setVisible(false);
+		  	dodajroom.setVisible(false);
+		  	opistask.setVisible(true);
+		  	choiceservice.setVisible(true);
+		  	choiceroomfortask.setVisible(true);
+		  	addtask.setVisible(true);
+		  	choiceuser.setVisible(true);
+		  	datapick.setVisible(false);
+		  	nameguest.setVisible(false);
+		  	surnameguest.setVisible(false);
+		  	createreservation.setVisible(false);
+		  	enddatepicker.setVisible(false);
+			lbldateend.setVisible(false);
+		  	lbldatereser.setVisible(false);
+		  	lblimie.setVisible(false);
+		  	lblnazwisko.setVisible(false);
+	    }
+	  
+	  
+	    void daneguesta() {
+		  	takenRooms.setVisible(false);
+		  	freeRooms.setVisible(false);
+		  	takenRooms.setVisible(false);
+		  	change.setVisible(false);
+		  	dodajroom.setVisible(false);
+		  	opistask.setVisible(false);
+		  	choiceroom.setVisible(false);
+		  	choiceroomfortask.setVisible(false);
+		  	choiceservice.setVisible(false);
+		  	addtask.setVisible(false);
+		  	choiceuser.setVisible(false);
+		  	datapick.setVisible(true);
+		  	nameguest.setVisible(true);
+		  	surnameguest.setVisible(true);
+		  	createreservation.setVisible(true);
+		  	enddatepicker.setVisible(true);
+		  	lbldateend.setVisible(true);
+		  	lbldatereser.setVisible(true);
+		  	lblimie.setVisible(true);
+		  	lblnazwisko.setVisible(true);
+	    }
+	    
 	
 }
 

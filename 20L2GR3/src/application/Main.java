@@ -1,6 +1,3 @@
-	package application;
-	
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -68,71 +66,66 @@ public class Main extends Application {
         
 		if(loggedUser!=null) {
             
-		if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==1)
+		if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==2)
 		{			
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
-	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("Receptionist.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==2)
-		{		
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==1)
+		{
+			
+			
 	        Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
-	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 	        Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
 			pane.getChildren().setAll(panes);
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==3)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==5)
 		{
 			
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
-	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("manager.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==4)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==4)
 		{
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
-	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("admin.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
 			
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==5)
+		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.getJob().getId()==3)
 		{
 			
 			Preferences userPreferences = Preferences.userRoot();
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
-	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
 			Pane panes = FXMLLoader.load(this.getClass().getResource("account.fxml"));
 	        pane.getChildren().setAll(panes);
 	     		
 		}
-		else if(loggedUser.password.equals(passwordfield.getText())&&loggedUser.idJob==6)
-		{			
-	        Preferences userPreferences = Preferences.userRoot();
-	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
-	        userPreferences.put("loggedUsername",loggedUser.login);
-	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.idJob));
-	        Pane panes = FXMLLoader.load(this.getClass().getResource("cookCleaner.fxml"));
-			pane.getChildren().setAll(panes);
-	     		
+		
 		}
+		else {
+			Alert a1=new Alert(Alert.AlertType.ERROR);
+			a1.setContentText("Bledne dane logowania");
+			a1.setTitle("Blad");
+			a1.setHeaderText(null);
+			a1.show();
 		}
 		
 	}
