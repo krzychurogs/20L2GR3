@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
@@ -42,6 +44,7 @@ import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import org.controlsfx.control.table.TableRowExpanderColumn;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -212,29 +215,36 @@ public class ReceptionistController implements Initializable{
 	 private void usun(ChoiceBox<String> choiceroom) throws Exception
 		{
 		 			try {
-						
+		 			if(!freeRooms.getSelectionModel().getSelectedItems().isEmpty()) 
+		 			{
 					
 		 			daneguesta();//panel dodawania goscia wraz z data
-					String dane=choiceroom.getValue();
-					String wynik1[] = null;
-					wynik1 = dane.split("_");
-					
-					//	System.out.print(wynik1[0]);
+
 					SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 				 	Session session=sessionFactory.openSession();
 				 	session.beginTransaction();	
 				    
 				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
-					query.setParameter("roomnumber",Integer.parseInt(wynik1[0]));
+					query.setParameter("roomnumber",freeRooms.getSelectionModel().getSelectedItems().get(0).getRoomNumber());
 					List<Rooms>rooms = query.list();	
-									
-				     Connection con=getconnection();	   
+					Rooms pickedRoom=rooms.get(0);	
+
 				     datapick.setOnAction((event) -> {
 				    	 		Date data = Date.valueOf(datapick.getValue());
 				    	 			enddatepicker.setOnAction((event3) -> {
 				 		    		Date enddata = Date.valueOf(enddatepicker.getValue());
 								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
-								 		   
+								 		   for(int i=0;i<pickedRoom.getReservation().size();i++) {
+								 			   if(!(pickedRoom.getReservation().get(i).getDates().before(data)&&pickedRoom.getReservation().get(i).getEndDate().after(data))&&
+								 					  pickedRoom.getReservation().get(i).getDates().before(enddata)&&pickedRoom.getReservation().get(i).getEndDate().after(enddata)) {
+								 				  Alert a1=new Alert(Alert.AlertType.ERROR);
+									 				a1.setContentText("Data jest juz zajeta");
+									 				a1.setTitle("Blad");
+									 				a1.setHeaderText(null);
+									 				a1.show();
+									 				return;
+								 			   }
+								 		   }
 								 		    try {
 									 		    	int id = 0;
 													for(int i=0;i<rooms.size();i++) {
@@ -271,7 +281,7 @@ public class ReceptionistController implements Initializable{
 				     		});
 				 			
 				 		});
-				     
+		 			}
 		 			}
 		 			catch (Exception e) {
 		 				Alert a1=new Alert(Alert.AlertType.ERROR);
@@ -282,7 +292,7 @@ public class ReceptionistController implements Initializable{
 		 				glowna();
 		 			
 					}
-								    			     
+		 								    			     
 		}
 	 
 	 
@@ -454,7 +464,7 @@ public class ReceptionistController implements Initializable{
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
 		    List<Reservation>reservation = new ArrayList<Reservation>() ;
-		 	
+		    TableRowExpanderColumn<Rooms> expanderColumn=new TableRowExpanderColumn<>(this::createEditor);
 		    Query query = session.createQuery("from Rooms");	
 		    
 		    List<Rooms>rooms = query.list();		
@@ -487,19 +497,19 @@ public class ReceptionistController implements Initializable{
 	    	numberOfSeatsF.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
 	    	lvlF.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
 	    	
-	    	
+	    	freeRooms.getColumns().addAll(expanderColumn);
 	    	takenRooms.setItems(item);	
 	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
 	    	
-	    	 Query query1 = session.createQuery("from Rooms r WHERE NOT EXISTS ( SELECT room FROM Reservation l WHERE r.id = l.room )");	
+	    	 Query query1 = session.createQuery("from Rooms");	
 	    	  List<Rooms>rooms1 = query1.list();	
 	    	  for(int i=0;i<rooms1.size();i++)
 			    {
 	    		 	int roomnumber=rooms1.get(i).getRoomNumber();
 	    			int numberOfSeats=rooms1.get(i).getNumberOfSeats();
 	    		 	String lvl=rooms1.get(i).getLvl();
-	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl; //choicebox tych pokoi,ktore nie sa zarezerowane
+	    			String roomnumbe=String.valueOf(roomnumber)+"("+String.valueOf(numberOfSeats)+ ")"; //choicebox tych pokoi,ktore nie sa zarezerowane
 	    			choiceroom.getItems().add(roomnumbe);
 	    		 
 			    }
@@ -539,6 +549,18 @@ public class ReceptionistController implements Initializable{
 	    	  
 	    	  
 	    	  session.close();
+		 
+	 }
+	 private GridPane createEditor(TableRowExpanderColumn.TableRowDataFeatures<Rooms> param) {
+		 GridPane editor=new GridPane();
+		 editor.setPadding(new Insets(10));
+		 Rooms room=param.getValue();
+		 if(!room.getReservation().isEmpty()) {
+		 for(int i=0;i<room.getReservation().size();i++) {
+			 editor.addRow(i, new Label(i+1+". OD: "+room.getReservation().get(i).getDates().toString()+" DO:"+room.getReservation().get(i).getEndDate().toString() ));
+		 }
+		 }
+		 return editor;
 		 
 	 }
 	  @FXML
