@@ -5,9 +5,6 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -16,7 +13,7 @@
 
 <Pane fx:id="mainpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ReceptionistController">
    <children>
-      <TableView fx:id="freeRooms" layoutX="180.0" layoutY="87.0" prefHeight="200.0" prefWidth="235.0" style="-fx-background-color: #90EE90;">
+      <TableView fx:id="freeRooms" layoutX="95.0" layoutY="87.0" prefHeight="200.0" prefWidth="483.0" style="-fx-background-color: #90EE90;">
         <columns>
               
               	<TableColumn id="room_numbefr" fx:id="roomNumberF" prefWidth="62.4000244140625" text="Nr_Pokoju" />
@@ -25,13 +22,13 @@
                
        </columns>
       </TableView>
-      <Label fx:id="nick" layoutX="192.0" layoutY="22.0" style="-fx-background-color: #DC143C;" text="Zalogowany recepjonista:">
+      <Label fx:id="nick" layoutX="192.0" layoutY="22.0" text="Zalogowany:">
          <font>
             <Font size="18.0" />
          </font></Label>
-      <Button layoutX="506.0" layoutY="23.0" mnemonicParsing="false" onAction="#wyloguj" style="-fx-font-weight: bold; -fx-background-color: #90EE90;" text="Wyloguj sie" />
+      <Button layoutX="502.0" layoutY="23.0" mnemonicParsing="false" onAction="#wyloguj" style="-fx-font-weight: bold; -fx-background-radius: 10; -fx-background-color: #90EE90;" text="Wyloguj sie" />
       
-      <CheckBox fx:id="change" layoutX="367.0" layoutY="61.0" mnemonicParsing="false" onAction="#zmien" style="-fx-background-color: #90EE90;" text="Zajęte Pokoje" />
+      <CheckBox fx:id="change" layoutX="483.0" layoutY="61.0" mnemonicParsing="false" onAction="#zmien" text="Zajęte Pokoje" />
       <TableView fx:id="takenRooms" layoutX="97.0" layoutY="87.0" prefHeight="200.0" prefWidth="483.0" style="-fx-background-color: #90EE90;">
 		<columns>
                 
@@ -42,22 +39,8 @@
            		 <TableColumn id="dates" fx:id="enddate" prefWidth="200.0" text="Data_zakonczenia" />
               </columns>
       </TableView>
-      <Button fx:id="dodajroom" layoutX="506.0" layoutY="339.0" mnemonicParsing="false" text="Zarezerwuj" />
+      <Button fx:id="dodajroom" layoutX="506.0" layoutY="339.0" mnemonicParsing="false" style="-fx-background-color: #90EE90; -fx-background-radius: 10;" text="Zarezerwuj" />
       <ChoiceBox fx:id="choiceroom" layoutX="431.0" layoutY="305.0" prefWidth="150.0" />
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="Głowna">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#glowna" text="Glowna" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Dodaj Zadanie">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#dodajzadanie" text="Dodaj Zadanie" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
       <TextField fx:id="opistask" layoutX="223.0" layoutY="100.0" prefHeight="25.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceservice" layoutX="223.0" layoutY="140.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceroomfortask" layoutX="223.0" layoutY="180.0" prefWidth="168.0" visible="false" />
@@ -72,6 +55,8 @@
       <Label fx:id="lbldateend" layoutX="110.0" layoutY="143.0" text="Data Końca Rezerwacji" visible="false" />
       <Label fx:id="lblimie" layoutX="140.00" layoutY="173.0" prefWidth="23.0" text="Imie" visible="false" />
       <Label fx:id="lblnazwisko" layoutX="140.0" layoutY="203.0" text="Nazwisko" visible="false" />
+      <Button fx:id="addTaskButton" layoutX="319.0" layoutY="339.0" mnemonicParsing="false" onAction="#dodajzadanie" style="-fx-background-color: #90EE90; -fx-background-radius: 10;" text="Dodaj Zadanie" />
+      <Button fx:id="mainTableButton" layoutX="37.0" layoutY="23.0" mnemonicParsing="false" onAction="#glowna" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="powrót" />
      
     
    </children>

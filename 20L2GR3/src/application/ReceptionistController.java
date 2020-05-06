@@ -96,6 +96,8 @@ public class ReceptionistController implements Initializable{
 		 @FXML
 		    private Button dodajroom;
 		 @FXML
+		    private Button addTaskButton;
+		 @FXML
 		   private ChoiceBox<String> choiceroom;
 		 @FXML
 		    private ChoiceBox<String> choiceservice;
@@ -103,6 +105,8 @@ public class ReceptionistController implements Initializable{
 		    private ChoiceBox<String> choiceroomfortask;
 		    @FXML
 		    private Button addtask;
+		    @FXML
+		    private Button mainTableButton;
 		    @FXML
 		    private TextField nameguest;
 
@@ -155,7 +159,7 @@ public class ReceptionistController implements Initializable{
 	    }
 	 @FXML
 	    void wyloguj(ActionEvent event) throws Exception {	
-		 Parent application = FXMLLoader.load(getClass().getResource("Uzytkownik.fxml"));
+		 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
 	     Scene applicationScene = new Scene(application);
 	     Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
 	     applicationScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -171,9 +175,10 @@ public class ReceptionistController implements Initializable{
 
 			Preferences userPreferences = Preferences.userRoot();
 	    	loggedUserName = userPreferences.get("loggedUsername","");
-	    	nick.setText("Zalogowany Recepjonista: "+loggedUserName);
+	    	nick.setText("Zalogowany: "+loggedUserName);
 	    	nameguest.setVisible(false);
 	    	surnameguest.setVisible(false);
+	  
 
 	    	
 	    	setTables();
@@ -226,9 +231,7 @@ public class ReceptionistController implements Initializable{
 				     Connection con=getconnection();	   
 				     datapick.setOnAction((event) -> {
 				    	 		Date data = Date.valueOf(datapick.getValue());
-				 					//String data=datapick.getValue().toString();//zlapanie daty z kalendarza do Stringa		
 				    	 			enddatepicker.setOnAction((event3) -> {
-				 		    		//String enddata=enddatepicker.getValue().toString();
 				 		    		Date enddata = Date.valueOf(enddatepicker.getValue());
 								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
 								 		   
@@ -401,6 +404,8 @@ public class ReceptionistController implements Initializable{
 		  	lbldatereser.setVisible(false);
 		  	lblimie.setVisible(false);
 		  	lblnazwisko.setVisible(false);
+		  	mainTableButton.setVisible(false);
+		  	addTaskButton.setVisible(true);
 		  	}
 	 
 	 
@@ -554,6 +559,9 @@ public class ReceptionistController implements Initializable{
 		  	surnameguest.setVisible(false);
 		  	createreservation.setVisible(false);
 		  	enddatepicker.setVisible(false);
+		  	addTaskButton.setVisible(true);
+			mainTableButton.setVisible(false);
+		  	addTaskButton.setVisible(true);
 	    }
 	  @FXML
 	    void dodajzadanie(ActionEvent event) {
@@ -576,6 +584,9 @@ public class ReceptionistController implements Initializable{
 		  	lbldatereser.setVisible(false);
 		  	lblimie.setVisible(false);
 		  	lblnazwisko.setVisible(false);
+			addTaskButton.setVisible(false);
+			mainTableButton.setVisible(true);
+		  	addTaskButton.setVisible(false);
 	    }
 	  
 	  
@@ -600,6 +611,8 @@ public class ReceptionistController implements Initializable{
 		  	lbldatereser.setVisible(true);
 		  	lblimie.setVisible(true);
 		  	lblnazwisko.setVisible(true);
+		  	mainTableButton.setVisible(true);
+		  	addTaskButton.setVisible(false);
 	    }
 	    
 	
