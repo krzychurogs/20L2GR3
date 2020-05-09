@@ -2,6 +2,7 @@ package application;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,10 +22,10 @@ public class Task {
 	@ManyToOne
     private User user;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY) 
     private Rooms room;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
     private Services service;
 	
 	@Column(name = "description")

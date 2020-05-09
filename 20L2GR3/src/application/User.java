@@ -94,6 +94,12 @@ public class User {
 		this.job = job;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
+	
 	
 	
 	

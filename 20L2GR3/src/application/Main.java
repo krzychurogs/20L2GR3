@@ -58,7 +58,7 @@ public class Main extends Application {
 		
 		session.getTransaction().commit();
 		
-		session.close();
+		
 		}
 		finally {
 			factory.close();
@@ -106,7 +106,7 @@ public class Main extends Application {
 	        userPreferences.put("loggedId",Integer.toString(loggedUser.id));
 	        userPreferences.put("loggedUsername",loggedUser.login);
 	        userPreferences.put("loggedJobId",Integer.toString(loggedUser.getJob().getId()));
-			Pane panes = FXMLLoader.load(this.getClass().getResource("admin.fxml"));
+			Pane panes = FXMLLoader.load(this.getClass().getResource("account.fxml"));
 	        pane.getChildren().setAll(panes);
 	        
 			

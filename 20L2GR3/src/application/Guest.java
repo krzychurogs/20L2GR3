@@ -86,6 +86,12 @@ public class Guest {
 		this.surname = surname;
 		this.reservation = reservation;
 	}
+
+
+	@Override
+	public String toString() {
+		return name+ " "+surname;
+	}
    
  
 

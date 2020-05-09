@@ -40,7 +40,6 @@
               </columns>
       </TableView>
       <Button fx:id="dodajroom" layoutX="506.0" layoutY="339.0" mnemonicParsing="false" style="-fx-background-color: #90EE90; -fx-background-radius: 10;" text="Zarezerwuj" />
-      <ChoiceBox fx:id="choiceroom" layoutX="431.0" layoutY="305.0" prefWidth="150.0" />
       <TextField fx:id="opistask" layoutX="223.0" layoutY="100.0" prefHeight="25.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceservice" layoutX="223.0" layoutY="140.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceroomfortask" layoutX="223.0" layoutY="180.0" prefWidth="168.0" visible="false" />

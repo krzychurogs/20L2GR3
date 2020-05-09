@@ -43,6 +43,7 @@ import java.util.prefs.Preferences;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.transaction.Transactional;
 
 import org.controlsfx.control.table.TableRowExpanderColumn;
 import org.hibernate.Query;
@@ -100,8 +101,6 @@ public class ReceptionistController implements Initializable{
 		    private Button dodajroom;
 		 @FXML
 		    private Button addTaskButton;
-		 @FXML
-		   private ChoiceBox<String> choiceroom;
 		 @FXML
 		    private ChoiceBox<String> choiceservice;
 		    @FXML
@@ -191,7 +190,7 @@ public class ReceptionistController implements Initializable{
 	 		    // Button was clicked, do something...
 	 		    try {
 	 		    	
-	 				usun(choiceroom);
+	 				usun();
 	 				
 	 			} catch (Throwable e) {
 	 				// TODO Auto-generated catch block
@@ -212,7 +211,9 @@ public class ReceptionistController implements Initializable{
 	    	
 	    		    	
 		}
-	 private void usun(ChoiceBox<String> choiceroom) throws Exception
+	 
+	 @Transactional
+	 private void usun() 
 		{
 		 			try {
 		 			if(!freeRooms.getSelectionModel().getSelectedItems().isEmpty()) 
@@ -223,12 +224,12 @@ public class ReceptionistController implements Initializable{
 					SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 				 	Session session=sessionFactory.openSession();
 				 	session.beginTransaction();	
-				    
+				    System.out.println("dd:"+freeRooms.getSelectionModel().getSelectedItems().get(0).getRoomNumber());
 				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
 					query.setParameter("roomnumber",freeRooms.getSelectionModel().getSelectedItems().get(0).getRoomNumber());
 					List<Rooms>rooms = query.list();	
 					Rooms pickedRoom=rooms.get(0);	
-
+					System.out.println(pickedRoom.getRoomNumber()+"pokoj");
 				     datapick.setOnAction((event) -> {
 				    	 		Date data = Date.valueOf(datapick.getValue());
 				    	 			enddatepicker.setOnAction((event3) -> {
@@ -281,6 +282,7 @@ public class ReceptionistController implements Initializable{
 				     		});
 				 			
 				 		});
+				   
 		 			}
 		 			}
 		 			catch (Exception e) {
@@ -292,6 +294,7 @@ public class ReceptionistController implements Initializable{
 		 				glowna();
 		 			
 					}
+		 			
 		 								    			     
 		}
 	 
@@ -355,8 +358,9 @@ public class ReceptionistController implements Initializable{
 					{
 						iduser=users.get(i).getId();
 					}
-					
+					session.close();
 					inputTask(idroom,iduser,idservice,opis);
+					
 		 			}
 		 			catch (Exception e) {
 		 				Alert a1=new Alert(Alert.AlertType.ERROR);
@@ -400,7 +404,6 @@ public class ReceptionistController implements Initializable{
 		  	change.setVisible(true);
 		  	dodajroom.setVisible(true);
 		  	opistask.setVisible(false);
-		  	choiceroom.setVisible(true);
 		  	choiceroomfortask.setVisible(false);
 		  	choiceservice.setVisible(false);
 		  	addtask.setVisible(false);
@@ -425,17 +428,13 @@ public class ReceptionistController implements Initializable{
 		 	Session session=sessionFactory.openSession();
 		 	session.beginTransaction();	
 			Rooms room=session.get(Rooms.class, roomId);
-			 session.getTransaction().commit();
-			 session.beginTransaction();	
 			Bill bill =new Bill();
 			Reservation reservation = new Reservation(0,room,data,enddata,guest,bill);
 			session.save(bill);
 			session.save(reservation);	
 		    session.getTransaction().commit();
-		    session.close();  
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
-		      choiceroom.getItems().clear();
 		      setTables();
 				      
 	 }
@@ -502,18 +501,7 @@ public class ReceptionistController implements Initializable{
 	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
 	    	
-	    	 Query query1 = session.createQuery("from Rooms");	
-	    	  List<Rooms>rooms1 = query1.list();	
-	    	  for(int i=0;i<rooms1.size();i++)
-			    {
-	    		 	int roomnumber=rooms1.get(i).getRoomNumber();
-	    			int numberOfSeats=rooms1.get(i).getNumberOfSeats();
-	    		 	String lvl=rooms1.get(i).getLvl();
-	    			String roomnumbe=String.valueOf(roomnumber)+"("+String.valueOf(numberOfSeats)+ ")"; //choicebox tych pokoi,ktore nie sa zarezerowane
-	    			choiceroom.getItems().add(roomnumbe);
-	    		 
-			    }
-	    	  
+
 	    	  Query query3 = session.createQuery("from Rooms");	
 	    	  List<Rooms>rooms2 = query3.list();	
 	    	  for(int i=0;i<rooms2.size();i++)
@@ -571,7 +559,6 @@ public class ReceptionistController implements Initializable{
 		  	change.setVisible(true);
 		  	dodajroom.setVisible(true);
 		  	opistask.setVisible(false);
-		  	choiceroom.setVisible(true);
 		  	choiceroomfortask.setVisible(false);
 		  	choiceservice.setVisible(false);
 		  	addtask.setVisible(false);
@@ -584,12 +571,17 @@ public class ReceptionistController implements Initializable{
 		  	addTaskButton.setVisible(true);
 			mainTableButton.setVisible(false);
 		  	addTaskButton.setVisible(true);
+		  	lbldatereser.setVisible(false);
+		  	lbldateend.setVisible(false);
+		  	lblimie.setVisible(false);
+		  	lblnazwisko.setVisible(false);
+		  	
+		  
 	    }
 	  @FXML
 	    void dodajzadanie(ActionEvent event) {
 		  	takenRooms.setVisible(false);
 		  	freeRooms.setVisible(false);
-		  	choiceroom.setVisible(false);
 		  	change.setVisible(false);
 		  	dodajroom.setVisible(false);
 		  	opistask.setVisible(true);
@@ -619,7 +611,6 @@ public class ReceptionistController implements Initializable{
 		  	change.setVisible(false);
 		  	dodajroom.setVisible(false);
 		  	opistask.setVisible(false);
-		  	choiceroom.setVisible(false);
 		  	choiceroomfortask.setVisible(false);
 		  	choiceservice.setVisible(false);
 		  	addtask.setVisible(false);

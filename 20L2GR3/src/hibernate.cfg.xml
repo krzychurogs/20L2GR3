@@ -15,7 +15,7 @@
       <property name="hibernate.show_sql">true</property>
       <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
       <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>  
-      <property name="hibernate.hbm2ddl.auto">update</property>
+      <property name="hibernate.hbm2ddl.auto">validate</property>
 
 
   		<mapping class="application.Task"/>

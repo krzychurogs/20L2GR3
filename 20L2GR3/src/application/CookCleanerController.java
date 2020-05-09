@@ -56,6 +56,7 @@ public class CookCleanerController {
 	
 	public CookCleanerController() 
     {
+		
     }
      
     @FXML
@@ -90,12 +91,12 @@ public class CookCleanerController {
     		list.add(tasks.get(i));
     		}
     	taskTableView.setItems(list);
-    	session.close();
+    
     }
     
     @FXML
     void wyloguj(ActionEvent event) throws Exception {	
-	 Parent application = FXMLLoader.load(getClass().getResource("Uzytkownik.fxml"));
+   	 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
      Scene applicationScene = new Scene(application);
      Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
      applicationScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -136,23 +137,18 @@ public class CookCleanerController {
 			session.beginTransaction();		
 			Task task=session.get(Task.class,taskTableView.getSelectionModel().getSelectedItems().get(0).getId());
 			task.setStatus(false);
-			session.getTransaction().commit();
-			session.beginTransaction();
-			session.getTransaction().commit();
 			int roomId =task.getRoom().getId(); 
 		 	Calendar calobj = Calendar.getInstance();
-		 	session.beginTransaction();	
 		 	Query query = session.createQuery("from Reservation r WHERE r.room.id=:roomid and :todaydate BETWEEN r.dates AND r.endDate ");
 		 	query.setParameter("roomid", roomId);
 		 	query.setParameter("todaydate",calobj.getTime() );
 		 	List<Reservation>reservations =(List<Reservation>) query.list();	
 		 	current=reservations.get(0);
-			session.getTransaction().commit();
-			session.beginTransaction();	
+
 		 	Bill bill=session.get(Bill.class, current.getId());
 		 	bill.addServices(task.getService());
 		 	session.getTransaction().commit();
-			session.close();
+		
 		}
 		populateTable();
     }

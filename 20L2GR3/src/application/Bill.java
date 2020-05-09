@@ -74,4 +74,17 @@ public class Bill {
 	        this.services.remove(services);
 	        services.getBill().remove(this);
 	    }
+	   public float totalbill()
+	    {
+	    	float price=0;
+	    	for(int i=0;i<reservation.getBill().getServices().size();i++)
+	    	{
+	    		 price+=reservation.getBill().getServices().get(i).getPrice();
+	    	}
+	    	return price;
+	    } 
+	   @Override
+	    public String toString() {
+	    return this.totalbill()+"";
+	    }
 }

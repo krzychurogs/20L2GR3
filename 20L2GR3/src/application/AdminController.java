@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -103,17 +104,17 @@ public class AdminController implements Initializable{
 	
 		 			list=FXCollections.observableArrayList();
 		 			
-	    		    setChoiceJobs();	
+		 			setChoiceJobs();	
 	    		    btncreate.setOnAction((event) -> {
-			 		    // Button was clicked, do something...
+			 		
 			 		    try {
 			 				createUser(choicejob);
 			 				
 			 			} catch (Throwable e) {
-			 				// TODO Auto-generated catch block
+			 				
 			 				e.printStackTrace();
 			 			}
-			 		});
+			 	});
 	    		  
 	    		    SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 	    		 	Session session=sessionFactory.openSession();
@@ -133,9 +134,19 @@ public class AdminController implements Initializable{
 	    	    	tablelogin.setCellValueFactory(new PropertyValueFactory<User, String>("login"));
 	    	    	tablezawod.setCellValueFactory(new PropertyValueFactory<User, Job>("job"));
 	    	    	accounts.setItems(list);
-	    		    
+	    	    	session.close();
 	 }
 	 
+	    @FXML
+	    void wyloguj(ActionEvent event) throws Exception {	
+	   	 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
+	     Scene applicationScene = new Scene(application);
+	     Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+	     applicationScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	     window.setScene(applicationScene);
+	     window.show();
+	    	
+	    } 
 
 	 
 	 public void setChoiceJobs()
@@ -155,7 +166,7 @@ public class AdminController implements Initializable{
     			choicejob.getValue();
     
 		    }
-    	
+    	session.close();
 	 }
 	 
 	 public void createUser(ChoiceBox<String> choicejob)
@@ -192,40 +203,41 @@ public class AdminController implements Initializable{
 		 
 		 session.beginTransaction();
 		 
-		 if(password.equals(rpassword))
+		 if(haslo.equals(rhaslo))
 		 {
 			 
 		 
-				 if(dane.equals("Recepjonista"))
+				 if(dane.equals("recepcjonista"))
 				 {
 				 	User user=new User(imie,nazwisko,logi,haslo,job);
 				 	session.save(user);
 					session.getTransaction().commit();
 					
 				 }
-				 else if (dane.equals("Kucharz")) {
+				 else if (dane.equals("kucharz")) {
 					 
 					 	User user=new User(imie,nazwisko,logi,haslo,job2);
 					 	session.save(user);
 						session.getTransaction().commit();
 				}
-				 else if (dane.equals("Sprzataczka")) {
+				 else if (dane.equals("sprzatacz")) {
 					 
 					 	User user=new User(imie,nazwisko,logi,haslo,job1);
 					 	session.save(user);
 						session.getTransaction().commit();
 						
 				}
+			
 		}
 		 else {
 			 Alert a1=new Alert(Alert.AlertType.ERROR);
-				a1.setContentText("Has³a siê nie zgadzaja");
+				a1.setContentText("HasÂ³a siÃª nie zgadzaja");
 				a1.setTitle("Blad");
 				a1.setHeaderText(null);
 				a1.show();
 		}
 		 
-		 
+		 session.close();
 	 }
 	 @FXML
 	    void showTable(ActionEvent event) {
