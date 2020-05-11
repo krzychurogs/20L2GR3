@@ -139,8 +139,9 @@ public class AdminController implements Initializable{
 			 			}
 			 	});
 	    		   
-	    		    
+	    		editableCols();    
 	    		setTables();
+	    		updateUser();
 	    		 
 	 }
 	 
@@ -178,8 +179,9 @@ public class AdminController implements Initializable{
 	
 	    	
 	    	
-	    	editableCols();
+	    
 	    	accounts.setItems(list);
+	    
 	    	
 	    	session.close();
 	 }
@@ -264,29 +266,6 @@ public class AdminController implements Initializable{
 				    }
 				);
 		 
-		 
-		 btnedit.setOnAction((event) -> {
-		 		
-	    	 ObservableList<User>selectedRow,allPeople;
-			 allPeople=accounts.getItems();
-			 selectedRow=accounts.getSelectionModel().getSelectedItems();
-			 Session session1=sessionFactory.openSession();
-			 session1.beginTransaction();	
-			 for(User user: selectedRow)
-			 {
-				 btnedit.setOnAction((event1) -> {
-				 		
-			 		
-				 		User s = new User(user.getId(),user.getName(),user.getSurname(),user.getLogin(),user.getPassword(),user.getJob());
-						
-						session1.update(s);
-						session1.getTransaction().commit();
-			 		 
-			 	});
-			 }
-	 	});
-		
-		
 	 }
 
 	 
@@ -313,11 +292,8 @@ public class AdminController implements Initializable{
 	 public void createUser(ChoiceBox<String> choicejob)
 	 {
 	
-		 
 		 String dane=choicejob.getValue();
 		
-		 
-
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 		 Session session=sessionFactory.openSession();
 		 session.beginTransaction();	
@@ -330,15 +306,19 @@ public class AdminController implements Initializable{
 		 String imie=name.getText();
 		 String nazwisko=surname.getText();
 		 String logi=login.getText();
-		 Job job=session.get(Job.class,2);
+		 Job job=session.get(Job.class,1);
 		 session.getTransaction().commit();
 
 		 session.beginTransaction();
-		 Job job1=session.get(Job.class,1);
+		 Job job1=session.get(Job.class,2);
 		 session.getTransaction().commit();
 		 
 		 session.beginTransaction();
-		 Job job2=session.get(Job.class,3);
+		 Job job2=session.get(Job.class,6);
+		 session.getTransaction().commit();
+
+		 session.beginTransaction();
+		 Job job3=session.get(Job.class,3);
 		 session.getTransaction().commit();
 		 
 		 
@@ -357,13 +337,20 @@ public class AdminController implements Initializable{
 				 }
 				 else if (dane.equals("kucharz")) {
 					 
-					 	User user=new User(imie,nazwisko,logi,haslo,job2);
+					 	User user=new User(imie,nazwisko,logi,haslo,job1);
 					 	session.save(user);
 						session.getTransaction().commit();
 				}
 				 else if (dane.equals("sprzatacz")) {
 					 
-					 	User user=new User(imie,nazwisko,logi,haslo,job1);
+					 	User user=new User(imie,nazwisko,logi,haslo,job2);
+					 	session.save(user);
+						session.getTransaction().commit();
+						
+				}
+				 else if (dane.equals("manager")) {
+					 
+					 	User user=new User(imie,nazwisko,logi,haslo,job3);
 					 	session.save(user);
 						session.getTransaction().commit();
 						
@@ -378,7 +365,8 @@ public class AdminController implements Initializable{
 				a1.setHeaderText(null);
 				a1.show();
 		}
-		 
+		 accounts.getItems().clear();
+		 setTables();
 		 session.close();
 	 }
 	 @FXML
@@ -490,7 +478,35 @@ public class AdminController implements Initializable{
 	    	
 	    }
 	   
-
+	  
+		public void updateUser()
+		{
+				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+				 ObservableList<User>selectedRow,allPeople;
+				 allPeople=accounts.getItems();
+				 selectedRow=accounts.getSelectionModel().getSelectedItems();
+				btnedit.setOnAction((event) -> {
+			 		
+		    	
+				 Session session1=sessionFactory.openSession();
+				 session1.beginTransaction();	
+				 for(User user: selectedRow)
+				 {
+					 btnedit.setOnAction((event1) -> {
+					 		
+				 		
+					 		User s = new User(user.getId(),user.getName(),user.getSurname(),user.getLogin(),user.getPassword(),user.getJob());
+							
+						
+					 		session1.merge(s);
+					 		session1.getTransaction().commit();
+							session1.beginTransaction();	
+				 		 
+				 	});
+				 }
+					
+		 	});
+		}
 	
 
 	
