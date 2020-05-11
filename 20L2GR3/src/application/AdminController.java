@@ -2,7 +2,10 @@ package application;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,11 +18,18 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.bytebuddy.build.HashCodeAndEqualsPlugin.Sorted;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,6 +42,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
+
+import javax.swing.JOptionPane;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -97,8 +109,19 @@ public class AdminController implements Initializable{
     private TableColumn<User,String> tablelogin;
 
     @FXML
+    private Button btndelete;
+    @FXML
+    private Button btnedit;
+    @FXML
+    private Label find;
+
+    @FXML
+    private TextField textviewfind;
+
+    @FXML
     private TableColumn<User,Job> tablezawod;
     public ObservableList <User> list;
+
 	 
 	 public void initialize(URL url, ResourceBundle rbl) {
 	
@@ -115,26 +138,10 @@ public class AdminController implements Initializable{
 			 				e.printStackTrace();
 			 			}
 			 	});
-	    		  
-	    		    SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-	    		 	Session session=sessionFactory.openSession();
-	    		 	session.beginTransaction();	
-	    		   
-	    		    Query query = session.createQuery("from User");	
-	    		    
-	    		    List<User>users = query.list();		
-	    		    for(int i=0;i<users.size();i++)
-	    		    {
-	    		    	list.add(users.get(i));
-	    		    }
 	    		   
 	    		    
-	    		    tablename.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
-	    		    tablenazwisko.setCellValueFactory(new PropertyValueFactory<User, String>("surname"));
-	    	    	tablelogin.setCellValueFactory(new PropertyValueFactory<User, String>("login"));
-	    	    	tablezawod.setCellValueFactory(new PropertyValueFactory<User, Job>("job"));
-	    	    	accounts.setItems(list);
-	    	    	session.close();
+	    		setTables();
+	    		 
 	 }
 	 
 	    @FXML
@@ -147,6 +154,140 @@ public class AdminController implements Initializable{
 	     window.show();
 	    	
 	    } 
+
+	 public void setTables()
+	 {
+		 	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		   
+		    Query query = session.createQuery("from User");	
+		    
+		    List<User>users = query.list();		
+		    for(int i=0;i<users.size();i++)
+		    {
+		    	list.add(users.get(i));
+		    }
+		   
+		    
+		    tablename.setCellValueFactory(new PropertyValueFactory<User, String>("name"));
+		    tablenazwisko.setCellValueFactory(new PropertyValueFactory<User, String>("surname"));
+	    	tablelogin.setCellValueFactory(new PropertyValueFactory<User, String>("login"));
+	    	tablezawod.setCellValueFactory(new PropertyValueFactory<User, Job>("job"));
+	 
+	
+	    	
+	    	
+	    	editableCols();
+	    	accounts.setItems(list);
+	    	
+	    	session.close();
+	 }
+	 
+	 public void editableCols()
+	 {
+		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 Session session=sessionFactory.openSession();
+		 session.beginTransaction();	
+		  Query query = session.createQuery("from Job");	
+    	  List<Job>jobs = query.list();	
+    	  int id = 0;
+    	  ObservableList list = FXCollections.observableArrayList();
+    	  
+    	  for(int i=0;i<jobs.size();i++)
+		    {
+    		 
+    			list.addAll(jobs.get(i));
+		    }
+    	session.close();
+		 tablename.setCellFactory(TextFieldTableCell.forTableColumn());
+		 tablename.setOnEditCommit(e->{
+			 e.getTableView().getItems().get(e.getTablePosition().getRow()).setName(e.getNewValue());
+		 });
+		 
+		 tablenazwisko.setCellFactory(TextFieldTableCell.forTableColumn());
+		 tablenazwisko.setOnEditCommit(e->{
+			 e.getTableView().getItems().get(e.getTablePosition().getRow()).setSurname(e.getNewValue());
+		 });
+		 tablelogin.setCellFactory(TextFieldTableCell.forTableColumn());
+		 tablelogin.setOnEditCommit(e->{
+			 e.getTableView().getItems().get(e.getTablePosition().getRow()).setLogin(e.getNewValue());
+		 });
+
+		 tablezawod.setCellFactory(ChoiceBoxTableCell.forTableColumn(list));
+		 tablezawod.setOnEditCommit(e->{
+			 e.getTableView().getItems().get(e.getTablePosition().getRow()).setJob(e.getNewValue());
+		 });
+		 
+		 accounts.setEditable(true);
+		 
+		 tablenazwisko.setOnEditCommit(
+				    new EventHandler<CellEditEvent<User, String>>() {
+				       @Override
+				       public void handle(CellEditEvent<User, String> t) {
+				            ((User) t.getTableView().getItems().get(
+				                t.getTablePosition().getRow())
+				                ).setSurname(t.getNewValue());
+				        }
+				    }
+				);
+		 
+		 tablename.setOnEditCommit(
+				    new EventHandler<CellEditEvent<User, String>>() {
+				       @Override
+				       public void handle(CellEditEvent<User, String> t) {
+				            ((User) t.getTableView().getItems().get(
+				                t.getTablePosition().getRow())
+				                ).setName(t.getNewValue());
+				        }
+				    }
+				);
+		 
+		 tablelogin.setOnEditCommit(
+				    new EventHandler<CellEditEvent<User, String>>() {
+				       @Override
+				       public void handle(CellEditEvent<User, String> t) {
+				            ((User) t.getTableView().getItems().get(
+				                t.getTablePosition().getRow())
+				                ).setLogin(t.getNewValue());
+				        }
+				    }
+				);
+		 tablezawod.setOnEditCommit(
+				    new EventHandler<CellEditEvent<User, Job>>() {
+				       @Override
+				       public void handle(CellEditEvent<User, Job> t) {
+				            ((User) t.getTableView().getItems().get(
+				                t.getTablePosition().getRow())
+				                ).setJob(t.getNewValue());
+				        }
+				    }
+				);
+		 
+		 
+		 btnedit.setOnAction((event) -> {
+		 		
+	    	 ObservableList<User>selectedRow,allPeople;
+			 allPeople=accounts.getItems();
+			 selectedRow=accounts.getSelectionModel().getSelectedItems();
+			 Session session1=sessionFactory.openSession();
+			 session1.beginTransaction();	
+			 for(User user: selectedRow)
+			 {
+				 btnedit.setOnAction((event1) -> {
+				 		
+			 		
+				 		User s = new User(user.getId(),user.getName(),user.getSurname(),user.getLogin(),user.getPassword(),user.getJob());
+						
+						session1.update(s);
+						session1.getTransaction().commit();
+			 		 
+			 	});
+			 }
+	 	});
+		
+		
+	 }
 
 	 
 	 public void setChoiceJobs()
@@ -227,6 +368,7 @@ public class AdminController implements Initializable{
 						session.getTransaction().commit();
 						
 				}
+				 
 			
 		}
 		 else {
@@ -254,10 +396,13 @@ public class AdminController implements Initializable{
 		  	lblrpassword.setVisible(false);
 		  	lblsurname.setVisible(false);
 		  	lbjob.setVisible(false);
-		  	back.setVisible(false);
+		  	back.setVisible(true);
 		  	header.setVisible(false);
 		  	accounts.setVisible(true);
-		  
+		  	btndelete.setVisible(true);
+		  	btnedit.setVisible(true);
+		  	textviewfind.setVisible(true);
+		  	find.setVisible(true);
 	    }
 	 @FXML
 	    void showCreate(ActionEvent event) {
@@ -277,10 +422,74 @@ public class AdminController implements Initializable{
 		  	back.setVisible(true);
 		  	header.setVisible(true);
 		  	accounts.setVisible(false);
+		  	btndelete.setVisible(false);
+		  	btnedit.setVisible(false);
+		  	textviewfind.setVisible(false);
+		  	find.setVisible(false);
 		 
 	    }
-	
-	
+	 @FXML
+	    void deleteuser(ActionEvent event) {
+		 int a=JOptionPane.showConfirmDialog(null, "Czy Napewno?","Ostrzezenie", JOptionPane.YES_NO_CANCEL_OPTION);
+		 if(a==0)
+		 {
+			
+			 ObservableList<User>selectedRow,allPeople;
+			 allPeople=accounts.getItems();
+			 selectedRow=accounts.getSelectionModel().getSelectedItems();
+			 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+			 Session session=sessionFactory.openSession();
+			 session.beginTransaction();	
+			 for(User user: selectedRow)
+			 {
+			
+				 
+				 User users=session.load(User.class,user.getId());
+				 session.delete(users);
+				 session.getTransaction().commit();
+			 }
+			
+				 accounts.getItems().removeAll(accounts.getSelectionModel().getSelectedItem());
+				 accounts.getItems().clear();
+				 setTables();
+		 }
+		 }
+
+	    @FXML
+	    void search(KeyEvent event) {
+	    	FilteredList<User> filteredData=new FilteredList<>(list,p->true);
+	    	textviewfind.textProperty().addListener((obsevable,oldvalue,newvalue)->{
+	    		filteredData.setPredicate(pers ->{
+	    			 if(newvalue==null || newvalue.isEmpty())
+	    			 {
+	    				 return true;
+	    			 }
+	    			 String typedText=newvalue.toLowerCase();
+	    			 if(pers.getName().toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 if(pers.getSurname().toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 if(pers.getLogin().toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 if(pers.getJob().getName().toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 return false;
+	    		});
+	    		SortedList<User>sortedList=new SortedList<>(filteredData);
+	    		sortedList.comparatorProperty().bind(accounts.comparatorProperty());
+	    		accounts.setItems(sortedList);
+	    	});
+	    	
+	    }
+	   
 
 	
 
