@@ -43,19 +43,26 @@
       <TextField fx:id="opistask" layoutX="223.0" layoutY="100.0" prefHeight="25.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceservice" layoutX="223.0" layoutY="140.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceroomfortask" layoutX="223.0" layoutY="180.0" prefWidth="168.0" visible="false" />
-      <ChoiceBox fx:id="choiceuser" layoutX="223.0" layoutY="220.0" prefWidth="169.0" visible="false" />
+      <ChoiceBox fx:id="choiceuser" layoutX="-132.0" layoutY="178.0" prefWidth="169.0" visible="false" />
       <Button fx:id="addtask" layoutX="348.0" layoutY="305.0" mnemonicParsing="false" text="Dodaj zadanie" visible="false" />
-      <DatePicker fx:id="datapick" layoutX="245.0" layoutY="113.0" visible="false" />
-      <TextField fx:id="nameguest" layoutX="245.0" layoutY="173.0" visible="false" />
-      <TextField fx:id="surnameguest" layoutX="245.0" layoutY="203.0" visible="false" />
-      <Button fx:id="createreservation" layoutX="354.0" layoutY="233.0" mnemonicParsing="false" text="Wyslij" visible="false" />
-      <DatePicker fx:id="enddatepicker" layoutX="245.0" layoutY="143.0" visible="false" />
+      <DatePicker fx:id="datapick" layoutX="9.0" layoutY="327.0" visible="false" />
+      <TextField fx:id="nameguest" layoutX="404.0" layoutY="173.0" visible="false" />
+      <TextField fx:id="surnameguest" layoutX="404.0" layoutY="203.0" visible="false" />
+      <Button fx:id="createreservation" layoutX="354.0" layoutY="233.0" mnemonicParsing="false" onAction="#addGuest" text="Wyslij" visible="false" />
+      <DatePicker fx:id="enddatepicker" layoutX="22.0" layoutY="364.0" visible="false" />
       <Label fx:id="lbldatereser" layoutX="110.0" layoutY="113.0" text="Data Poczatku Rezerwacji" visible="false" />
       <Label fx:id="lbldateend" layoutX="110.0" layoutY="143.0" text="Data Końca Rezerwacji" visible="false" />
       <Label fx:id="lblimie" layoutX="140.00" layoutY="173.0" prefWidth="23.0" text="Imie" visible="false" />
       <Label fx:id="lblnazwisko" layoutX="140.0" layoutY="203.0" text="Nazwisko" visible="false" />
       <Button fx:id="addTaskButton" layoutX="319.0" layoutY="339.0" mnemonicParsing="false" onAction="#dodajzadanie" style="-fx-background-color: #90EE90; -fx-background-radius: 10;" text="Dodaj Zadanie" />
       <Button fx:id="mainTableButton" layoutX="37.0" layoutY="23.0" mnemonicParsing="false" onAction="#glowna" style="-fx-background-radius: 10; -fx-background-color: #90EE90;" text="powrót" />
+      <TableView fx:id="dateRoomsTable" layoutX="30.0" layoutY="87.0" prefHeight="232.0" prefWidth="305.0">
+        <columns>
+          <TableColumn fx:id="dateRoomNumberColumn" prefWidth="75.0" text="nr pokoju" />
+          <TableColumn fx:id="dateSizeColumn" prefWidth="75.0" text="miejsca" />
+            <TableColumn fx:id="dateLvlColumn" prefWidth="75.0" text="poziom" />
+        </columns>
+      </TableView>
      
     
    </children>

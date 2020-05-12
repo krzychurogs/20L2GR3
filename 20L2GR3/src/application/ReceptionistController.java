@@ -66,7 +66,17 @@ public class ReceptionistController implements Initializable{
 	    private TableView<MenuItem> takenRooms;
 	    @FXML
 	    private TableView<Rooms> freeRooms;
+	    @FXML
+	    private TableView<Rooms> dateRoomsTable;
+	    
+	    @FXML
+		private TableColumn<Rooms,Integer> dateSizeColumn;
 		
+		@FXML
+		private TableColumn <Rooms,Integer>dateRoomNumberColumn;
+			
+		@FXML
+		private TableColumn<Rooms,String> dateLvlColumn;
 		@FXML
 		private TableColumn<MenuItem,Integer> numberOfSeats;
 		
@@ -136,8 +146,8 @@ public class ReceptionistController implements Initializable{
 		String loggedUserName;
 		public ObservableList <MenuItem> item;
 		public ObservableList <Rooms> list;
-	  
-	
+		Date firstDate,endDate;
+		List<Rooms> roomList;
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
 	    	
@@ -215,88 +225,73 @@ public class ReceptionistController implements Initializable{
 	 @Transactional
 	 private void usun() 
 		{
-		 			try {
-		 			if(!freeRooms.getSelectionModel().getSelectedItems().isEmpty()) 
-		 			{
-					
-		 			daneguesta();//panel dodawania goscia wraz z data
-
-					SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-				 	Session session=sessionFactory.openSession();
-				 	session.beginTransaction();	
-				    System.out.println("dd:"+freeRooms.getSelectionModel().getSelectedItems().get(0).getRoomNumber());
-				    Query query = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
-					query.setParameter("roomnumber",freeRooms.getSelectionModel().getSelectedItems().get(0).getRoomNumber());
-					List<Rooms>rooms = query.list();	
-					Rooms pickedRoom=rooms.get(0);	
-					System.out.println(pickedRoom.getRoomNumber()+"pokoj");
-				     datapick.setOnAction((event) -> {
-				    	 		Date data = Date.valueOf(datapick.getValue());
-				    	 			enddatepicker.setOnAction((event3) -> {
-				 		    		Date enddata = Date.valueOf(enddatepicker.getValue());
-								      createreservation.setOnAction((event1) -> { //przycisk tworzacy guesta 
-								 		   for(int i=0;i<pickedRoom.getReservation().size();i++) {
-								 			   if(!(pickedRoom.getReservation().get(i).getDates().before(data)&&pickedRoom.getReservation().get(i).getEndDate().after(data))&&
-								 					  pickedRoom.getReservation().get(i).getDates().before(enddata)&&pickedRoom.getReservation().get(i).getEndDate().after(enddata)) {
-								 				  Alert a1=new Alert(Alert.AlertType.ERROR);
-									 				a1.setContentText("Data jest juz zajeta");
-									 				a1.setTitle("Blad");
-									 				a1.setHeaderText(null);
-									 				a1.show();
-									 				return;
-								 			   }
-								 		   }
-								 		    try {
-									 		    	int id = 0;
-													for(int i=0;i<rooms.size();i++) {
-														id=rooms.get(i).getId(); //id roomu wybranego
-													}
-													String imie=nameguest.getText();
-													String nazwisko=surnameguest.getText();
-
-													Guest guest=new Guest(0,imie,nazwisko,null);
-													
-													if(!nameguest.getText().equals("") && !surnameguest.getText().equals(""))
-													{
-	
-														session.save(guest);
-														session.close();
-														input(guest,id,data,enddata);//stworzenie rezerwacji
-													}
-													else {
-														Alert a1=new Alert(Alert.AlertType.ERROR);
-										 				a1.setContentText("Nie poda3es danych");
-										 				a1.setTitle("Blad");
-										 				a1.setHeaderText(null);
-										 				a1.show();
-													}
-													
-												
-								 		    	
-								 				
-								 			} catch (Exception e) {
-
-								 				
-								 			}
-								 		});			
-				     		});
-				 			
-				 		});
-				   
-		 			}
-		 			}
-		 			catch (Exception e) {
-		 				Alert a1=new Alert(Alert.AlertType.ERROR);
-		 				a1.setContentText("Nie wybrales pokoju");
-		 				a1.setTitle("Blad");
-		 				a1.setHeaderText(null);
-		 				a1.show();
-		 				glowna();
-		 			
-					}
-		 			
-		 								    			     
+		 daneguesta();
+		 		SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 		Session session=sessionFactory.openSession();
+		 		session.beginTransaction();	
+		 		Query query = session.createQuery("from Rooms");
+		 		roomList = query.list();	
+		 			//daneguesta();//panel dodawania goscia wraz z data	
+					datapick.valueProperty().addListener((observable, oldDate, newDate)->{
+						 firstDate=Date.valueOf(newDate);
+						 if(firstDate!=null && endDate!=null)
+						 refreshDateTable();
+					 });
+					enddatepicker.valueProperty().addListener((observable, oldDate, newDate)->{
+						 endDate=Date.valueOf(newDate);
+						 if(firstDate!=null && endDate!=null)
+						 refreshDateTable();
+				 	});			    	 		
+		 					 								    			     
 		}
+	 private void refreshDateTable() {
+			if(!roomList.isEmpty()) {
+				boolean add=true;
+				 list=FXCollections.observableArrayList();
+				 dateRoomNumberColumn.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
+		    	dateSizeColumn.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("numberOfSeats"));
+		    	dateLvlColumn.setCellValueFactory(new PropertyValueFactory<Rooms, String>("lvl"));
+		    	for(int i=0;i<roomList.size();i++) {
+		    		for(int j=0;j<roomList.get(i).getReservation().size();j++) {
+		    		if((roomList.get(i).getReservation().get(j).getDates().before(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().after(endDate))||
+		    				(roomList.get(i).getReservation().get(j).getDates().before(endDate)&&roomList.get(i).getReservation().get(j).getEndDate().after(endDate))||
+		    				(roomList.get(i).getReservation().get(j).getDates().before(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().after(firstDate))||
+		    				(roomList.get(i).getReservation().get(j).getDates().after(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().before(endDate))) 
+		    			add=false;
+		    	
+		    	}
+		    		if(add!=false) {
+			    		list.add(roomList.get(i));
+			    		}
+			    		add=true;
+		    	
+		    	}
+		    	dateRoomsTable.setItems(list);
+			}
+		 
+	 }
+	 
+	 @FXML
+	 private void addGuest() {
+		 if(dateRoomsTable.getSelectionModel().getSelectedItems().isEmpty()==false) {
+			 SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
+			 Session session=sessionFactory.openSession();		 	
+			session.beginTransaction();	
+			Rooms room=session.get(Rooms.class, dateRoomsTable.getSelectionModel().getSelectedItems().get(0).getId());
+			String name=nameguest.getText();
+			String surname=surnameguest.getText();
+			Guest guest=new Guest();
+			guest.setName(name);
+			guest.setSurname(surname);
+			Bill bill=new Bill();
+			Reservation reservation=new Reservation(0,room,firstDate,endDate,guest,bill);
+			session.save(bill);
+			session.save(guest);
+			session.save(reservation);
+			session.getTransaction().commit();
+		 }
+	 }
+	
 	 
 	 
 	 private void addTask(ChoiceBox<String> choiceservice,ChoiceBox<String> choiceroomfortask) throws Exception
@@ -398,7 +393,7 @@ public class ReceptionistController implements Initializable{
 	 
 	 
 	    void glowna() {
-		  	takenRooms.setVisible(true);
+	    	takenRooms.setVisible(true);
 		  	freeRooms.setVisible(true);
 		  	takenRooms.setVisible(true);
 		  	change.setVisible(true);
@@ -412,13 +407,18 @@ public class ReceptionistController implements Initializable{
 		  	nameguest.setVisible(false);
 		  	surnameguest.setVisible(false);
 		  	createreservation.setVisible(false);
-		 	enddatepicker.setVisible(false);
-		 	lbldateend.setVisible(false);
+		  	enddatepicker.setVisible(false);
+		  	addTaskButton.setVisible(true);
+			mainTableButton.setVisible(false);
+		  	addTaskButton.setVisible(true);
 		  	lbldatereser.setVisible(false);
+		  	lbldateend.setVisible(false);
 		  	lblimie.setVisible(false);
 		  	lblnazwisko.setVisible(false);
-		  	mainTableButton.setVisible(false);
-		  	addTaskButton.setVisible(true);
+		  	dateRoomsTable.setVisible(false);
+		  	dateSizeColumn.setVisible(false);
+		  	dateLvlColumn.setVisible(false);
+		  	dateRoomNumberColumn.setVisible(false);
 		  	}
 	 
 	 
@@ -575,6 +575,10 @@ public class ReceptionistController implements Initializable{
 		  	lbldateend.setVisible(false);
 		  	lblimie.setVisible(false);
 		  	lblnazwisko.setVisible(false);
+		  	dateRoomsTable.setVisible(false);
+		  	dateSizeColumn.setVisible(false);
+		  	dateLvlColumn.setVisible(false);
+		  	dateRoomNumberColumn.setVisible(false);
 		  	
 		  
 	    }
@@ -624,8 +628,12 @@ public class ReceptionistController implements Initializable{
 		  	lbldatereser.setVisible(true);
 		  	lblimie.setVisible(true);
 		  	lblnazwisko.setVisible(true);
-		  	mainTableButton.setVisible(true);
+		  	mainTableButton.setVisible(false);
 		  	addTaskButton.setVisible(false);
+			dateRoomsTable.setVisible(true);
+		  	dateSizeColumn.setVisible(true);
+		  	dateLvlColumn.setVisible(true);
+		  	dateRoomNumberColumn.setVisible(true);
 	    }
 	    
 	
