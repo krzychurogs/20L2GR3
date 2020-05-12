@@ -482,12 +482,12 @@ public class AdminController implements Initializable{
 		public void updateUser()
 		{
 				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-				 ObservableList<User>selectedRow,allPeople;
-				 allPeople=accounts.getItems();
-				 selectedRow=accounts.getSelectionModel().getSelectedItems();
+				
 				btnedit.setOnAction((event) -> {
 			 		
-		    	
+					 ObservableList<User>selectedRow,allPeople;
+					 allPeople=accounts.getItems();
+					 selectedRow=accounts.getSelectionModel().getSelectedItems();
 				 Session session1=sessionFactory.openSession();
 				 session1.beginTransaction();	
 				 for(User user: selectedRow)

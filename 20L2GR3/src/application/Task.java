@@ -39,6 +39,16 @@ public class Task {
 
 	
 
+	public Task(User user, Rooms room, Services service, String description, boolean status) {
+		super();
+		this.user = user;
+		this.room = room;
+		this.service = service;
+		this.description = description;
+		this.status = status;
+	}
+
+
 	public Task(int id, User user, Rooms room, Services service, String description, boolean status) {
 		super();
 		this.id = id;
@@ -60,15 +70,7 @@ public class Task {
 	}
 
 
-	public Task() {
-		super();
-		this.id =0;
-		this.user = null;
-		this.room = null;
-		this.service = null;
-		this.description = "";
-		this.status = false;
-	}
+	
 
 
 	public int getId() {
@@ -114,6 +116,7 @@ public class Task {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+	
 	
 	
 	

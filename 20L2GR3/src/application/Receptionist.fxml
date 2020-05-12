@@ -43,7 +43,7 @@
       <TextField fx:id="opistask" layoutX="223.0" layoutY="100.0" prefHeight="25.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceservice" layoutX="223.0" layoutY="140.0" prefWidth="168.0" visible="false" />
       <ChoiceBox fx:id="choiceroomfortask" layoutX="223.0" layoutY="180.0" prefWidth="168.0" visible="false" />
-      <ChoiceBox fx:id="choiceuser" layoutX="223.0" layoutY="220.0" prefWidth="169.0" visible="false" />
+      <ChoiceBox fx:id="choiceuser" layoutX="223.0" layoutY="220.0" onMouseEntered="#addTask" prefWidth="169.0" visible="false" />
       <Button fx:id="addtask" layoutX="348.0" layoutY="305.0" mnemonicParsing="false" text="Dodaj zadanie" visible="false" />
       <DatePicker fx:id="datapick" layoutX="245.0" layoutY="113.0" visible="false" />
       <TextField fx:id="nameguest" layoutX="245.0" layoutY="173.0" visible="false" />
