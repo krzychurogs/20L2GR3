@@ -138,6 +138,9 @@ public class ReceptionistController implements Initializable{
 		String loggedUserName;
 		public ObservableList <MenuItem> item;
 		public ObservableList <Rooms> list;
+		int idservice = 0;
+		int idroom=0;
+		int iduser=0;
 	  
 	
 		@FXML
@@ -292,10 +295,10 @@ public class ReceptionistController implements Initializable{
 	 
 	   @FXML
 	    void addTask(MouseEvent event) throws Exception {
-	
+		    choiceservice.getItems().clear();
+		    choiceroomfortask.getItems().clear();
 		   	String opis=opistask.getText();
-		   	int idservice = 0;
-			int idroom=0;
+		   	
 			try {
 				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 			 	Session session=sessionFactory.openSession();
@@ -310,7 +313,7 @@ public class ReceptionistController implements Initializable{
 				String job = null;
 				String daneroom=null;
 				String daneservice=null;
-				int iduser=0;//idusera
+				//idusera
 			
 				
 				for(int i=0;i<users.size();i++)
@@ -319,7 +322,7 @@ public class ReceptionistController implements Initializable{
 					iduser=users.get(i).getId();
 				}
 				
-				if(job.equals("recepcjonista"))
+				if(job.equals("kucharz"))
 				{
 				  	  Query query4 = session.createQuery("from Services where id<8");	
 			    	  List<Services>services = query4.list();	
@@ -367,24 +370,21 @@ public class ReceptionistController implements Initializable{
 						{
 							idroom=rooms.get(i).getId();
 						}
-						
-						
-						
 						 addtask.setOnAction((event1) -> {
 					 		    // Button was clicked, do something...
 					 		  
 					 		    	
-					 		   
-										try {
-											inputTask(idroom,iduser,idservice,opis);
-										} catch (Exception e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-							
+					 		    	try {
+										inputTask(idroom,iduser,idservice,opis);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 					 				
 					 			
 					 		});
+					
+					
 
 			
 			
@@ -503,7 +503,7 @@ public class ReceptionistController implements Initializable{
 	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
 	    	  
-	    	  Query query5 = session.createQuery("from User");	
+	    	  Query query5 = session.createQuery("from User where job_id=2 or job_id=6");	
 	    	  List<User>users = query5.list();	
 	    	  for(int i=0;i<users.size();i++)
 			    {
