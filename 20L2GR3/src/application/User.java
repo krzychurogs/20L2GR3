@@ -3,6 +3,9 @@ package application;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import javafx.scene.control.Button;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,9 +34,11 @@ public class User {
 	String password;
 	
 
+
 	@ManyToOne
     private Job job;
 	
+
 	
 	public Job getJob() {
 		return job;
@@ -81,9 +86,7 @@ public class User {
 		this.surname = surname;
 	}
 	
-	public User() {
-		super();
-	}
+	
 
 	public User(String name, String surname, String login, String password, Job job) {
 		super();
@@ -93,11 +96,40 @@ public class User {
 		this.password = password;
 		this.job = job;
 	}
+	
+
+	
+
+	public User() {
+		super();
+	}
+
+	public User(int id, String name, String surname, String login, String password, Job job) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.login = login;
+		this.password = password;
+		this.job = job;
+	}
+
+	public User(int id, String name, String surname, String login, Job job) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.login = login;
+		this.job = job;
+	}
+
+	
 
 	@Override
 	public String toString() {
 		return name;
 	}
+
 
 	
 	
