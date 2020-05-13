@@ -14,12 +14,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -50,6 +53,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+
 public class ReceptionistController implements Initializable{
 	@FXML
     private DatePicker datapick;
@@ -148,6 +152,10 @@ public class ReceptionistController implements Initializable{
 		public ObservableList <Rooms> list;
 		Date firstDate,endDate;
 		List<Rooms> roomList;
+		int idservice = 0;
+		int idroom=0;
+		int iduser=0;
+		
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
 	    	
@@ -191,7 +199,7 @@ public class ReceptionistController implements Initializable{
 	    	nameguest.setVisible(false);
 	    	surnameguest.setVisible(false);
 	  
-
+	    		
 	    	
 	    	setTables();
 	    	
@@ -208,16 +216,7 @@ public class ReceptionistController implements Initializable{
 	 			}
 	 		});
 	    	 
-	    	 addtask.setOnAction((event) -> {
-		 		    // Button was clicked, do something...
-		 		    try {
-		 				addTask(choiceservice, choiceroomfortask);
-		 				
-		 			} catch (Throwable e) {
-		 				// TODO Auto-generated catch block
-		 				e.printStackTrace();
-		 			}
-		 		});
+	    	
 	    	
 	    		    	
 		}
@@ -245,7 +244,7 @@ public class ReceptionistController implements Initializable{
 		 					 								    			     
 		}
 	 private void refreshDateTable() {
-			if(!roomList.isEmpty()) {
+			if(!roomList.isEmpty()) {		
 				boolean add=true;
 				 list=FXCollections.observableArrayList();
 				 dateRoomNumberColumn.setCellValueFactory(new PropertyValueFactory<Rooms, Integer>("roomNumber"));
@@ -294,100 +293,24 @@ public class ReceptionistController implements Initializable{
 	
 	 
 	 
-	 private void addTask(ChoiceBox<String> choiceservice,ChoiceBox<String> choiceroomfortask) throws Exception
+	 
+	 
+	  public void inputTask(int idroom,int iduser,int idservice,String opis) throws Exception
 		{
-			
-		 			try {
-						
-		 				
-					
-		 			String opis=opistask.getText();
-					String dane=choiceservice.getValue();
-					String wynik1[] = null;
-					wynik1 = dane.split("_");
-					
-					//	System.out.print(wynik1[0]);
-					SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-				 	Session session=sessionFactory.openSession();
-				 	session.beginTransaction();	
-				    
-				 	
-				    Query query = session.createQuery("from Services s WHERE s.name=:servicename");
-					query.setParameter("servicename",wynik1[0]);
-					
-					
-					List<Services>service=query.list();
-					int idservice = 0;
-					for(int i=0;i<service.size();i++) {
-						idservice=service.get(i).getId(); 
-					}
-					
-				
-					String daneroom=choiceroomfortask.getValue();
-					String wynik2[]=null;
-					wynik2 = daneroom.split("_");
-					
-					Query query1 = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
-					query1.setParameter("roomnumber",Integer.parseInt(wynik2[0]));
-					List <Rooms>rooms=query1.list();
-					int idroom=0;
-					
-					for(int i=0;i<rooms.size();i++)
-					{
-						idroom=rooms.get(i).getId();
-					}
-					
-					String daneuser=choiceuser.getValue();
-					String wynik3[]=null;
-					wynik3 = daneuser.split("_");
-					
-					Query query2 = session.createQuery("from User u WHERE u.login=:login");
-					query2.setParameter("login",(wynik3[0]));
-					
-					
-					
-					List<User>users=query2.list();
-					int iduser=0;
-					
-					for(int i=0;i<users.size();i++)
-					{
-						iduser=users.get(i).getId();
-					}
-					session.close();
-					inputTask(idroom,iduser,idservice,opis);
-					
-		 			}
-		 			catch (Exception e) {
-		 				Alert a1=new Alert(Alert.AlertType.ERROR);
-		 				a1.setContentText("Z3e wype3nione dane");
-		 				a1.setTitle("Blad");
-		 				a1.setHeaderText(null);
-		 				a1.show();
-					}
+		   	 SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
+			 Session session=sessionFactory.openSession();		 	
+			 session.beginTransaction();	
+			 Rooms room=session.get(Rooms.class,idroom);
+			 Services service=session.get(Services.class,idservice);
+			 User user=session.get(User.class,iduser);
+			 Task task=new Task(user,room,service,opis,true);
+			 session.save(room);
+			 session.save(service);
+			 session.save(user);
+			 session.save(task);
+			 session.getTransaction().commit();   
+			 
 		}
-	 
-	 
-	public void inputTask(int idroom,int iduser,int idservice,String opis) throws Exception
-	{
-		 Connection con=getconnection();
-		 String query = " insert into task(description,status,room_ID,service_ID,user_ID)"
-				 + " values (?,?,?,?,?)";
-			 PreparedStatement preparedStmt = con.prepareStatement(query);
-			 preparedStmt.setString(1, opis);
-		     preparedStmt.setBoolean(2, true);
-		     preparedStmt.setInt(3, idroom);
-		     preparedStmt.setInt(4, idservice);
-		     preparedStmt.setInt(5, iduser);
-		  
-		   
-		    int i=preparedStmt.executeUpdate();
-		    if(i>0)
-		    {
-		    	glowna();
-		    }
-		    
-		 
-	}
 	 
 	 
 	 
@@ -453,6 +376,108 @@ public class ReceptionistController implements Initializable{
 			return null;
 			
 		}
+	 	
+	 	@FXML
+	    void addTask(MouseEvent event) throws Exception {
+	 		choiceservice.getItems().clear();
+		    choiceroomfortask.getItems().clear();
+		   	String opis=opistask.getText();
+		   	
+			try {
+				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+			 	Session session=sessionFactory.openSession();
+			 	session.beginTransaction();	
+			    
+			 	
+			 	String daneuser=choiceuser.getValue();
+				
+				Query query2 = session.createQuery("from User u WHERE u.login=:login");
+				query2.setParameter("login",daneuser);
+				List<User>users=query2.list();
+				String job = null;
+				String daneroom=null;
+				String daneservice=null;
+				//idusera
+			
+				
+				for(int i=0;i<users.size();i++)
+				{
+					job=users.get(i).getJob().getName();
+					iduser=users.get(i).getId();
+				}
+				
+				if(job.equals("kucharz"))
+				{
+				  	  Query query4 = session.createQuery("from Services where id<8");	
+			    	  List<Services>services = query4.list();	
+			    	  for(int i=0;i<services.size();i++)
+					    {
+			    		  	String nameService=services.get(i).getName();
+			    		 	float priceService=services.get(i).getPrice();                           //choicebox wolnych pokoi
+			    			
+			    			String service=nameService+ " " + String.valueOf(priceService)+" zl";
+			    			choiceservice.getItems().add(service);
+			    		 
+					    }
+			    	  Query query3 = session.createQuery("from Rooms");	
+			    	  List<Rooms>rooms2 = query3.list();	
+			    	  for(int i=0;i<rooms2.size();i++)
+					    {
+			    		 	int roomnumber=rooms2.get(i).getRoomNumber();                           
+			    			int numberOfSeats=rooms2.get(i).getNumberOfSeats();
+			    		 	String lvl=rooms2.get(i).getLvl();
+			    			String roomnumbe=String.valueOf(roomnumber);
+			    			choiceroomfortask.getItems().add(roomnumbe);
+					    } 	
+			    	  
+				}
+
+			    	  	daneservice=choiceservice.getValue();
+			    	  	daneroom=choiceroomfortask.getValue();
+			    	  
+						String wynik1[] = null;
+						wynik1 = daneservice.split(" ");
+			    	  	Query query = session.createQuery("from Services s WHERE s.name=:servicename");
+			    	  	query.setParameter("servicename",wynik1[0]);
+			    	  	System.out.println(wynik1[0]);
+			    	  	List<Services>service=query.list();
+						
+						for(int i=0;i<service.size();i++) {
+							idservice=service.get(i).getId(); 
+						}
+						Query query1 = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
+						query1.setParameter("roomnumber",Integer.parseInt(daneroom));
+						List <Rooms>rooms=query1.list();
+						
+						
+						for(int i=0;i<rooms.size();i++)
+						{
+							idroom=rooms.get(i).getId();
+						}
+						 addtask.setOnAction((event1) -> {
+					 		    // Button was clicked, do something...
+					 		  
+					 		    	
+					 		    	try {
+										inputTask(idroom,iduser,idservice,opis);
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+					 				
+					 			
+					 		});
+					
+					
+
+			
+			
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+	   }
+
 	 public void setTables()
 	 {
 		 
@@ -500,7 +525,7 @@ public class ReceptionistController implements Initializable{
 	    	takenRooms.setItems(item);	
 	    	freeRooms.setItems(list);
 	    	takenRooms.setVisible(false);
-	    	
+	    	dateRoomsTable.setVisible(false);
 
 	    	  Query query3 = session.createQuery("from Rooms");	
 	    	  List<Rooms>rooms2 = query3.list();	
@@ -534,7 +559,22 @@ public class ReceptionistController implements Initializable{
 	    		  	choiceuser.getItems().add(name);
 	  
 			    }
-	    	  
+	    		datapick.setDayCellFactory(picker -> new DateCell() {
+			        public void updateItem(LocalDate date, boolean empty) {
+			            super.updateItem(date, empty);
+			            LocalDate today = LocalDate.now();
+
+			            setDisable(empty || date.compareTo(today) < 0 );
+			        }
+			    });
+	    		enddatepicker.setDayCellFactory(picker -> new DateCell() {
+			        public void updateItem(LocalDate date, boolean empty) {
+			            super.updateItem(date, empty);
+			            LocalDate today = LocalDate.now();
+
+			            setDisable(empty || date.compareTo(today) < 0 );
+			        }
+			    });
 	    	  
 	    	  session.close();
 		 
