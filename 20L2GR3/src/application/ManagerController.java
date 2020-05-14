@@ -34,15 +34,21 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
+import javax.persistence.criteria.Root;
+
 import org.controlsfx.control.table.TableRowExpanderColumn;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 
 
@@ -59,59 +65,128 @@ public class ManagerController implements Initializable{
 
     @FXML
     private TableColumn<Reservation,Bill> balance;
+    @FXML
+    private TableView<Item> reservationRooms;
+
+    @FXML
+    private TableColumn<Item,Rooms> numberRoom;
+    @FXML
+    private TableColumn<Item,Long> countedreservation;
+    @FXML
+    private Button statstobills;
 
     public ObservableList <Reservation> list;
     public ObservableList <Reservation> lista;
+    
     @FXML
     private Label profit;
     @FXML
     private PieChart piechart;
-    
+    @FXML
+    private Button swapforcount;
     @FXML
     private Button billls;
+    public ObservableList<Item> counts;
 	 public void initialize(URL url, ResourceBundle rbl) {
 
 		 	list=FXCollections.observableArrayList();
+		 	guest();
 		 
-	
-			SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-		 	Session session=sessionFactory.openSession();
-		 	session.beginTransaction();	
-		 	
-			    Query query = session.createQuery("from Reservation");	
-			    
-			    List<Reservation>resr = query.list();	
-			   TableRowExpanderColumn<Reservation> expanderColumn=new TableRowExpanderColumn<>(this::createEditor);
-			    session.getTransaction().commit();
-			    int id=0;
-		    float cena=0;
-		    for(int i=0;i<resr.size();i++)
-		    {
-		    	list.add(resr.get(i));
-		    
-		    	
-		    }	
-		    
-				
-		    name.setCellValueFactory(new PropertyValueFactory<Reservation, Guest>("guest"));
-		    balance.setCellValueFactory(new PropertyValueFactory<Reservation, Bill>("bill"));
-	    	
-		 	guestTable.getColumns().addAll(expanderColumn);
-	    	guestTable.setItems(list);
+
 	    	float value=profit();
 	    	profit.setText("£aczny przychod: "+String.valueOf(value));
 	    	 btnstats.setOnAction((event) -> {
-
 		 		    	
 		 				stats(list);
 		 				
 		 			
 		 		});
 	    	 
-	    
+	    	 
 	    
 	 }
 	 
+	 
+	public void guest()
+	{
+		
+		SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+	 	Session session=sessionFactory.openSession();
+	 	session.beginTransaction();	
+	 	
+		    Query query = session.createQuery("from Reservation");	
+		    
+		    List<Reservation>resr = query.list();	
+		   TableRowExpanderColumn<Reservation> expanderColumn=new TableRowExpanderColumn<>(this::createEditor);
+		    session.getTransaction().commit();
+		    int id=0;
+	    float cena=0;
+	    for(int i=0;i<resr.size();i++)
+	    {
+	    	list.add(resr.get(i));
+	    
+	    	
+	    }	
+	    
+			
+	    name.setCellValueFactory(new PropertyValueFactory<Reservation, Guest>("guest"));
+	    balance.setCellValueFactory(new PropertyValueFactory<Reservation, Bill>("bill"));
+    	
+	 	guestTable.getColumns().addAll(expanderColumn);
+    	guestTable.setItems(list);
+	}
+	 
+	 
+	 
+	 
+	 
+	 public void setTable() {
+		 		guestTable.setVisible(false);
+		 		reservationRooms.setVisible(true);
+		 		swapforcount.setVisible(false);
+		 		piechart.setVisible(false);
+		 		statstobills.setVisible(false);
+		 		billls.setVisible(true);
+			 	counts=FXCollections.observableArrayList();
+			 	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+			 	Session session=sessionFactory.openSession();
+			 	session.beginTransaction();	
+			
+			 	Query query = session.createQuery("select rk.room,count(rk.id) from Reservation as rk group by rk.room");
+
+			 	 List<Object[]>employees=(List<Object[]>) query.list();
+               
+			 	 for(Object[] employee: employees){
+                	
+			 		 //employee[0]
+			 		 //employee[1]
+			 		Rooms number=(Rooms) employee[0];
+			 		long count=(long) employee[1];
+			 		
+			 		System.out.println(number);
+			 		System.out.println(count);
+                	Item pomocnicza2=new Item(number,count);
+             
+                	counts.add(pomocnicza2);
+                
+                }
+                
+
+			   session.getTransaction().commit();
+			  
+	
+			   
+			    
+			   	numberRoom.setCellValueFactory(new PropertyValueFactory<Item,Rooms>("number"));
+				countedreservation.setCellValueFactory(new PropertyValueFactory<Item,Long>("count"));
+			    
+			   	reservationRooms.setItems(counts);
+			    
+		    	
+		    	session.close();
+		    	
+		 
+		 }
 	 
 	 private GridPane createEditor(TableRowExpanderColumn.TableRowDataFeatures<Reservation> param) {
 		 GridPane editor=new GridPane();
@@ -163,13 +238,26 @@ public class ManagerController implements Initializable{
 	     window.show();
 	    	
 	    } 
+	    public void screenGuest()
+	    {
+	    	guestTable.setVisible(true);
+	    	reservationRooms.setVisible(false);
+	    	btnstats.setVisible(true);
+	    	piechart.setVisible(false);
+	    	reservationRooms.setVisible(false);
+	    	statstobills.setVisible(true);
+	    	
+	    }
+	    
 	 public void stats(ObservableList<Reservation> list2) {
 		 	guestTable.setVisible(false);
 		 	profit.setVisible(false);
 		 	btnstats.setVisible(false);
-		 	
+		 	swapforcount.setVisible(true);
+		 	statstobills.setVisible(true);
 		 	piechart.setVisible(true);
 		 	billls.setVisible(true);
+		 	
 		 	float cola=0;
 		 	float piwo=0;
 		 	float pizza=0;
@@ -209,16 +297,7 @@ public class ManagerController implements Initializable{
 	        )
 	);
 			
-			billls.setOnAction((event) -> {
-
-				guestTable.setVisible(true);
-			 	profit.setVisible(true);
-			 	btnstats.setVisible(true);
- 				piechart.setVisible(false);
- 				billls.setVisible(false);
- 				
- 			
- 		});
+			
 	}
 	
 	 
