@@ -71,7 +71,8 @@ public class CookCleanerController {
      	
     }
     
-    private void populateTable() {
+     void populateTable() {
+    	 taskTableView.getItems().clear();
     	System.out.println("id"+loggedId);
 		list=FXCollections.observableArrayList();  	
     	idColumn.setCellValueFactory(new PropertyValueFactory<Task, Integer>("id"));
@@ -125,7 +126,8 @@ public class CookCleanerController {
     	        Stage stage = new Stage();
     	        stage.setTitle("New Window");
     	        stage.setScene(scene);
-    	        stage.show();
+    	        stage.showAndWait();
+    	        populateTable();
     	}
     }
     private void confirmCookTask() {

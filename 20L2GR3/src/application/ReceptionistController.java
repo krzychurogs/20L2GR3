@@ -38,6 +38,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.sql.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -294,19 +295,34 @@ public class ReceptionistController implements Initializable{
 	 
 	 
 	 
-	 
-	  public void inputTask(int idroom,int iduser,int idservice,String opis) throws Exception
+	 @FXML
+	  public void inputTask(ActionEvent event) throws Exception
 		{
 		   	 SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
 			 Session session=sessionFactory.openSession();		 	
 			 session.beginTransaction();	
-			 Rooms room=session.get(Rooms.class,idroom);
-			 Services service=session.get(Services.class,idservice);
-			 User user=session.get(User.class,iduser);
-			 Task task=new Task(user,room,service,opis,true);
-			 session.save(room);
-			 session.save(service);
-			 session.save(user);
+			 String daneservice=choiceservice.getValue();
+			 String daneroom=choiceroomfortask.getValue();
+			 Services idservice;
+			 int iduser; 
+			 Rooms idroom;
+			 String opis;
+				String wynik1[] = null;
+				wynik1 = daneservice.split(" ");
+	    	  	Query query = session.createQuery("from Services s WHERE s.name=:servicename");
+	    	  	query.setParameter("servicename",wynik1[0]);
+	    	  	System.out.println(wynik1[0]);
+	    	  	List<Services>service=query.list();
+				idservice=service.get(0);
+
+				Query query1 = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
+				query1.setParameter("roomnumber",Integer.parseInt(daneroom));
+				List <Rooms>rooms=query1.list();
+				idroom=rooms.get(0);
+
+			 
+					opis="costam";
+			 Task task=new Task(0,userForTask,idroom,idservice,opis,true);
 			 session.save(task);
 			 session.getTransaction().commit();   
 			 
@@ -377,107 +393,65 @@ public class ReceptionistController implements Initializable{
 			
 		}
 	 	
+	 
+	 
+	 	
+	 List<Rooms> roomListToTask;
+	 	List<User> userListToTask;
+	 	List<Services> servicesListToTask;
+	 	User userForTask;
 	 	@FXML
-	    void addTask(MouseEvent event) throws Exception {
+	 	void userChoiceBoxeEvent(ActionEvent event){
 	 		choiceservice.getItems().clear();
 		    choiceroomfortask.getItems().clear();
-		   	String opis=opistask.getText();
-		   	
-			try {
-				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-			 	Session session=sessionFactory.openSession();
-			 	session.beginTransaction();	
-			    
-			 	
-			 	String daneuser=choiceuser.getValue();
-				
-				Query query2 = session.createQuery("from User u WHERE u.login=:login");
-				query2.setParameter("login",daneuser);
-				List<User>users=query2.list();
-				String job = null;
-				String daneroom=null;
-				String daneservice=null;
-				//idusera
-			
-				
-				for(int i=0;i<users.size();i++)
-				{
-					job=users.get(i).getJob().getName();
-					iduser=users.get(i).getId();
-				}
-				
-				if(job.equals("kucharz"))
-				{
-				  	  Query query4 = session.createQuery("from Services where id<8");	
-			    	  List<Services>services = query4.list();	
-			    	  for(int i=0;i<services.size();i++)
-					    {
-			    		  	String nameService=services.get(i).getName();
-			    		 	float priceService=services.get(i).getPrice();                           //choicebox wolnych pokoi
-			    			
-			    			String service=nameService+ " " + String.valueOf(priceService)+" zl";
-			    			choiceservice.getItems().add(service);
-			    		 
-					    }
-			    	  Query query3 = session.createQuery("from Rooms");	
-			    	  List<Rooms>rooms2 = query3.list();	
-			    	  for(int i=0;i<rooms2.size();i++)
-					    {
-			    		 	int roomnumber=rooms2.get(i).getRoomNumber();                           
-			    			int numberOfSeats=rooms2.get(i).getNumberOfSeats();
-			    		 	String lvl=rooms2.get(i).getLvl();
-			    			String roomnumbe=String.valueOf(roomnumber);
-			    			choiceroomfortask.getItems().add(roomnumbe);
-					    } 	
-			    	  
-				}
+		   	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();		 	
+		 	String daneuser=choiceuser.getValue();			
+			Query query2 = session.createQuery("from User u WHERE u.login=:login");
+			query2.setParameter("login",daneuser);
+			List<User>users=query2.list();
+			userForTask=users.get(0);
+			int job = userForTask.getJob().getId();
+			if(job==2) {
 
-			    	  	daneservice=choiceservice.getValue();
-			    	  	daneroom=choiceroomfortask.getValue();
-			    	  
-						String wynik1[] = null;
-						wynik1 = daneservice.split(" ");
-			    	  	Query query = session.createQuery("from Services s WHERE s.name=:servicename");
-			    	  	query.setParameter("servicename",wynik1[0]);
-			    	  	System.out.println(wynik1[0]);
-			    	  	List<Services>service=query.list();
-						
-						for(int i=0;i<service.size();i++) {
-							idservice=service.get(i).getId(); 
-						}
-						Query query1 = session.createQuery("from Rooms r WHERE r.roomNumber=:roomnumber");
-						query1.setParameter("roomnumber",Integer.parseInt(daneroom));
-						List <Rooms>rooms=query1.list();
-						
-						
-						for(int i=0;i<rooms.size();i++)
-						{
-							idroom=rooms.get(i).getId();
-						}
-						 addtask.setOnAction((event1) -> {
-					 		    // Button was clicked, do something...
-					 		  
-					 		    	
-					 		    	try {
-										inputTask(idroom,iduser,idservice,opis);
-									} catch (Exception e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-					 				
-					 			
-					 		});
-					
-					
-
-			
-			
-			} catch (Exception e) {
-				// TODO: handle exception
+		    	  for(int i=0;i<8;i++)
+				    {
+		    		  	String nameService=servicesListToTask.get(i).getName();
+		    		 	float priceService=servicesListToTask.get(i).getPrice();                           //choicebox wolnych pokoi
+		    			
+		    			String service=nameService+ " " + String.valueOf(priceService)+" zl";
+		    			choiceservice.getItems().add(service);
+		    		 
+				    }
 			}
-			
-	   }
-
+	 	}
+	 	@FXML
+	 	void roomChoiceBoxeEvent(ActionEvent event){
+	 		
+	 	}
+	 	@FXML
+	 	void serviceChoiceBoxeEvent(ActionEvent event){
+	 		 choiceroomfortask.getItems().clear();
+	 		Calendar calobj = Calendar.getInstance();
+	 		Date currentDate=new Date(calobj.getTime().getTime());
+	 		for(int i=0;i<roomListToTask.size();i++)
+		    {
+    		  for(int j=0;j<roomListToTask.get(i).getReservation().size();j++) {
+    			  if(roomListToTask.get(i).getReservation().get(j).getDates().before(currentDate) && roomListToTask.get(i).getReservation().get(j).getEndDate().after(currentDate)){
+    				  int roomnumber=roomListToTask.get(i).getRoomNumber();                           
+    				  int numberOfSeats=roomListToTask.get(i).getNumberOfSeats();
+    				  String lvl=roomListToTask.get(i).getLvl();
+    				  String roomnumbe=String.valueOf(roomnumber);
+    				  choiceroomfortask.getItems().add(roomnumbe);
+    			  }
+    		  }
+	 		
+		    }
+	 	
+	 	}
+	 	
+	 	
 	 public void setTables()
 	 {
 		 
@@ -528,34 +502,16 @@ public class ReceptionistController implements Initializable{
 	    	dateRoomsTable.setVisible(false);
 
 	    	  Query query3 = session.createQuery("from Rooms");	
-	    	  List<Rooms>rooms2 = query3.list();	
-	    	  for(int i=0;i<rooms2.size();i++)
-			    {
-	    		 	int roomnumber=rooms2.get(i).getRoomNumber();                            //choicebox wolnych pokoi
-	    			int numberOfSeats=rooms2.get(i).getNumberOfSeats();
-	    		 	String lvl=rooms2.get(i).getLvl();
-	    			String roomnumbe=String.valueOf(roomnumber)+"_"+String.valueOf(numberOfSeats)+ "_"+lvl;
-	    			choiceroomfortask.getItems().add(roomnumbe);
-	    		 
-			    }
-	    	  
-	    	  Query query4 = session.createQuery("from Services");	
-	    	  List<Services>services = query4.list();	
-	    	  for(int i=0;i<services.size();i++)
-			    {
-	    		  	String nameService=services.get(i).getName();
-	    		 	float priceService=services.get(i).getPrice();                           //choicebox wolnych pokoi
-	    			
-	    			String service=nameService+ "_" + String.valueOf(priceService);
-	    			choiceservice.getItems().add(service);
-	    		 
-			    }
+	    	  roomListToTask = query3.list();	
+	       	  Query query4 = session.createQuery("from Services");	
+	    	  servicesListToTask = query4.list();	
+	    
 	    	  
 	    	  Query query5 = session.createQuery("from User");	
-	    	  List<User>users = query5.list();	
-	    	  for(int i=0;i<users.size();i++)
+	    	  userListToTask = query5.list();	
+	    	  for(int i=0;i<userListToTask.size();i++)
 			    {
-	    		  	String name=users.get(i).getLogin();
+	    		  	String name=userListToTask.get(i).getLogin();
 	    		  	choiceuser.getItems().add(name);
 	  
 			    }
@@ -668,7 +624,7 @@ public class ReceptionistController implements Initializable{
 		  	lbldatereser.setVisible(true);
 		  	lblimie.setVisible(true);
 		  	lblnazwisko.setVisible(true);
-		  	mainTableButton.setVisible(false);
+		  	mainTableButton.setVisible(true);
 		  	addTaskButton.setVisible(false);
 			dateRoomsTable.setVisible(true);
 		  	dateSizeColumn.setVisible(true);
