@@ -50,6 +50,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import generator.PdfGenerator;
+import generator.ReservationPdf;
+import generator.UserPDF;
+
 
 
 public class AdminController implements Initializable{
@@ -175,8 +179,6 @@ public class AdminController implements Initializable{
 		    tablenazwisko.setCellValueFactory(new PropertyValueFactory<User, String>("surname"));
 	    	tablelogin.setCellValueFactory(new PropertyValueFactory<User, String>("login"));
 	    	tablezawod.setCellValueFactory(new PropertyValueFactory<User, Job>("job"));
-	 
-	
 	    	
 	    	
 	    
@@ -478,7 +480,35 @@ public class AdminController implements Initializable{
 	    	
 	    }
 	   
-	  
+	    public void generatePdf(ActionEvent event) {
+	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		   
+		    Query query = session.createQuery("from User");	
+		    
+		    List<User>users = query.list();		
+	    	PdfGenerator generator =new PdfGenerator();
+	    	List<UserPDF> userpdfList =new ArrayList<UserPDF>();
+	    	 for(int i=0;i<users.size();i++)
+			    {
+	    		 UserPDF newuser=new UserPDF(users.get(i).id,users.get(i).name,users.get(i).surname,users.get(i).login);
+	    		 userpdfList.add(newuser);
+			    }
+	    	
+	    	 Query queryTwo = session.createQuery("from Reservation");	
+	    	 List<Reservation>reservations = queryTwo.list();	
+	    	 List<ReservationPdf> reservationpdflist =new ArrayList<ReservationPdf>();
+	    	 for(int i=0;i<reservations.size();i++)
+			    {
+	    		 ReservationPdf newreservation=new ReservationPdf(reservations.get(i).getGuest().getName(),reservations.get(i).getGuest().getSurname(),reservations.get(i).getBill().totalbill(),reservations.get(i).getDates().toString(),reservations.get(i).getEndDate().toString());
+	    		 reservationpdflist.add(newreservation);
+			    }
+	    	 
+	    	 
+	    	 generator.userListPdf(userpdfList,reservationpdflist);	    	
+	    	 
+	    }
 		public void updateUser()
 		{
 				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();

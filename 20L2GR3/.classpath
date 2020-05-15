@@ -23,5 +23,18 @@
 	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/hibernate-release-5.4.14.Final/hibernate-release-5.4.14.Final/lib/required/txw2-2.3.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19/mysql-connector-java-8.0.19.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/controlsfx-8.40.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itextpdf-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itextpdf-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itextpdf-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itext-pdfa-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itext-pdfa-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itext-pdfa-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itext-xtra-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itext-xtra-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/itext-xtra-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/xmlworker-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/xmlworker-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Downloads/itext-5.5.9/xmlworker-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Dawid/Desktop/mojpliktest.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
