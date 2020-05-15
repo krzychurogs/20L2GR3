@@ -3,6 +3,8 @@ package application;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -59,7 +62,10 @@ public class ManagerController implements Initializable{
     private Button btnstats;
 	@FXML
     private TableView<Reservation> guestTable;
-
+    @FXML
+    private TextField textfieldtofind;
+    @FXML
+    private Label lblfind;
     @FXML
     private TableColumn<Reservation, Guest> name;
 
@@ -109,6 +115,13 @@ public class ManagerController implements Initializable{
 	 
 	public void guest()
 	{
+		btnstats.setVisible(true);
+		swapforcount.setVisible(true);
+		billls.setVisible(false);
+		statstobills.setVisible(false);
+		reservationRooms.setVisible(false);
+		guestTable.setVisible(true);
+		piechart.setVisible(false);
 		
 		SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 	 	Session session=sessionFactory.openSession();
@@ -147,6 +160,10 @@ public class ManagerController implements Initializable{
 		 		piechart.setVisible(false);
 		 		statstobills.setVisible(false);
 		 		billls.setVisible(true);
+		 		piechart.setVisible(false);
+		 		btnstats.setVisible(true);
+		 		lblfind.setVisible(true);
+		    	textfieldtofind.setVisible(true);
 			 	counts=FXCollections.observableArrayList();
 			 	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 			 	Session session=sessionFactory.openSession();
@@ -245,18 +262,55 @@ public class ManagerController implements Initializable{
 	    	btnstats.setVisible(true);
 	    	piechart.setVisible(false);
 	    	reservationRooms.setVisible(false);
+	    	lblfind.setVisible(false);
+	    	textfieldtofind.setVisible(false);
 	    	statstobills.setVisible(true);
+	    	
 	    	
 	    }
 	    
+	    @FXML
+	    void search(KeyEvent event) {
+	    	FilteredList<Item> filteredData=new FilteredList<>(counts,p->true);
+	    	textfieldtofind.textProperty().addListener((obsevable,oldvalue,newvalue)->{
+	    		filteredData.setPredicate(pers ->{
+	    			 if(newvalue==null || newvalue.isEmpty())
+	    			 {
+	    				 return true;
+	    			 }
+	    			 String typedText=newvalue.toLowerCase();
+	    			 long count=pers.getCount();
+	    			 String counter=String.valueOf(count);
+	    			 String number=String.valueOf(pers.getNumber().getRoomNumber());
+	    			 if(counter.toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 if(number.toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 
+	    			 return false;
+	    		});
+	    		SortedList<Item>sortedList=new SortedList<>(filteredData);
+	    		sortedList.comparatorProperty().bind(reservationRooms.comparatorProperty());
+	    		reservationRooms.setItems(sortedList);
+	    	});
+	    	
+	    }	
 	 public void stats(ObservableList<Reservation> list2) {
 		 	guestTable.setVisible(false);
+		 	reservationRooms.setVisible(false);
 		 	profit.setVisible(false);
 		 	btnstats.setVisible(false);
 		 	swapforcount.setVisible(true);
 		 	statstobills.setVisible(true);
 		 	piechart.setVisible(true);
-		 	billls.setVisible(true);
+		 	billls.setVisible(false);
+		 	statstobills.setVisible(true);
+			lblfind.setVisible(false);
+	    	textfieldtofind.setVisible(false);
 		 	
 		 	float cola=0;
 		 	float piwo=0;

@@ -5,12 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ManagerController">
    <children>
-      <Button fx:id="statstobills" layoutX="484.0" layoutY="65.0" mnemonicParsing="false" onAction="#screenGuest" prefHeight="35.0" prefWidth="135.0" text="Rachunki" visible="false" />
+      <Button fx:id="statstobills" layoutX="484.0" layoutY="65.0" mnemonicParsing="false" onAction="#guest" prefHeight="35.0" prefWidth="135.0" text="Rachunki" visible="false" />
       <TableView fx:id="guestTable" layoutX="62.0" layoutY="55.0" prefHeight="200.0" prefWidth="399.0">
         <columns>
           <TableColumn fx:id="name" prefWidth="130.0" text="Imie i Nazwisko" />
@@ -25,8 +26,8 @@
       </Label>
       <PieChart fx:id="piechart" layoutX="150.0" layoutY="75.0" prefHeight="311.0" prefWidth="316.0" visible="false" />
       <Button fx:id="btnstats" layoutX="484.0" layoutY="65.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="113.0" text="Statystyki" />
-      <Button fx:id="billls" layoutX="484.0" layoutY="130.0" mnemonicParsing="false" onAction="#screenGuest" prefHeight="35.0" prefWidth="135.0" text="Rachunki" visible="false" />
-      <Button layoutX="33.0" layoutY="30.0" mnemonicParsing="false" onAction="#wyloguj" text="wyloguj" />
+      <Button fx:id="billls" layoutX="484.0" layoutY="130.0" mnemonicParsing="false" onAction="#guest" prefHeight="35.0" prefWidth="135.0" text="Rachunki" visible="false" />
+      <Button layoutX="22.0" layoutY="8.0" mnemonicParsing="false" onAction="#wyloguj" prefHeight="35.0" prefWidth="89.0" text="wyloguj" />
       <TableView fx:id="reservationRooms" layoutX="62.0" layoutY="55.0" prefHeight="200.0" prefWidth="399.0" visible="false">
         <columns>
           <TableColumn fx:id="numberRoom" prefWidth="101.0" text="Numer pokoju" />
@@ -34,5 +35,11 @@
         </columns>
       </TableView>
       <Button fx:id="swapforcount" layoutX="484.0" layoutY="130.0" mnemonicParsing="false" onAction="#setTable" prefHeight="35.0" prefWidth="113.0" text="Rezerwacje pokoi" />
+      <TextField fx:id="textfieldtofind" layoutX="197.0" layoutY="272.0" onKeyReleased="#search" prefHeight="28.0" prefWidth="204.0" visible="false" />
+      <Label fx:id="lblfind" layoutX="140.0" layoutY="277.0" text="Szukaj" visible="false">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
