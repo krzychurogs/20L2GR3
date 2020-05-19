@@ -53,6 +53,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import generator.PdfGenerator;
+import generator.ReservationPdf;
+import generator.UserPDF;
+
 
 
 public class ManagerController implements Initializable{
@@ -92,6 +96,8 @@ public class ManagerController implements Initializable{
     private Button swapforcount;
     @FXML
     private Button billls;
+    @FXML
+    private Button pdfGenerate;
     public ObservableList<Item> counts;
 	 public void initialize(URL url, ResourceBundle rbl) {
 
@@ -100,7 +106,7 @@ public class ManagerController implements Initializable{
 		 
 
 	    	float value=profit();
-	    	profit.setText("Â£aczny przychod: "+String.valueOf(value));
+	    	profit.setText("£aczny przychod: "+String.valueOf(value));
 	    	 btnstats.setOnAction((event) -> {
 		 		    	
 		 				stats(list);
@@ -122,6 +128,7 @@ public class ManagerController implements Initializable{
 		reservationRooms.setVisible(false);
 		guestTable.setVisible(true);
 		piechart.setVisible(false);
+		pdfGenerate.setVisible(true);
 		
 		SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 	 	Session session=sessionFactory.openSession();
@@ -164,6 +171,7 @@ public class ManagerController implements Initializable{
 		 		btnstats.setVisible(true);
 		 		lblfind.setVisible(true);
 		    	textfieldtofind.setVisible(true);
+		    	pdfGenerate.setVisible(true);
 			 	counts=FXCollections.observableArrayList();
 			 	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 			 	Session session=sessionFactory.openSession();
@@ -311,7 +319,8 @@ public class ManagerController implements Initializable{
 		 	statstobills.setVisible(true);
 			lblfind.setVisible(false);
 	    	textfieldtofind.setVisible(false);
-		 	
+	    	pdfGenerate.setVisible(false);
+	    	
 		 	float cola=0;
 		 	float piwo=0;
 		 	float pizza=0;
@@ -353,6 +362,35 @@ public class ManagerController implements Initializable{
 			
 			
 	}
+	    public void generatePdf(ActionEvent event) {
+	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		   
+		    Query query = session.createQuery("from User");	
+		    
+		    List<User>users = query.list();		
+	    	PdfGenerator generator =new PdfGenerator();
+	    	List<UserPDF> userpdfList =new ArrayList<UserPDF>();
+	    	 for(int i=0;i<users.size();i++)
+			    {
+	    		 UserPDF newuser=new UserPDF(users.get(i).id,users.get(i).name,users.get(i).surname,users.get(i).login);
+	    		 userpdfList.add(newuser);
+			    }
+	    	
+	    	 Query queryTwo = session.createQuery("from Reservation");	
+	    	 List<Reservation>reservations = queryTwo.list();	
+	    	 List<ReservationPdf> reservationpdflist =new ArrayList<ReservationPdf>();
+	    	 for(int i=0;i<reservations.size();i++)
+			    {
+	    		 ReservationPdf newreservation=new ReservationPdf(reservations.get(i).getGuest().getName(),reservations.get(i).getGuest().getSurname(),reservations.get(i).getBill().totalbill(),reservations.get(i).getDates().toString(),reservations.get(i).getEndDate().toString());
+	    		 reservationpdflist.add(newreservation);
+			    }
+	    	 
+	    	 float value=profit();
+	    	 generator.userListPdf(userpdfList,reservationpdflist);	    	
+	    	 
+	    }
 	
 	 
 }

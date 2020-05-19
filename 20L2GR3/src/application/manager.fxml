@@ -34,6 +34,7 @@
             <TableColumn fx:id="countedreservation" prefWidth="297.0" text="Liczba Rezerwacji" />
         </columns>
       </TableView>
+       <Button fx:id="pdfGenerate" layoutX="210.0" layoutY="320.0" mnemonicParsing="false" onAction="#generatePdf" prefHeight="74.0" prefWidth="120.0" text="generuj pdf" />
       <Button fx:id="swapforcount" layoutX="484.0" layoutY="130.0" mnemonicParsing="false" onAction="#setTable" prefHeight="35.0" prefWidth="113.0" text="Rezerwacje pokoi" />
       <TextField fx:id="textfieldtofind" layoutX="197.0" layoutY="272.0" onKeyReleased="#search" prefHeight="28.0" prefWidth="204.0" visible="false" />
       <Label fx:id="lblfind" layoutX="140.0" layoutY="277.0" text="Szukaj" visible="false">
