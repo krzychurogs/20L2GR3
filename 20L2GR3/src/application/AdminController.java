@@ -23,6 +23,7 @@ import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -335,6 +336,11 @@ public class AdminController implements Initializable{
 				 	User user=new User(imie,nazwisko,logi,haslo,job);
 				 	session.save(user);
 					session.getTransaction().commit();
+					 Alert as = new Alert(AlertType.NONE);
+					    as.setAlertType(AlertType.INFORMATION); 
+					    as.setContentText("Uzytkownik dodany");
+					    as.getDialogPane().setPrefSize(200, 100);
+			           as.show(); 
 					
 				 }
 				 else if (dane.equals("kucharz")) {
@@ -342,12 +348,22 @@ public class AdminController implements Initializable{
 					 	User user=new User(imie,nazwisko,logi,haslo,job1);
 					 	session.save(user);
 						session.getTransaction().commit();
+						 Alert as = new Alert(AlertType.NONE);
+						    as.setAlertType(AlertType.INFORMATION); 
+						    as.setContentText("Uzytkownik dodany");
+						    as.getDialogPane().setPrefSize(200, 100);
+				           as.show(); 
 				}
 				 else if (dane.equals("sprzatacz")) {
 					 
 					 	User user=new User(imie,nazwisko,logi,haslo,job2);
 					 	session.save(user);
 						session.getTransaction().commit();
+						 Alert as = new Alert(AlertType.NONE);
+						    as.setAlertType(AlertType.INFORMATION); 
+						    as.setContentText("Uzytkownik dodany");
+						    as.getDialogPane().setPrefSize(200, 100);
+				           as.show(); 
 						
 				}
 				 else if (dane.equals("manager")) {
@@ -355,6 +371,11 @@ public class AdminController implements Initializable{
 					 	User user=new User(imie,nazwisko,logi,haslo,job3);
 					 	session.save(user);
 						session.getTransaction().commit();
+						 Alert as = new Alert(AlertType.NONE);
+						    as.setAlertType(AlertType.INFORMATION); 
+						    as.setContentText("Uzytkownik dodany");
+						    as.getDialogPane().setPrefSize(200, 100);
+				           as.show(); 
 						
 				}
 				 
@@ -437,6 +458,11 @@ public class AdminController implements Initializable{
 				 User users=session.load(User.class,user.getId());
 				 session.delete(users);
 				 session.getTransaction().commit();
+				 Alert as = new Alert(AlertType.NONE);
+				    as.setAlertType(AlertType.INFORMATION); 
+				    as.setContentText("Uzytkownik usuniety");
+				    as.getDialogPane().setPrefSize(200, 100);
+		           as.show(); 
 			 }
 			
 				 accounts.getItems().removeAll(accounts.getSelectionModel().getSelectedItem());
@@ -480,35 +506,7 @@ public class AdminController implements Initializable{
 	    	
 	    }
 	   
-	    public void generatePdf(ActionEvent event) {
-	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-		 	Session session=sessionFactory.openSession();
-		 	session.beginTransaction();	
-		   
-		    Query query = session.createQuery("from User");	
-		    
-		    List<User>users = query.list();		
-	    	PdfGenerator generator =new PdfGenerator();
-	    	List<UserPDF> userpdfList =new ArrayList<UserPDF>();
-	    	 for(int i=0;i<users.size();i++)
-			    {
-	    		 UserPDF newuser=new UserPDF(users.get(i).id,users.get(i).name,users.get(i).surname,users.get(i).login);
-	    		 userpdfList.add(newuser);
-			    }
-	    	
-	    	 Query queryTwo = session.createQuery("from Reservation");	
-	    	 List<Reservation>reservations = queryTwo.list();	
-	    	 List<ReservationPdf> reservationpdflist =new ArrayList<ReservationPdf>();
-	    	 for(int i=0;i<reservations.size();i++)
-			    {
-	    		 ReservationPdf newreservation=new ReservationPdf(reservations.get(i).getGuest().getName(),reservations.get(i).getGuest().getSurname(),reservations.get(i).getBill().totalbill(),reservations.get(i).getDates().toString(),reservations.get(i).getEndDate().toString());
-	    		 reservationpdflist.add(newreservation);
-			    }
-	    	 
-	    	 
-	    	 generator.userListPdf(userpdfList,reservationpdflist);	    	
-	    	 
-	    }
+
 		public void updateUser()
 		{
 				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -530,7 +528,12 @@ public class AdminController implements Initializable{
 						
 					 		session1.merge(s);
 					 		session1.getTransaction().commit();
-							session1.beginTransaction();	
+							session1.beginTransaction();
+							 Alert as = new Alert(AlertType.NONE);
+							    as.setAlertType(AlertType.INFORMATION); 
+							    as.setContentText("Uzytkownik uaktualniony");
+							    as.getDialogPane().setPrefSize(200, 100);
+					           as.show(); 
 				 		 
 				 	});
 				 }

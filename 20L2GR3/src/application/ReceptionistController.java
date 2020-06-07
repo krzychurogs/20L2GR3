@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -110,6 +111,8 @@ public class ReceptionistController implements Initializable{
 		  @FXML
 		    private TextField opistask;
 		@FXML
+		private TextField descriptionTextField;
+		@FXML
 		 private Label nick;
 		
 		 @FXML
@@ -146,6 +149,15 @@ public class ReceptionistController implements Initializable{
 
 		    @FXML
 		    private Label lblnazwisko;
+		    
+		    @FXML
+		    private Label userChoiceLabel;
+		    
+		    @FXML
+		    private Label roomChoiceLabel;
+		    
+		    @FXML
+		    private Label serviceChoiceLabel;
 		    
 		    
 		String loggedUserName;
@@ -199,8 +211,10 @@ public class ReceptionistController implements Initializable{
 	    	nick.setText("Zalogowany: "+loggedUserName);
 	    	nameguest.setVisible(false);
 	    	surnameguest.setVisible(false);
-	  
-	    		
+	    	descriptionTextField.setVisible(false);
+	    	userChoiceLabel.setVisible(false);
+		  	roomChoiceLabel.setVisible(false);
+		  	serviceChoiceLabel.setVisible(false);	
 	    	
 	    	setTables();
 	    	
@@ -234,7 +248,7 @@ public class ReceptionistController implements Initializable{
 		 			//daneguesta();//panel dodawania goscia wraz z data	
 					datapick.valueProperty().addListener((observable, oldDate, newDate)->{
 						 firstDate=Date.valueOf(newDate);
-						 if(firstDate!=null && endDate!=null)
+						 if(firstDate!=null && endDate!=null)	 
 						 refreshDateTable();
 					 });
 					enddatepicker.valueProperty().addListener((observable, oldDate, newDate)->{
@@ -273,7 +287,7 @@ public class ReceptionistController implements Initializable{
 	 
 	 @FXML
 	 private void addGuest() {
-		 if(dateRoomsTable.getSelectionModel().getSelectedItems().isEmpty()==false) {
+		 if(dateRoomsTable.getSelectionModel().getSelectedItems().isEmpty()==false &&firstDate.before(endDate)) {
 			 SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
 			 Session session=sessionFactory.openSession();		 	
 			session.beginTransaction();	
@@ -283,16 +297,40 @@ public class ReceptionistController implements Initializable{
 			Guest guest=new Guest();
 			guest.setName(name);
 			guest.setSurname(surname);
-			Bill bill=new Bill();
+			Bill bill=new Bill();	
 			Reservation reservation=new Reservation(0,room,firstDate,endDate,guest,bill);
 			session.save(bill);
 			session.save(guest);
 			session.save(reservation);
 			session.getTransaction().commit();
+			addRoomToBill(bill.getId());
+		 }
+		 else if(!firstDate.before(endDate)) {
+			   Alert a = new Alert(AlertType.NONE);
+			    a.setAlertType(AlertType.INFORMATION); 
+			    a.setContentText("Data konca nie moze byc przed poczatkowa");
+			    a.getDialogPane().setPrefSize(200, 100);
+	           a.show(); 
 		 }
 	 }
 	
-	 
+	 private void addRoomToBill(int id) {
+		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
+		Session session=sessionFactory.openSession();		 	
+		session.beginTransaction();
+		Bill bill=session.get(Bill.class, id);
+		Services service=session.get(Services.class, 9);
+		bill.addServices(service);
+		session.save(bill);
+		session.save(service);
+		session.getTransaction().commit();
+		   Alert a = new Alert(AlertType.NONE);
+		    a.setAlertType(AlertType.INFORMATION); 
+		    a.setContentText("Rezerwacja dodana");
+		    a.getDialogPane().setPrefSize(200, 100);
+           a.show(); 
+		 
+	 }
 	 
 	 
 	 @FXML
@@ -319,12 +357,15 @@ public class ReceptionistController implements Initializable{
 				query1.setParameter("roomnumber",Integer.parseInt(daneroom));
 				List <Rooms>rooms=query1.list();
 				idroom=rooms.get(0);
-
-			 
-					opis="costam";
+				opis=descriptionTextField.getText();
 			 Task task=new Task(0,userForTask,idroom,idservice,opis,true);
 			 session.save(task);
 			 session.getTransaction().commit();   
+			 Alert a = new Alert(AlertType.NONE);
+			  a.setAlertType(AlertType.INFORMATION); 
+			    a.setContentText("Zadanie dodane");
+			    a.getDialogPane().setPrefSize(200, 100);
+	            a.show(); 
 			 
 		}
 	 
@@ -358,6 +399,10 @@ public class ReceptionistController implements Initializable{
 		  	dateSizeColumn.setVisible(false);
 		  	dateLvlColumn.setVisible(false);
 		  	dateRoomNumberColumn.setVisible(false);
+		  	descriptionTextField.setVisible(false);
+		  	userChoiceLabel.setVisible(false);
+		  	roomChoiceLabel.setVisible(false);
+		  	serviceChoiceLabel.setVisible(false);
 		  	}
 	 
 	 
@@ -372,9 +417,11 @@ public class ReceptionistController implements Initializable{
 			session.save(bill);
 			session.save(reservation);	
 		    session.getTransaction().commit();
+		 
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
 		      setTables();
+		  
 				      
 	 }
 	 public static Connection getconnection()throws Exception
@@ -413,16 +460,21 @@ public class ReceptionistController implements Initializable{
 			List<User>users=query2.list();
 			userForTask=users.get(0);
 			int job = userForTask.getJob().getId();
+			if(job==6) {
+
+		    		  	String nameService=servicesListToTask.get(18).getName();
+		    		 	float priceService=servicesListToTask.get(18).getPrice();                           		    			
+		    			String service=nameService+ " " + String.valueOf(priceService)+" zl";
+		    			choiceservice.getItems().add(service);		    		 				    
+			}
 			if(job==2) {
 
-		    	  for(int i=0;i<8;i++)
+		    	  for(int i=9;i<17;i++)
 				    {
 		    		  	String nameService=servicesListToTask.get(i).getName();
-		    		 	float priceService=servicesListToTask.get(i).getPrice();                           //choicebox wolnych pokoi
-		    			
+		    		 	float priceService=servicesListToTask.get(i).getPrice();                          		    			
 		    			String service=nameService+ " " + String.valueOf(priceService)+" zl";
-		    			choiceservice.getItems().add(service);
-		    		 
+		    			choiceservice.getItems().add(service);		    		 
 				    }
 			}
 	 	}
@@ -507,7 +559,7 @@ public class ReceptionistController implements Initializable{
 	    	  servicesListToTask = query4.list();	
 	    
 	    	  
-	    	  Query query5 = session.createQuery("from User");	
+	    	  Query query5 = session.createQuery("from User u where u.job.id=2 or u.job.id=6 ");	
 	    	  userListToTask = query5.list();	
 	    	  for(int i=0;i<userListToTask.size();i++)
 			    {
@@ -575,7 +627,10 @@ public class ReceptionistController implements Initializable{
 		  	dateSizeColumn.setVisible(false);
 		  	dateLvlColumn.setVisible(false);
 		  	dateRoomNumberColumn.setVisible(false);
-		  	
+		  	descriptionTextField.setVisible(false);
+		  	userChoiceLabel.setVisible(false);
+		  	roomChoiceLabel.setVisible(false);
+		  	serviceChoiceLabel.setVisible(false);
 		  
 	    }
 	  @FXML
@@ -601,6 +656,10 @@ public class ReceptionistController implements Initializable{
 			addTaskButton.setVisible(false);
 			mainTableButton.setVisible(true);
 		  	addTaskButton.setVisible(false);
+		  	descriptionTextField.setVisible(true);
+		  	userChoiceLabel.setVisible(true);
+		  	roomChoiceLabel.setVisible(true);
+		  	serviceChoiceLabel.setVisible(true);
 	    }
 	  
 	  
@@ -630,6 +689,10 @@ public class ReceptionistController implements Initializable{
 		  	dateSizeColumn.setVisible(true);
 		  	dateLvlColumn.setVisible(true);
 		  	dateRoomNumberColumn.setVisible(true);
+		  	descriptionTextField.setVisible(false);
+		  	userChoiceLabel.setVisible(false);
+		  	roomChoiceLabel.setVisible(false);
+		  	serviceChoiceLabel.setVisible(false);
 	    }
 	    
 	

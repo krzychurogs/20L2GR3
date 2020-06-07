@@ -3,6 +3,8 @@ package application;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -34,15 +37,25 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
+import javax.persistence.criteria.Root;
+
 import org.controlsfx.control.table.TableRowExpanderColumn;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+
+import generator.PdfGenerator;
+import generator.ReservationPdf;
+import generator.UserPDF;
 
 
 
@@ -53,65 +66,152 @@ public class ManagerController implements Initializable{
     private Button btnstats;
 	@FXML
     private TableView<Reservation> guestTable;
-
+    @FXML
+    private TextField textfieldtofind;
+    @FXML
+    private Label lblfind;
     @FXML
     private TableColumn<Reservation, Guest> name;
 
     @FXML
     private TableColumn<Reservation,Bill> balance;
+    @FXML
+    private TableView<Item> reservationRooms;
+
+    @FXML
+    private TableColumn<Item,Rooms> numberRoom;
+    @FXML
+    private TableColumn<Item,Long> countedreservation;
+    @FXML
+    private Button statstobills;
 
     public ObservableList <Reservation> list;
     public ObservableList <Reservation> lista;
+    
     @FXML
     private Label profit;
     @FXML
     private PieChart piechart;
-    
+    @FXML
+    private Button swapforcount;
     @FXML
     private Button billls;
+    @FXML
+    private Button pdfGenerate;
+    public ObservableList<Item> counts;
+    
 	 public void initialize(URL url, ResourceBundle rbl) {
 
 		 	list=FXCollections.observableArrayList();
+		 	guest();
 		 
-	
-			SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-		 	Session session=sessionFactory.openSession();
-		 	session.beginTransaction();	
-		 	
-			    Query query = session.createQuery("from Reservation");	
-			    
-			    List<Reservation>resr = query.list();	
-			   TableRowExpanderColumn<Reservation> expanderColumn=new TableRowExpanderColumn<>(this::createEditor);
-			    session.getTransaction().commit();
-			    int id=0;
-		    float cena=0;
-		    for(int i=0;i<resr.size();i++)
-		    {
-		    	list.add(resr.get(i));
-		    
-		    	
-		    }	
-		    
-				
-		    name.setCellValueFactory(new PropertyValueFactory<Reservation, Guest>("guest"));
-		    balance.setCellValueFactory(new PropertyValueFactory<Reservation, Bill>("bill"));
-	    	
-		 	guestTable.getColumns().addAll(expanderColumn);
-	    	guestTable.setItems(list);
 	    	float value=profit();
 	    	profit.setText("£aczny przychod: "+String.valueOf(value));
 	    	 btnstats.setOnAction((event) -> {
-
 		 		    	
 		 				stats(list);
 		 				
 		 			
 		 		});
 	    	 
-	    
+	    	 
 	    
 	 }
 	 
+	 
+	public void guest()
+	{
+		btnstats.setVisible(true);
+		swapforcount.setVisible(true);
+		billls.setVisible(false);
+		statstobills.setVisible(false);
+		reservationRooms.setVisible(false);
+		guestTable.setVisible(true);
+		piechart.setVisible(false);
+		pdfGenerate.setVisible(true);
+		
+		SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+	 	Session session=sessionFactory.openSession();
+	 	session.beginTransaction();	
+	 	
+		    Query query = session.createQuery("from Reservation");	
+		    
+		    List<Reservation>resr = query.list();	
+		   TableRowExpanderColumn<Reservation> expanderColumn=new TableRowExpanderColumn<>(this::createEditor);
+		    session.getTransaction().commit();
+		    int id=0;
+	    float cena=0;
+	    for(int i=0;i<resr.size();i++)
+	    {
+	    	list.add(resr.get(i));
+	    
+	    	
+	    }	
+	    
+			
+	    name.setCellValueFactory(new PropertyValueFactory<Reservation, Guest>("guest"));
+	    balance.setCellValueFactory(new PropertyValueFactory<Reservation, Bill>("bill"));
+    	
+	 	guestTable.getColumns().addAll(expanderColumn);
+    	guestTable.setItems(list);
+	}
+	 
+	 
+	 
+	 
+	 
+	 public void setTable() {
+		 		guestTable.setVisible(false);
+		 		reservationRooms.setVisible(true);
+		 		swapforcount.setVisible(false);
+		 		piechart.setVisible(false);
+		 		statstobills.setVisible(false);
+		 		billls.setVisible(true);
+		 		piechart.setVisible(false);
+		 		btnstats.setVisible(true);
+		 		lblfind.setVisible(true);
+		    	textfieldtofind.setVisible(true);
+		    	pdfGenerate.setVisible(true);
+			 	counts=FXCollections.observableArrayList();
+			 	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+			 	Session session=sessionFactory.openSession();
+			 	session.beginTransaction();	
+			
+			 	Query query = session.createQuery("select rk.room,count(rk.id) from Reservation as rk group by rk.room");
+
+			 	 List<Object[]>employees=(List<Object[]>) query.list();
+               
+			 	 for(Object[] employee: employees){
+                	
+			 		 //employee[0]
+			 		 //employee[1]
+			 		Rooms number=(Rooms) employee[0];
+			 		long count=(long) employee[1];
+			 		
+			 		System.out.println(number);
+			 		System.out.println(count);
+                	Item pomocnicza2=new Item(number,count);
+             
+                	counts.add(pomocnicza2);
+                
+                }
+                
+
+			   session.getTransaction().commit();
+			  
+	
+			   
+			    
+			   	numberRoom.setCellValueFactory(new PropertyValueFactory<Item,Rooms>("number"));
+				countedreservation.setCellValueFactory(new PropertyValueFactory<Item,Long>("count"));
+			    
+			   	reservationRooms.setItems(counts);
+			    
+		    	
+		    	session.close();
+		    	
+		 
+		 }
 	 
 	 private GridPane createEditor(TableRowExpanderColumn.TableRowDataFeatures<Reservation> param) {
 		 GridPane editor=new GridPane();
@@ -163,13 +263,64 @@ public class ManagerController implements Initializable{
 	     window.show();
 	    	
 	    } 
+	    public void screenGuest()
+	    {
+	    	guestTable.setVisible(true);
+	    	reservationRooms.setVisible(false);
+	    	btnstats.setVisible(true);
+	    	piechart.setVisible(false);
+	    	reservationRooms.setVisible(false);
+	    	lblfind.setVisible(false);
+	    	textfieldtofind.setVisible(false);
+	    	statstobills.setVisible(true);
+	    	
+	    	
+	    }
+	    
+	    @FXML
+	    void search(KeyEvent event) {
+	    	FilteredList<Item> filteredData=new FilteredList<>(counts,p->true);
+	    	textfieldtofind.textProperty().addListener((obsevable,oldvalue,newvalue)->{
+	    		filteredData.setPredicate(pers ->{
+	    			 if(newvalue==null || newvalue.isEmpty())
+	    			 {
+	    				 return true;
+	    			 }
+	    			 String typedText=newvalue.toLowerCase();
+	    			 long count=pers.getCount();
+	    			 String counter=String.valueOf(count);
+	    			 String number=String.valueOf(pers.getNumber().getRoomNumber());
+	    			 if(counter.toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 if(number.toLowerCase().indexOf(typedText) != -1)
+	    			 {
+	    				 return true;
+	    			 }
+	    			 
+	    			 return false;
+	    		});
+	    		SortedList<Item>sortedList=new SortedList<>(filteredData);
+	    		sortedList.comparatorProperty().bind(reservationRooms.comparatorProperty());
+	    		reservationRooms.setItems(sortedList);
+	    	});
+	    	
+	    }	
 	 public void stats(ObservableList<Reservation> list2) {
 		 	guestTable.setVisible(false);
+		 	reservationRooms.setVisible(false);
 		 	profit.setVisible(false);
 		 	btnstats.setVisible(false);
-		 	
+		 	swapforcount.setVisible(true);
+		 	statstobills.setVisible(true);
 		 	piechart.setVisible(true);
-		 	billls.setVisible(true);
+		 	billls.setVisible(false);
+		 	statstobills.setVisible(true);
+			lblfind.setVisible(false);
+	    	textfieldtofind.setVisible(false);
+	    	pdfGenerate.setVisible(false);
+	    	
 		 	float cola=0;
 		 	float piwo=0;
 		 	float pizza=0;
@@ -209,17 +360,37 @@ public class ManagerController implements Initializable{
 	        )
 	);
 			
-			billls.setOnAction((event) -> {
-
-				guestTable.setVisible(true);
-			 	profit.setVisible(true);
-			 	btnstats.setVisible(true);
- 				piechart.setVisible(false);
- 				billls.setVisible(false);
- 				
- 			
- 		});
+			
 	}
+	    public void generatePdf(ActionEvent event) {
+	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+		 	Session session=sessionFactory.openSession();
+		 	session.beginTransaction();	
+		   
+		    Query query = session.createQuery("from User");	
+		    
+		    List<User>users = query.list();		
+	    	PdfGenerator generator =new PdfGenerator();
+	    	List<UserPDF> userpdfList =new ArrayList<UserPDF>();
+	    	 for(int i=0;i<users.size();i++)
+			    {
+	    		 UserPDF newuser=new UserPDF(users.get(i).id,users.get(i).name,users.get(i).surname,users.get(i).login);
+	    		 userpdfList.add(newuser);
+			    }
+	    	
+	    	 Query queryTwo = session.createQuery("from Reservation");	
+	    	 List<Reservation>reservations = queryTwo.list();	
+	    	 List<ReservationPdf> reservationpdflist =new ArrayList<ReservationPdf>();
+	    	 for(int i=0;i<reservations.size();i++)
+			    {
+	    		 ReservationPdf newreservation=new ReservationPdf(reservations.get(i).getGuest().getName(),reservations.get(i).getGuest().getSurname(),reservations.get(i).getBill().totalbill(),reservations.get(i).getDates().toString(),reservations.get(i).getEndDate().toString());
+	    		 reservationpdflist.add(newreservation);
+			    }
+	    	 
+	    	 float value=profit();
+	    	 generator.userListPdf(userpdfList,reservationpdflist);	    	
+	    	 
+	    }
 	
 	 
 }
