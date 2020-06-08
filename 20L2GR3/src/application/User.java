@@ -16,6 +16,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "user")
+/**
+ * Model reprezentujacy Pracownika, polaczony relacja z jego zawodem
+ */
 public class User {
 	
 	@Id 

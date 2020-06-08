@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+/**
+ * Model reprezentujacy pokoj hotelowy, polaczony relacja z serwisami,rezerwacjami
+ */
 @Entity
 @Table(name = "room")
 public class Rooms {

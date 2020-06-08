@@ -27,7 +27,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
+/**
+ * Kontroler obslugujacy Kucharza/Sprzatacza
+ */
 public class CookCleanerController {
 	@FXML
 	private Button confirmButton;
@@ -72,7 +74,10 @@ public class CookCleanerController {
     	
      	
     }
-    
+	    /**
+	     * Metoda wyswietlajaca zadania dla danego pracownika
+	     * {@value} taskTableView - tabela z zadaniami okreslenego pracownika
+	     */ 	 
      void populateTable() {
     	 taskTableView.getItems().clear();
     	System.out.println("id"+loggedId);
@@ -96,7 +101,10 @@ public class CookCleanerController {
     	taskTableView.setItems(list);
     
     }
-    
+     /**
+	   * Metoda sluzaca do wylogywania uzytkownika
+	   * @param event zdarzenie wywolane na przycisku
+	   */
     @FXML
     void wyloguj(ActionEvent event) throws Exception {	
    	 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
@@ -107,7 +115,10 @@ public class CookCleanerController {
      window.show();
     	
     } 
-    
+    /**
+	   * Metoda sluzaca do zatwierdzenia zadania
+	   * @param event zdarzenie wywolane na przycisku
+	   */
     @FXML
     void confirmTask(ActionEvent event) throws Exception {
     	if(loggedJobId==2) {
@@ -132,6 +143,12 @@ public class CookCleanerController {
     	        populateTable();
     	}
     }
+    	/**
+	   * Metoda sluzaca do zatwierdzenia zadania przez Kucgaraza
+	   * {@value} task obiekt klasy Task
+	   * {@value} current obiekt klasy Reservation
+	   * {@value} bill obiekt klasy Bill
+	   */
     private void confirmCookTask() {
     	if(taskTableView.getSelectionModel().getSelectedItems().isEmpty()==false) {
     		Reservation current;

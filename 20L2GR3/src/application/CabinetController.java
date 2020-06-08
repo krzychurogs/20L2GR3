@@ -18,7 +18,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
-
+/**
+ * Kontroler obslugujacy Barek
+ */
 public class CabinetController {
 	
 	@FXML
@@ -64,7 +66,16 @@ public class CabinetController {
 	 void setTaskId(int taskid) {
 		this.taskId=taskid;
 	}
-	
+	 
+	 
+	 /**
+	  * metoda potwierdzajca zadanie
+	  * {@value} task - obiekt klasy Task
+	  * {@value} bill - obiekt klasy Bill
+	  * {@value} service - obiekt klasy Services
+	  * {@value} reservations - lista obiektow klasy Rezerwacji
+	  * @param event zdarzenie wywolane przez przycisk
+	  */
 	@FXML
 	void confirmTask(ActionEvent event)  throws Exception {
 		Reservation current;

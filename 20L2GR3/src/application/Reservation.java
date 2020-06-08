@@ -8,6 +8,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name ="reservation")
+/**
+ * Model reprezentujacy rezerwacje, polaczony relacjami z pokojami
+ */
 public class Reservation {
 	
 @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

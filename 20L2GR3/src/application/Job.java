@@ -15,6 +15,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "job")
+/**
+ * Model reprezentujacy zawod, polaczony relacja OneToMany z uzytkownikiem
+ */
 public class Job {
 
 	@Id 

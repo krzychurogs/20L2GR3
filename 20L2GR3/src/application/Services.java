@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Model reprezentujacy serwisy, polaczony relacja z rachunkami,zadaniami
+ */
 @Entity
 @Table(name = "services")
 public class Services {

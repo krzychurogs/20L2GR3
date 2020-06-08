@@ -58,7 +58,9 @@ import generator.ReservationPdf;
 import generator.UserPDF;
 
 
-
+/**
+ * Kontroler obslugujacy Managera
+ */
 public class ManagerController implements Initializable{
 
 	
@@ -99,7 +101,9 @@ public class ManagerController implements Initializable{
     @FXML
     private Button pdfGenerate;
     public ObservableList<Item> counts;
-    
+    /**
+     * Metoda Initalize po uruchomieniu kontrolera w tabeli wyswietla sie lista gosci z ich rachunkami
+     */
 	 public void initialize(URL url, ResourceBundle rbl) {
 
 		 	list=FXCollections.observableArrayList();
@@ -118,7 +122,11 @@ public class ManagerController implements Initializable{
 	    
 	 }
 	 
-	 
+	  /**
+	     * Metoda wyswietlajaca tabelke gosci z ich rachunkiem
+	     * @param guestTable tabela z gosciami
+	     * @param resr lista rezerwacji(bill)
+	     */ 
 	public void guest()
 	{
 		btnstats.setVisible(true);
@@ -159,7 +167,11 @@ public class ManagerController implements Initializable{
 	 
 	 
 	 
-	 
+	/**
+     * Metoda sluzaca do ustawienia i wyswietlenia z pokojami i liczba rezerwacji danego pokoju
+     * @param employees lista obiektow zwracanych przez kwerende
+     * @param pomocnicza2 obiekt klasy Item,sluzacy do wyswietlenia w tableview
+     */
 	 public void setTable() {
 		 		guestTable.setVisible(false);
 		 		reservationRooms.setVisible(true);
@@ -212,7 +224,11 @@ public class ManagerController implements Initializable{
 		    	
 		 
 		 }
-	 
+	 /**
+	     * Metoda rozszerzajaca dane o rachunku uzytkownika(pokazuje co dokladnie kupil i za ile)
+	     * @param reservation obiekt klasy Reservation
+	     * @param editor to GridPane
+	     */
 	 private GridPane createEditor(TableRowExpanderColumn.TableRowDataFeatures<Reservation> param) {
 		 GridPane editor=new GridPane();
 		 editor.setPadding(new Insets(10));
@@ -225,7 +241,11 @@ public class ManagerController implements Initializable{
 		 return editor;
 		 
 	 }
-	 
+	 /**
+	     * Metoda wyliczajaca laczny przychod hotelu
+	     * @param reservations lista rezerwacji
+	     * @param price zmienna typu float przechowujaca laczny przychod firmy
+	     */
 	 public float profit()
 	 {
 		 
@@ -252,7 +272,10 @@ public class ManagerController implements Initializable{
 		    	}
 	    	return price;
 	 }
-	 
+	 		/**
+	     * Metoda sluzaca do wylogywania uzytkownika
+	     * @param event zdarzenie obslugiwane przez przycisk
+	     */
 	    @FXML
 	    void wyloguj(ActionEvent event) throws Exception {	
 	   	 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
@@ -263,6 +286,10 @@ public class ManagerController implements Initializable{
 	     window.show();
 	    	
 	    } 
+	    /**
+	     * Metoda wyswietlajaca formatke z tabela Gosci i ich rachunkami
+	    
+	     */
 	    public void screenGuest()
 	    {
 	    	guestTable.setVisible(true);
@@ -277,6 +304,12 @@ public class ManagerController implements Initializable{
 	    	
 	    }
 	    
+	    /**
+	     * Metoda sluzaca do filtrowania w tabeli pokoju/liczby jego rezerwacji
+	     * @param event dziala na wpisanie cos w textFieldzie
+	     * @param textfieldtofind to TextField do wyszukiwaniwa pokoju/liczby jego rezerwacji na nim jest event
+	     * @param sortedList posortowana lista obiekow klasy Item w Tabeli.
+	     */
 	    @FXML
 	    void search(KeyEvent event) {
 	    	FilteredList<Item> filteredData=new FilteredList<>(counts,p->true);
@@ -307,6 +340,12 @@ public class ManagerController implements Initializable{
 	    	});
 	    	
 	    }	
+	    /**
+	     * Metoda uruchumiajaca formatke ze statystykami
+	     * @param pieChartData wykres kolowy, opisujacy przychody za okreslone uslugi
+	     * @param list2 jest to lista rezerwacji
+	    
+	     */   
 	 public void stats(ObservableList<Reservation> list2) {
 		 	guestTable.setVisible(false);
 		 	reservationRooms.setVisible(false);
@@ -362,6 +401,12 @@ public class ManagerController implements Initializable{
 			
 			
 	}
+	 	/**
+	     * Metoda generujaca plik pdf ze statystykami
+	     * @param generator  obiekt klasy PdfGenerator
+	     * @param users jest to lista pracownikow
+	    
+	     */  
 	    public void generatePdf(ActionEvent event) {
 	    	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 		 	Session session=sessionFactory.openSession();

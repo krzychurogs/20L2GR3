@@ -18,6 +18,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "guest")
+/**
+ * Model reprezentuje Goscia z jego danymi
+ * @param name imie goscia
+ * @param surname nazwisko goscia
+ * @param reservation lista rezerwacji goscia
+ */
 public class Guest {
 
 	 @Id 

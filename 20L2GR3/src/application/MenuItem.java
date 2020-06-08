@@ -1,7 +1,9 @@
 package application;
 
 import java.util.Date;
-
+/**
+ * Klasa Pomocnicza wykorzystyana w tabeli zajetych pokoi w Recepcjoniscie
+ */
 public class MenuItem
 {
 	public int roomNumber;

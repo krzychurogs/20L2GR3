@@ -56,7 +56,10 @@ import generator.ReservationPdf;
 import generator.UserPDF;
 
 
+/**
+ * Kontroler uzytkownika o uprawnieniach administratora(zarzadzanie kontami).
 
+ */
 public class AdminController implements Initializable{
 
     @FXML
@@ -149,7 +152,10 @@ public class AdminController implements Initializable{
 	    		updateUser();
 	    		 
 	 }
-	 
+	  /**
+	     * Metoda sluzaca do wylogywania uzytkownika
+	     * @param event zdarzenie
+	     */
 	    @FXML
 	    void wyloguj(ActionEvent event) throws Exception {	
 	   	 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
@@ -160,7 +166,14 @@ public class AdminController implements Initializable{
 	     window.show();
 	    	
 	    } 
-
+	    
+	    /**
+	     * Metoda wyswietlajaca w Tabeli pracownikow i ich zawodcy.
+	     *
+	     * {@value} list jest to lista uzytkownikow
+	     * {@value} accounts jest to tabela wyswietlajaca pracownikow
+	     *
+	     */   
 	 public void setTables()
 	 {
 		 	SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -188,6 +201,13 @@ public class AdminController implements Initializable{
 	    	
 	    	session.close();
 	 }
+	  /**
+	     * Metoda umozliwia modyfikacje poszczegolnych komorek w tabeli uzytkonikow
+	     *
+	     *  {@value} jobs lista prac
+	     *  {@value}list jest to pracownikow
+	    
+	     */
 	 
 	 public void editableCols()
 	 {
@@ -271,7 +291,13 @@ public class AdminController implements Initializable{
 		 
 	 }
 
+	  /**
+	     * Metoda zapelniajaca choicebox zawodami dostepnymi w firmie
+	     *
+	     *  {@value} jobs jest to lista zawodow
+	     * {@value} choicejob jest to choiceBox,gdzie do wyboru mamy zawody
 	 
+	     */
 	 public void setChoiceJobs()
 	 {
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -291,7 +317,14 @@ public class AdminController implements Initializable{
 		    }
     	session.close();
 	 }
-	 
+	  /**
+	     * Metoda umozliwiajaca tworzenie Uzytkownika.
+	     *
+	     *  {@value} choicejob jest to choiceBox z pracami do wyboru
+	     *  {@value} job obiekt klasy Job
+	     *  {@value} haslo textfield z haslem
+	    
+	     */
 	 public void createUser(ChoiceBox<String> choicejob)
 	 {
 	
@@ -392,6 +425,10 @@ public class AdminController implements Initializable{
 		 setTables();
 		 session.close();
 	 }
+	 /**
+	     *  Metoda wyswietlajaca formatke z spisem pracownikow i potrzebnymi polami do tego
+	    	@param event dzialacy na przycisk
+	     */
 	 @FXML
 	    void showTable(ActionEvent event) {
 		  	surname.setVisible(false);
@@ -415,6 +452,10 @@ public class AdminController implements Initializable{
 		  	textviewfind.setVisible(true);
 		  	find.setVisible(true);
 	    }
+	 /**
+	     * Metoda wyswietlajaca formatke z tworzeniem konta i potrzebnymi polami do tego.
+	    	@param event dzialacy na przycisk
+	     */
 	 @FXML
 	    void showCreate(ActionEvent event) {
 		  	surname.setVisible(true);
@@ -439,6 +480,14 @@ public class AdminController implements Initializable{
 		  	find.setVisible(false);
 		 
 	    }
+	 /**
+	     * Metoda umozliwiajaca usuwanie pracownika.
+	     *   @param event dzialacy na przycisk
+	     *  {@value} selectedRow lista wybranych wierszow Uzytkownikow
+	     *  {@value} allPeople tabela wszystkich pracownikow
+	     *  {@value} haslo textfield z haslem
+	    
+	     */
 	 @FXML
 	    void deleteuser(ActionEvent event) {
 		 int a=JOptionPane.showConfirmDialog(null, "Czy Napewno?","Ostrzezenie", JOptionPane.YES_NO_CANCEL_OPTION);
@@ -470,7 +519,14 @@ public class AdminController implements Initializable{
 				 setTables();
 		 }
 		 }
-
+	 	/**
+	     * Metoda umozliwiajaca szukanie pracownika poprzez textfield(filtr).
+	     *	 @param event dzialacy na przycisk
+	     *  {@value} textviewfind textField do wyszukiwania pracownikow
+	     *  {@value} filteredData sflitrowana lista pracownikow
+	     *  {@value} sortedList sortowana lista filtrowanych pracownikow
+	    
+	     */
 	    @FXML
 	    void search(KeyEvent event) {
 	    	FilteredList<User> filteredData=new FilteredList<>(list,p->true);
@@ -506,7 +562,13 @@ public class AdminController implements Initializable{
 	    	
 	    }
 	   
-
+	    /**
+	     * Metoda umozliwiajaca aktualizowanie Uzytkownika.
+	     *  {@value} btnedit przycisk do edytowania
+	     *  {@value} obiekt klasy User,ktory jest aktualizowany
+	     
+	    
+	     */
 		public void updateUser()
 		{
 				SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();

@@ -56,6 +56,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+
+/**
+ * Kontroler obslugujacy Managera
+ */
 public class ReceptionistController implements Initializable{
 	@FXML
     private DatePicker datapick;
@@ -158,6 +162,8 @@ public class ReceptionistController implements Initializable{
 		    
 		    @FXML
 		    private Label serviceChoiceLabel;
+		    @FXML
+		    private Label descryptionChoiceLabel;
 		    
 		    
 		String loggedUserName;
@@ -169,6 +175,11 @@ public class ReceptionistController implements Initializable{
 		int idroom=0;
 		int iduser=0;
 		
+		/**
+		 * Metoda zamieniajaca tabelke z pokojami zajetymi/wolnymi 
+		 * @param change CheckBox zamieniajacy wolne/zajete pokoje
+		 * @param isSelected zmienna sprawdzaja czy checkBox jest zaznaczony
+		 */
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
 	    	
@@ -190,6 +201,10 @@ public class ReceptionistController implements Initializable{
 		 }
 	    	
 	    }
+	/**
+	   * Metoda sluzaca do wylogywania uzytkownika
+	   * @param event zdarzenie wywolane na przycisku
+	   */
 	 @FXML
 	    void wyloguj(ActionEvent event) throws Exception {	
 		 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
@@ -201,7 +216,12 @@ public class ReceptionistController implements Initializable{
 	    	
 	    }
 	 
-	 
+	 /**
+	     * Metoda wywolana przy uruchomieniu formatki, wyswietlajaca tabelke z rezerwacjami
+	     * @param url url
+	     * @param rbl rbl
+	     
+	     */
 	 public void initialize(URL url, ResourceBundle rbl) {
 		 item=FXCollections.observableArrayList();
 		 list=FXCollections.observableArrayList();
@@ -215,6 +235,7 @@ public class ReceptionistController implements Initializable{
 	    	userChoiceLabel.setVisible(false);
 		  	roomChoiceLabel.setVisible(false);
 		  	serviceChoiceLabel.setVisible(false);	
+		  	descryptionChoiceLabel.setVisible(false);
 	    	
 	    	setTables();
 	    	
@@ -235,7 +256,7 @@ public class ReceptionistController implements Initializable{
 	    	
 	    		    	
 		}
-	 
+	
 	 @Transactional
 	 private void usun() 
 		{
@@ -285,6 +306,14 @@ public class ReceptionistController implements Initializable{
 		 
 	 }
 	 
+
+	 	/**
+	     * Metoda umozliwiajaca dodanieGoscia
+	     * {@value} room - obiekt klasy Room
+	     * {@value} reservation - obiekt klasy Reservation
+	     
+	     
+	     */
 	 @FXML
 	 private void addGuest() {
 		 if(dateRoomsTable.getSelectionModel().getSelectedItems().isEmpty()==false &&firstDate.before(endDate)) {
@@ -313,7 +342,12 @@ public class ReceptionistController implements Initializable{
 	           a.show(); 
 		 }
 	 }
-	
+	 	/**
+	     * Metoda dodajaca pokoj do Rachunku
+	     * {@value} bill obiekt klasy Bill
+	     * @param rbl rbl
+	     
+	     */
 	 private void addRoomToBill(int id) {
 		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
 		Session session=sessionFactory.openSession();		 	
@@ -332,7 +366,14 @@ public class ReceptionistController implements Initializable{
 		 
 	 }
 	 
-	 
+	 /**
+	     * Metoda dodajaca pokoj do Rachunku
+	     * {@value} idroom - obiekt klasy Room
+	     * {@value} task - obiekt klasy Task
+	     * {@value} rooms - lista pokoi
+	     * @param event zdarzenie wywolane przez przycisk dodajacy zadanie
+	     
+	     */
 	 @FXML
 	  public void inputTask(ActionEvent event) throws Exception
 		{
@@ -405,7 +446,14 @@ public class ReceptionistController implements Initializable{
 		  	serviceChoiceLabel.setVisible(false);
 		  	}
 	 
-	 
+	    /**
+	     * Metoda zapisujaca rezerwacje
+	     * @param guest obiekt klasy Guest
+	     * @param roomId zmienna przechowujace id pokoju
+	     * @param data data rezerwacji
+	     * @param enddata data zakonczenia rezerwacji
+	     
+	     */
 	 public void input(Guest guest,int roomId,Date data,Date enddata) throws Exception
 	 {
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -424,24 +472,7 @@ public class ReceptionistController implements Initializable{
 		  
 				      
 	 }
-	 public static Connection getconnection()throws Exception
-		{
-				try {
-					String url="jdbc:mysql://localhost:3306/hotel";
-					String user = "root";
-				     String password = "";;
-			     Connection con=DriverManager.getConnection(url, user, password);
-			      return con;
-				
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-			return null;
-			
-		}
-	 	
-	 
-	 
+	 	 
 	 	
 	 List<Rooms> roomListToTask;
 	 	List<User> userListToTask;
@@ -503,7 +534,14 @@ public class ReceptionistController implements Initializable{
 	 	
 	 	}
 	 	
-	 	
+	 	/**
+	     * Metoda wywolana przy uruchomieniu formatki, wyswietlajaca tabelke z rezerwacjami
+	     * {@value} - reservation lista rezerwacji
+	     * {@value} - rooms lista Pokoi
+	     * {@value} - takenRooms tabela zajetych pokoi
+	     * {@value} - freeRooms tabela wolnych pokoi
+	     
+	     */	
 	 public void setTables()
 	 {
 		 
@@ -631,6 +669,7 @@ public class ReceptionistController implements Initializable{
 		  	userChoiceLabel.setVisible(false);
 		  	roomChoiceLabel.setVisible(false);
 		  	serviceChoiceLabel.setVisible(false);
+		  	descryptionChoiceLabel.setVisible(false);
 		  
 	    }
 	  @FXML
@@ -660,6 +699,7 @@ public class ReceptionistController implements Initializable{
 		  	userChoiceLabel.setVisible(true);
 		  	roomChoiceLabel.setVisible(true);
 		  	serviceChoiceLabel.setVisible(true);
+		  	descryptionChoiceLabel.setVisible(true);
 	    }
 	  
 	  
@@ -692,6 +732,7 @@ public class ReceptionistController implements Initializable{
 		  	descriptionTextField.setVisible(false);
 		  	userChoiceLabel.setVisible(false);
 		  	roomChoiceLabel.setVisible(false);
+		  	descryptionChoiceLabel.setVisible(false);
 		  	serviceChoiceLabel.setVisible(false);
 	    }
 	    

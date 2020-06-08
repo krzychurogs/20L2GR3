@@ -12,6 +12,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "task")
+/**
+ * Model reprezentujacy Zadanie, polaczony relacja z Pokojami i serwisami
+ */
 public class Task {
 	
 	@Id 

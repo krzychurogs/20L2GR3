@@ -66,6 +66,7 @@
       <TextField fx:id="descriptionTextField" layoutX="223.0" layoutY="220.0" />
       <Label fx:id="userChoiceLabel" layoutX="96.0" layoutY="100" text="Uzytkownik" />
       <Label fx:id="roomChoiceLabel" layoutX="96.0" layoutY="180.0" text="Pokoj" />
+      <Label fx:id="descryptionChoiceLabel" layoutX="96.0" layoutY="220.0" text="Opis" />
       <Label fx:id="serviceChoiceLabel" layoutX="96.0" layoutY="140.0" text="Usluga" />
      
     

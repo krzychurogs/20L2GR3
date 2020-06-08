@@ -30,7 +30,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import org.hibernate.service.ServiceRegistry;
-
+/**
+ * Klasa reprezentujaca logowanie(Startowa)
+ */
 public class Main extends Application {
 	
 	private static SessionFactory factory;
@@ -43,6 +45,17 @@ public class Main extends Application {
 	@FXML
 	private PasswordField passwordfield;
 	Pane content;
+	
+	
+	  
+    /**
+     * Metoda reprezentujaca logowanie.
+     * @param loggedUser obiekt modelu user
+     * @param passwordfield jest to PasswordField,z ktorego pobieramy wartosc haslo i sprawdzamy czy jest taki w bazie
+     * @param loginfield jest to TextField,z ktorego pobieramy wartosc loginu i sprawdzamy czy jest taki w bazie
+     
+    
+     */
 	public void Login(ActionEvent event)throws Exception
 	{	
 		SessionFactory factory=new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
@@ -135,7 +148,12 @@ public class Main extends Application {
 		}
 		
 	}
-	      
+	
+	  
+    /**
+     * Metoda ³adujaca formatke logowania(startowa)
+   
+     */
 	@Override
 	public void start(Stage primaryStage) {
 		
@@ -180,7 +198,10 @@ public class Main extends Application {
 		
 	}
 	
-
+	  
+    /**
+     * Metoda Main
+     */
 	public static void main(String[] args)  {
 		launch(args);
 	}
