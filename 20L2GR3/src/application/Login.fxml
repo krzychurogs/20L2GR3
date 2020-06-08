@@ -5,13 +5,23 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Main">
    <children>
-      <Button fx:id="login" layoutX="200.0" layoutY="248.0" mnemonicParsing="false" onAction="#Login" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #90EE90;" text="Zaloguj się" />
-      <TextField fx:id="loginfield" layoutX="183.0" layoutY="130.0" />
-      <Label layoutX="100.0" layoutY="134.0" prefHeight="17.0" prefWidth="50.0" text="Login" />
-      <Label layoutX="100.0" layoutY="179.0" prefHeight="17.0" prefWidth="41.0" text="Hasło" />
-      <PasswordField fx:id="passwordfield" layoutX="183.0" layoutY="175.0" />
+      <Button fx:id="login" layoutX="369.0" layoutY="223.0" mnemonicParsing="false" onAction="#Login" prefHeight="25.0" prefWidth="115.0" style="-fx-background-color: #90EE90;" text="Zaloguj się">
+         <font>
+            <Font size="16.0" />
+         </font></Button>
+      <TextField fx:id="loginfield" layoutX="247.0" layoutY="130.0" />
+      <Label layoutX="161.0" layoutY="129.0" prefHeight="17.0" prefWidth="50.0" text="Login">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label layoutX="161.0" layoutY="174.0" prefHeight="27.0" prefWidth="50.0" text="Hasło">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <PasswordField fx:id="passwordfield" layoutX="247.0" layoutY="175.0" />
    </children>
 </Pane>

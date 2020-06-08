@@ -56,10 +56,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-
-/**
- * Kontroler obslugujacy Managera
- */
 public class ReceptionistController implements Initializable{
 	@FXML
     private DatePicker datapick;
@@ -164,7 +160,7 @@ public class ReceptionistController implements Initializable{
 		    private Label serviceChoiceLabel;
 		    @FXML
 		    private Label descryptionChoiceLabel;
-		    
+		   
 		    
 		String loggedUserName;
 		public ObservableList <MenuItem> item;
@@ -175,11 +171,6 @@ public class ReceptionistController implements Initializable{
 		int idroom=0;
 		int iduser=0;
 		
-		/**
-		 * Metoda zamieniajaca tabelke z pokojami zajetymi/wolnymi 
-		 * @param change CheckBox zamieniajacy wolne/zajete pokoje
-		 * @param isSelected zmienna sprawdzaja czy checkBox jest zaznaczony
-		 */
 		@FXML
 	    void zmien(ActionEvent event) throws Exception {
 	    	
@@ -201,10 +192,6 @@ public class ReceptionistController implements Initializable{
 		 }
 	    	
 	    }
-	/**
-	   * Metoda sluzaca do wylogywania uzytkownika
-	   * @param event zdarzenie wywolane na przycisku
-	   */
 	 @FXML
 	    void wyloguj(ActionEvent event) throws Exception {	
 		 Parent application = FXMLLoader.load(getClass().getResource("Login.fxml"));
@@ -216,12 +203,7 @@ public class ReceptionistController implements Initializable{
 	    	
 	    }
 	 
-	 /**
-	     * Metoda wywolana przy uruchomieniu formatki, wyswietlajaca tabelke z rezerwacjami
-	     * @param url url
-	     * @param rbl rbl
-	     
-	     */
+	 
 	 public void initialize(URL url, ResourceBundle rbl) {
 		 item=FXCollections.observableArrayList();
 		 list=FXCollections.observableArrayList();
@@ -256,7 +238,7 @@ public class ReceptionistController implements Initializable{
 	    	
 	    		    	
 		}
-	
+	 
 	 @Transactional
 	 private void usun() 
 		{
@@ -268,18 +250,20 @@ public class ReceptionistController implements Initializable{
 		 		roomList = query.list();	
 		 			//daneguesta();//panel dodawania goscia wraz z data	
 					datapick.valueProperty().addListener((observable, oldDate, newDate)->{
+						 if(newDate!=null)
 						 firstDate=Date.valueOf(newDate);
 						 if(firstDate!=null && endDate!=null)	 
 						 refreshDateTable();
 					 });
 					enddatepicker.valueProperty().addListener((observable, oldDate, newDate)->{
+						if(newDate!=null)
 						 endDate=Date.valueOf(newDate);
 						 if(firstDate!=null && endDate!=null)
 						 refreshDateTable();
 				 	});			    	 		
 		 					 								    			     
 		}
-	 private void refreshDateTable() {
+	  private void refreshDateTable() {
 			if(!roomList.isEmpty()) {		
 				boolean add=true;
 				 list=FXCollections.observableArrayList();
@@ -291,7 +275,9 @@ public class ReceptionistController implements Initializable{
 		    		if((roomList.get(i).getReservation().get(j).getDates().before(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().after(endDate))||
 		    				(roomList.get(i).getReservation().get(j).getDates().before(endDate)&&roomList.get(i).getReservation().get(j).getEndDate().after(endDate))||
 		    				(roomList.get(i).getReservation().get(j).getDates().before(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().after(firstDate))||
-		    				(roomList.get(i).getReservation().get(j).getDates().after(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().before(endDate))) 
+		    				(roomList.get(i).getReservation().get(j).getDates().after(firstDate)&&roomList.get(i).getReservation().get(j).getEndDate().before(endDate))||
+		    				(roomList.get(i).getReservation().get(j).getDates().equals(firstDate))||(roomList.get(i).getReservation().get(j).getDates().equals(endDate))||
+		    				(roomList.get(i).getReservation().get(j).getEndDate().equals(endDate))||(roomList.get(i).getReservation().get(j).getEndDate().equals(firstDate))) 
 		    			add=false;
 		    	
 		    	}
@@ -306,20 +292,13 @@ public class ReceptionistController implements Initializable{
 		 
 	 }
 	 
-
-	 	/**
-	     * Metoda umozliwiajaca dodanieGoscia
-	     * {@value} room - obiekt klasy Room
-	     * {@value} reservation - obiekt klasy Reservation
-	     
-	     
-	     */
 	 @FXML
 	 private void addGuest() {
 		 if(dateRoomsTable.getSelectionModel().getSelectedItems().isEmpty()==false &&firstDate.before(endDate)) {
+			 if(!nameguest.getText().isEmpty()&&!surnameguest.getText().isEmpty()) {
 			 SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
 			 Session session=sessionFactory.openSession();		 	
-			session.beginTransaction();	
+			session.beginTransaction();				
 			Rooms room=session.get(Rooms.class, dateRoomsTable.getSelectionModel().getSelectedItems().get(0).getId());
 			String name=nameguest.getText();
 			String surname=surnameguest.getText();
@@ -333,6 +312,21 @@ public class ReceptionistController implements Initializable{
 			session.save(reservation);
 			session.getTransaction().commit();
 			addRoomToBill(bill.getId());
+			 }
+			 else {
+				 Alert a = new Alert(AlertType.NONE);
+				    a.setAlertType(AlertType.INFORMATION); 
+				    a.setContentText("Uzupelnij dane");
+				    a.getDialogPane().setPrefSize(200, 100);
+		           a.show(); 
+			 }
+		 }
+		 else if(dateRoomsTable.getSelectionModel().getSelectedItems().isEmpty()) {
+			 Alert a = new Alert(AlertType.NONE);
+			    a.setAlertType(AlertType.INFORMATION); 
+			    a.setContentText("Zaznacz pokoj");
+			    a.getDialogPane().setPrefSize(200, 100);
+	           a.show(); 
 		 }
 		 else if(!firstDate.before(endDate)) {
 			   Alert a = new Alert(AlertType.NONE);
@@ -342,38 +336,31 @@ public class ReceptionistController implements Initializable{
 	           a.show(); 
 		 }
 	 }
-	 	/**
-	     * Metoda dodajaca pokoj do Rachunku
-	     * {@value} bill obiekt klasy Bill
-	     * @param rbl rbl
-	     
-	     */
+	
 	 private void addRoomToBill(int id) {
-		SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
-		Session session=sessionFactory.openSession();		 	
-		session.beginTransaction();
-		Bill bill=session.get(Bill.class, id);
-		Services service=session.get(Services.class, 9);
-		bill.addServices(service);
-		session.save(bill);
-		session.save(service);
-		session.getTransaction().commit();
-		   Alert a = new Alert(AlertType.NONE);
-		    a.setAlertType(AlertType.INFORMATION); 
-		    a.setContentText("Rezerwacja dodana");
-		    a.getDialogPane().setPrefSize(200, 100);
-           a.show(); 
-		 
-	 }
+			SessionFactory sessionFactory=new Configuration().configure().buildSessionFactory();	
+			Session session=sessionFactory.openSession();		 	
+			session.beginTransaction();
+			Bill bill=session.get(Bill.class, id);
+			Services service=session.get(Services.class, 9);
+			bill.addServices(service);
+			
+			session.save(bill);
+			session.save(service);
+			session.getTransaction().commit();		
+			datapick.setValue(null);
+		    enddatepicker.setValue(null);
+		    dateRoomsTable.getItems().clear();
+			Alert a = new Alert(AlertType.NONE);
+			a.setAlertType(AlertType.INFORMATION); 
+			a.setContentText("Rezerwacja dodana");
+			a.getDialogPane().setPrefSize(200, 100);
+	        a.show(); 
+	           usun();
+			 
+		 }
 	 
-	 /**
-	     * Metoda dodajaca pokoj do Rachunku
-	     * {@value} idroom - obiekt klasy Room
-	     * {@value} task - obiekt klasy Task
-	     * {@value} rooms - lista pokoi
-	     * @param event zdarzenie wywolane przez przycisk dodajacy zadanie
-	     
-	     */
+	 
 	 @FXML
 	  public void inputTask(ActionEvent event) throws Exception
 		{
@@ -399,6 +386,7 @@ public class ReceptionistController implements Initializable{
 				List <Rooms>rooms=query1.list();
 				idroom=rooms.get(0);
 				opis=descriptionTextField.getText();
+				if(!choiceservice.getValue().isEmpty()&&!choiceroomfortask.getValue().isEmpty()) {
 			 Task task=new Task(0,userForTask,idroom,idservice,opis,true);
 			 session.save(task);
 			 session.getTransaction().commit();   
@@ -407,7 +395,17 @@ public class ReceptionistController implements Initializable{
 			    a.setContentText("Zadanie dodane");
 			    a.getDialogPane().setPrefSize(200, 100);
 	            a.show(); 
-			 
+	            session.close();
+	            setTables();
+				}
+				else {
+					Alert a = new Alert(AlertType.NONE);
+					  a.setAlertType(AlertType.INFORMATION); 
+					    a.setContentText("Wypelnij dane");
+					    a.getDialogPane().setPrefSize(200, 100);
+			            a.show(); 
+			            session.close();
+				}
 		}
 	 
 	 
@@ -444,16 +442,10 @@ public class ReceptionistController implements Initializable{
 		  	userChoiceLabel.setVisible(false);
 		  	roomChoiceLabel.setVisible(false);
 		  	serviceChoiceLabel.setVisible(false);
+		  	descryptionChoiceLabel.setVisible(false);
 		  	}
 	 
-	    /**
-	     * Metoda zapisujaca rezerwacje
-	     * @param guest obiekt klasy Guest
-	     * @param roomId zmienna przechowujace id pokoju
-	     * @param data data rezerwacji
-	     * @param enddata data zakonczenia rezerwacji
-	     
-	     */
+	 
 	 public void input(Guest guest,int roomId,Date data,Date enddata) throws Exception
 	 {
 		 SessionFactory sessionFactory=new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
@@ -465,14 +457,30 @@ public class ReceptionistController implements Initializable{
 			session.save(bill);
 			session.save(reservation);	
 		    session.getTransaction().commit();
-		 
 		      takenRooms.getItems().clear();
 		      freeRooms.getItems().clear();
 		      setTables();
 		  
 				      
 	 }
-	 	 
+	 public static Connection getconnection()throws Exception
+		{
+				try {
+					String url="jdbc:mysql://localhost:3306/hotel";
+					String user = "root";
+				     String password = "";;
+			     Connection con=DriverManager.getConnection(url, user, password);
+			      return con;
+				
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			return null;
+			
+		}
+	 	
+	 
+	 
 	 	
 	 List<Rooms> roomListToTask;
 	 	List<User> userListToTask;
@@ -515,6 +523,7 @@ public class ReceptionistController implements Initializable{
 	 	}
 	 	@FXML
 	 	void serviceChoiceBoxeEvent(ActionEvent event){
+	 		setTables();
 	 		 choiceroomfortask.getItems().clear();
 	 		Calendar calobj = Calendar.getInstance();
 	 		Date currentDate=new Date(calobj.getTime().getTime());
@@ -534,14 +543,7 @@ public class ReceptionistController implements Initializable{
 	 	
 	 	}
 	 	
-	 	/**
-	     * Metoda wywolana przy uruchomieniu formatki, wyswietlajaca tabelke z rezerwacjami
-	     * {@value} - reservation lista rezerwacji
-	     * {@value} - rooms lista Pokoi
-	     * {@value} - takenRooms tabela zajetych pokoi
-	     * {@value} - freeRooms tabela wolnych pokoi
-	     
-	     */	
+	 	
 	 public void setTables()
 	 {
 		 
@@ -732,8 +734,8 @@ public class ReceptionistController implements Initializable{
 		  	descriptionTextField.setVisible(false);
 		  	userChoiceLabel.setVisible(false);
 		  	roomChoiceLabel.setVisible(false);
-		  	descryptionChoiceLabel.setVisible(false);
 		  	serviceChoiceLabel.setVisible(false);
+		  	descryptionChoiceLabel.setVisible(false);
 	    }
 	    
 	

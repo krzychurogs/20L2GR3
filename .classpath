@@ -22,6 +22,19 @@
 	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/hibernate-release-5.4.14.Final/lib/required/txw2-2.3.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/mysql-connector-java-5.1.48-bin.jar"/>
 	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/controlsfx-8.40.16.jar"/>
-	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/mojpliktest.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itextpdf-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itextpdf-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itextpdf-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itext-pdfa-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itext-pdfa-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itext-pdfa-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itext-xtra-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itext-xtra-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/itext-xtra-5.5.9-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/xmlworker-5.5.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/xmlworker-5.5.9-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Desktop/hs/itempdf/xmlworker-5.5.9-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="C:/Users/krzysztof/Downloads/pdfgenerator.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

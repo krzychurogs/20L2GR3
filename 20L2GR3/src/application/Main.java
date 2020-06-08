@@ -23,6 +23,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -145,6 +147,21 @@ public class Main extends Application {
 			pane.getChildren().setAll(panes);
 	     		
 		}
+		else {
+			Alert a = new Alert(AlertType.NONE);
+		    a.setAlertType(AlertType.INFORMATION); 
+		    a.setContentText("Zle dane logowania");
+		    a.getDialogPane().setPrefSize(200, 100);
+           a.show(); 
+		}
+		
+		}
+		else {
+			Alert a = new Alert(AlertType.NONE);
+		    a.setAlertType(AlertType.INFORMATION); 
+		    a.setContentText("Zle dane logowania");
+		    a.getDialogPane().setPrefSize(200, 100);
+           a.show(); 
 		}
 		
 	}
@@ -162,7 +179,7 @@ public class Main extends Application {
 			 Parent root=FXMLLoader.load(getClass().getResource("Login.fxml"));
 			Scene scene = new Scene(root,600,400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			
+			primaryStage.setResizable(false);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

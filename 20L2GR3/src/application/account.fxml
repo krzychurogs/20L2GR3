@@ -32,12 +32,12 @@
       <Label fx:id="lbjob" layoutX="160.0" layoutY="263.0" text="Zawód" />
       <PasswordField fx:id="password" layoutX="235.0" layoutY="188.0" />
       <PasswordField fx:id="rpassword" layoutX="235.0" layoutY="223.0" />
-      <TableView fx:id="accounts" layoutX="155.0" layoutY="45.0" prefHeight="268.0" prefWidth="404.0" visible="false">
+      <TableView fx:id="accounts" layoutX="155.0" layoutY="45.0" prefHeight="268.0" prefWidth="404.0"  visible="false">
         <columns>
-          <TableColumn fx:id="tablename" prefWidth="53.0" text="Imie" />
-          <TableColumn fx:id="tablenazwisko" prefWidth="64.0" text="Nazwisko" />
-            <TableColumn fx:id="tablelogin" prefWidth="122.0" text="Login" />
-            <TableColumn fx:id="tablezawod" prefWidth="163.0" text="Zawód" />
+          <TableColumn style="-fx-alignment: CENTER;" fx:id="tablename" prefWidth="53.0" text="Imie" />
+          <TableColumn style="-fx-alignment: CENTER;" fx:id="tablenazwisko" prefWidth="64.0" text="Nazwisko" />
+            <TableColumn style="-fx-alignment: CENTER;" fx:id="tablelogin" prefWidth="122.0" text="Login" />
+            <TableColumn style="-fx-alignment: CENTER;" fx:id="tablezawod" prefWidth="163.0" text="Zawód" />
     
         </columns>
       </TableView>
