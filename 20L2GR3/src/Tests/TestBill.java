@@ -2,6 +2,7 @@ package Tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,16 @@ public class TestBill {
         bill.setServices(services);
         assertEquals(services,bill.getServices());
 	}
+	@Test
+    void getProfit() {
+		Services service= new Services("pizza",14.0F);
+		List<Services> list = new ArrayList<Services>();
+		list.add(service);
+		Reservation reservation = new Reservation(bill);
 	
+		bill.setReservation(reservation);
+		bill.setServices(list);
+		assertEquals(14, 14, 1e-15);
+	}
 	
 }

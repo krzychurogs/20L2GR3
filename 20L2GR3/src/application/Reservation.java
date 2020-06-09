@@ -95,6 +95,9 @@ public Reservation(int id, Rooms room, Date data, Date enddata, Guest guest, Bil
 public Reservation() {
 	super();
 }
+public Reservation(Bill bill) {
+	this.bill = bill;
+}
 
 
 

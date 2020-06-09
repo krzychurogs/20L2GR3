@@ -41,11 +41,9 @@ public class Services {
  	private List<Bill> bill;
 
 	
+
+
 	
-	public Services() {
-		super();
-		
-	}
 
 	public Services(int id, String name, float price, List<Task> task, List<Bill> bill) {
 		super();
@@ -54,6 +52,16 @@ public class Services {
 		this.price = price;
 		this.task = task;
 		this.bill = bill;
+	}
+
+	public Services(String name, Float price) {
+		this.price = price;
+		this.name = name;
+		
+	}
+
+	public Services() {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
