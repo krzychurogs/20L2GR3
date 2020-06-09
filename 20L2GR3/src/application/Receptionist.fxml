@@ -16,9 +16,9 @@
       <TableView fx:id="freeRooms" layoutX="95.0" layoutY="87.0" prefHeight="200.0" prefWidth="483.0" style="-fx-background-color: #90EE90;">
         <columns>
               
-              	<TableColumn style="-fx-alignment: CENTER;" id="room_numbefr" fx:id="roomNumberF" prefWidth="142.0" text="Nr_Pokoju" />
-                <TableColumn style="-fx-alignment: CENTER;" id="number_of_seatsf" fx:id="numberOfSeatsF" prefWidth="145.0" text="Miejsca" />
-                <TableColumn style="-fx-alignment: CENTER;" id="lvlf" fx:id="lvlF" prefWidth="145.0" text="Poziom" />
+              	<TableColumn  id="room_numbefr" fx:id="roomNumberF" prefWidth="142.0" text="Nr_Pokoju" />
+                <TableColumn  id="number_of_seatsf" fx:id="numberOfSeatsF" prefWidth="145.0" text="Miejsca" />
+                <TableColumn  id="lvlf" fx:id="lvlF" prefWidth="145.0" text="Poziom" />
                
        </columns>
       </TableView>
@@ -32,11 +32,11 @@
       <TableView fx:id="takenRooms" layoutX="97.0" layoutY="87.0" prefHeight="200.0" prefWidth="483.0" style="-fx-background-color: #90EE90;">
 		<columns>
                 
-                  <TableColumn style="-fx-alignment: CENTER;" id="room_number" fx:id="roomNumber" prefWidth="62.4000244140625" text="Nr_Pokoju" />
-                  <TableColumn style="-fx-alignment: CENTER;" id="number_of_seats" fx:id="numberOfSeats" prefWidth="80.0" text="Miejsca" />
-                  <TableColumn style="-fx-alignment: CENTER;" id="lvl" fx:id="lvl" prefWidth="52.0" text="Poziom" />
-                  <TableColumn style="-fx-alignment: CENTER;" id="dates" fx:id="dates" minWidth="0.0" prefWidth="123.0" text="Data_zabukowania" />
-           		 <TableColumn style="-fx-alignment: CENTER;" id="dates" fx:id="enddate" prefWidth="200.0" text="Data_zakonczenia" />
+                  <TableColumn  id="room_number" fx:id="roomNumber" prefWidth="62.4000244140625" text="Nr_Pokoju" />
+                  <TableColumn  id="number_of_seats" fx:id="numberOfSeats" prefWidth="80.0" text="Miejsca" />
+                  <TableColumn  id="lvl" fx:id="lvl" prefWidth="52.0" text="Poziom" />
+                  <TableColumn  id="dates" fx:id="dates" minWidth="0.0" prefWidth="123.0" text="Data_zabukowania" />
+           		 <TableColumn  id="dates" fx:id="enddate" prefWidth="200.0" text="Data_zakonczenia" />
               </columns>
       </TableView>
       <Button fx:id="dodajroom" layoutX="506.0" layoutY="339.0" mnemonicParsing="false" style="-fx-background-color: #90EE90; -fx-background-radius: 10;" text="Zarezerwuj" />

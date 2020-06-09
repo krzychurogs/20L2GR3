@@ -341,6 +341,7 @@ public class AdminController implements Initializable {
 				as.setContentText("Uzytkownik dodany");
 				as.getDialogPane().setPrefSize(200, 100);
 				as.show();
+				setTables();
 
 			} else if (dane.equals("kucharz")) {
 
@@ -352,6 +353,7 @@ public class AdminController implements Initializable {
 				as.setContentText("Uzytkownik dodany");
 				as.getDialogPane().setPrefSize(200, 100);
 				as.show();
+				setTables();
 			} else if (dane.equals("sprzatacz")) {
 
 				User user = new User(imie, nazwisko, logi, haslo, job2);
@@ -362,6 +364,7 @@ public class AdminController implements Initializable {
 				as.setContentText("Uzytkownik dodany");
 				as.getDialogPane().setPrefSize(200, 100);
 				as.show();
+				setTables();
 
 			} else if (dane.equals("manager")) {
 
@@ -373,6 +376,7 @@ public class AdminController implements Initializable {
 				as.setContentText("Uzytkownik dodany");
 				as.getDialogPane().setPrefSize(200, 100);
 				as.show();
+				setTables();
 
 			}
 

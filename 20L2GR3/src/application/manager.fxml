@@ -11,11 +11,11 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ADD8E6;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ManagerController">
    <children>
-      <Button fx:id="statstobills" layoutX="484.0" layoutY="65.0" mnemonicParsing="false" onAction="#screenGuest" prefHeight="35.0" prefWidth="135.0" text="Rachunki" visible="false" />
+      <Button fx:id="statstobills" layoutX="484.0" layoutY="65.0" mnemonicParsing="false" onAction="#screenGuest" prefHeight="35.0" prefWidth="113.0" text="Rachunki" visible="false" />
       <TableView fx:id="guestTable" layoutX="62.0" layoutY="55.0" prefHeight="200.0" prefWidth="399.0">
         <columns>
-          <TableColumn style="-fx-alignment: CENTER;" fx:id="name" prefWidth="130.0" text="Imie i Nazwisko" />
-           <TableColumn style="-fx-alignment: CENTER;" fx:id="balance" prefWidth="220.0" text="Rachunek" />
+          <TableColumn  fx:id="name" prefWidth="130.0" text="Imie i Nazwisko" />
+           <TableColumn  fx:id="balance" prefWidth="220.0" text="Rachunek" />
           
         </columns>
       </TableView>

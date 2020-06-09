@@ -397,6 +397,7 @@ public class ReceptionistController implements Initializable{
 	            a.show(); 
 	            session.close();
 	            setTables();
+	            
 				}
 				else {
 					Alert a = new Alert(AlertType.NONE);
