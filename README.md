@@ -58,11 +58,11 @@ Administrator może zarządzać kontami użytkowników. Może zarówno tworzyć,
 
 # Obsługa aplikacji
 Domyślne dane logowania:
-Administrator: admin 12345
-Recepcjonista: recepcjonista 12345
-Manager: manager 12345
-Kucharz: kucharz 12345
-Sprzatacz: sprzatacz 12345
+-Administrator: admin 12345
+-Recepcjonista: recepcjonista 12345
+-Manager: manager 12345
+-Kucharz: kucharz 12345
+-Sprzatacz: sprzatacz 12345
 
 Po uruchomieniu aplikacji wyświetlone zostanie menu główne aplikacji.
 
