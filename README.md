@@ -56,4 +56,27 @@ Administrator może zarządzać kontami użytkowników. Może zarówno tworzyć,
 # Diagram Sekwencji
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_sekwencji.png)
 
+# Obsługa aplikacji
+Domyślne dane logowania:
+Administrator: admin 12345
+Recepcjonista: recepcjonista 12345
+Manager: manager 12345
+Kucharz: kucharz 12345
+Sprzatacz: sprzatacz 12345
+
+Po uruchomieniu aplikacji wyświetlone zostanie menu główne aplikacji.
+# Wykonał
+- Krzysztof Rogowski
+- Dawid Hubicki
+- Piotr Kłos
+- Damian Gaworowski
+
+# Technologie
+- JavaFx
+- Hibernate
+- MySQL
+- CSS
+
+
+
 
