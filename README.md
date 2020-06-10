@@ -41,4 +41,19 @@ Administrator może zarządzać kontami użytkowników. Może zarówno tworzyć,
 - moze usuwac/edytowac dane pracowników
 - widzi liste wszystkich pracownikow
 
+# Diagramy UML
+
+# Diagram aktywnosci
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_aktywnosci.JPG)
+
+# Diagram przypadkow uzycia
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_przypadkow_uzycia.JPG)
+
+# Diagram Klas
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_klas.JPG)
+
+# Diagram Sekwencji
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_sekwencji.png)
+
 
