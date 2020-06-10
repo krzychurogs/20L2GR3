@@ -66,7 +66,7 @@ Sprzatacz: sprzatacz 12345
 
 Po uruchomieniu aplikacji wyświetlone zostanie menu główne aplikacji.
 
-# 2.Obsługa aplikacji z konta recepcjonisty.
+# Obsługa aplikacji z konta recepcjonisty.
 
 Recepcjonista w swoim głównym oknie widzi pokoje które znajdują się w hotelu. Po
 rozwinięciu plusem z prawej strony, ukażą się aktualne rezerwacje dla danego pokoju. Po
@@ -92,7 +92,7 @@ Po zatwierdzeniu zadania ukaża się wybranemu użytkownikowi.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Recepcjonista%20-%20rezerwacja%202.JPG)
 
-# 3.Obsługa aplikacji z konta kucharza.
+# Obsługa aplikacji z konta kucharza.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/zadania.JPG)\
 
@@ -101,7 +101,7 @@ z nich, może zatwierdzić wykonanie zadania lub je anulować. Po zatwierdzeniu 
 automatycznie, doliczone do rachunku klienta który znajduje się aktualnie w pokoju
 zapisanym do zamówienia.
 
-# 4.Obsługa aplikacji z konta sprzątacza.
+# Obsługa aplikacji z konta sprzątacza.
 
 Sprzątacz działa na takiej samej zasadzie co kucharz ale po zamówieniu uzupełnia
 produkty które zniknęły z barku. Są one wtedy doliczane do rachunku.
@@ -109,13 +109,13 @@ produkty które zniknęły z barku. Są one wtedy doliczane do rachunku.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Barek.jpg)\
 
-# 5.Obsługa aplikacji z konta administratora.
+# Obsługa aplikacji z konta administratora.
 Administrator może tworzyć, edytować lub usuwać konta użytkowników.
 
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/stw%C3%B3rz%20konto.jpg)\
 
-# 6.Obsługa aplikacji z konta managera.
+# Obsługa aplikacji z konta managera.
 
 Manager może przeglądać statystyki. Znajdują się tam wykres sprzedaży usług
 hotelowych oraz najczęściej wybierane pokoje. Ten użytkownik ma możliwość
