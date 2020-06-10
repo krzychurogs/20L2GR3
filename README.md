@@ -65,6 +65,64 @@ Kucharz: kucharz 12345
 Sprzatacz: sprzatacz 12345
 
 Po uruchomieniu aplikacji wyświetlone zostanie menu główne aplikacji.
+
+2.Obsługa aplikacji z konta recepcjonisty.
+
+Recepcjonista w swoim głównym oknie widzi pokoje które znajdują się w hotelu. Po
+rozwinięciu plusem z prawej strony, ukażą się aktualne rezerwacje dla danego pokoju. Po
+zaznaczeniu „zajęte pokoje” wyświetlą nam się wszystkie rezerwacje w hotelu, które
+będziemy mogli sortować. 
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Recepcjonista.JPG)
+
+Po kliknięciu „zarezerwuj” ukaże nam się okno do rezerwacji. W polach do wybierania
+daty, możemy wybrać przedział czasowy, w jakim dany gość chce zatrzymać się w hotelu.
+Po uzupełnieniu dat pokaże nam się lista wolnych w tym terminie pokoi. Możemy
+zatwierdzić rezerwację przyciskiem „wyślij”.
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Recepcjonista-rezerwajc.JPG)
+
+Recepcjonista może również dodawać zadania dla kucharzy oraz sprzątaczy. Po kliknięciu
+w „Dodaj zadanie” ukaże się okno dodawania zadania. Recepcjonista może wybrać
+-użytkownika
+-usługę
+-pokój
+-dodać krótki opis
+Po zatwierdzeniu zadania ukaża się wybranemu użytkownikowi.
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Recepcjonista%20-%20rezerwacja%202.JPG)
+
+3.Obsługa aplikacji z konta kucharza.
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/zadania.JPG)\
+
+Kucharzowi wyświetlają się zadania stworzone przez recepcjonistę. Po wybraniu któregoś
+z nich, może zatwierdzić wykonanie zadania lub je anulować. Po zatwierdzeniu zostanie
+automatycznie, doliczone do rachunku klienta który znajduje się aktualnie w pokoju
+zapisanym do zamówienia.
+
+4.Obsługa aplikacji z konta sprzątacza.
+
+Sprzątacz działa na takiej samej zasadzie co kucharz ale po zamówieniu uzupełnia
+produkty które zniknęły z barku. Są one wtedy doliczane do rachunku.
+
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Barek.jpg)\
+
+5.Obsługa aplikacji z konta administratora.
+Administrator może tworzyć, edytować lub usuwać konta użytkowników.
+
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/stw%C3%B3rz%20konto.jpg)\
+
+6.Obsługa aplikacji z konta managera.
+
+Manager może przeglądać statystyki. Znajdują się tam wykres sprzedaży usług
+hotelowych oraz najczęściej wybierane pokoje. Ten użytkownik ma możliwość
+generowania pliku PDF z listą gości oraz listą użytkowników.
+
+![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/%C5%82acznyprzych%C3%B3d.JPG)\
+
 # Wykonał
 - Krzysztof Rogowski
 - Dawid Hubicki
