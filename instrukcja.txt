@@ -1,6 +1,0 @@
-Aby program poprawnie działał należy: 
-1.Zainstalować program za pomocą instalatora
-2.Zainstalować program XAMPP
-3.Uruchomić serwer apache oraz serwer bazodanowy w programie XAMPP
-4.Zaimportować bazę danych hotel dołączoną w folderze(z pliku hotel.sql)
-5.Uruchomić program
