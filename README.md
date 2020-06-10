@@ -58,11 +58,11 @@ Administrator może zarządzać kontami użytkowników. Może zarówno tworzyć,
 
 # Obsługa aplikacji
 Domyślne dane logowania:
--Administrator: admin 12345
--Recepcjonista: recepcjonista 12345
--Manager: manager 12345
--Kucharz: kucharz 12345
--Sprzatacz: sprzatacz 12345
+- Administrator: admin 12345
+- Recepcjonista: recepcjonista 12345
+- Manager: manager 12345
+- Kucharz: kucharz 12345
+- Sprzatacz: sprzatacz 12345
 
 Po uruchomieniu aplikacji wyświetlone zostanie menu główne aplikacji.
 
@@ -84,10 +84,10 @@ zatwierdzić rezerwację przyciskiem „wyślij”.
 
 Recepcjonista może również dodawać zadania dla kucharzy oraz sprzątaczy. Po kliknięciu
 w „Dodaj zadanie” ukaże się okno dodawania zadania. Recepcjonista może wybrać
--użytkownika
--usługę
--pokój
--dodać krótki opis
+- użytkownika
+- usługę
+- pokój
+- dodać krótki opis
 Po zatwierdzeniu zadania ukaża się wybranemu użytkownikowi.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Recepcjonista%20-%20rezerwacja%202.JPG)
