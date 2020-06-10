@@ -17,43 +17,43 @@ Manager posiada wgląd do rachunków klientów, jak i również do statystyk zwi
 Administrator może zarządzać kontami użytkowników. Może zarówno tworzyć, usuwać jak i edytować wszystkie konta znajdujące się w systemie. Może również tworzyć innych administratorów. 
 
 # Analiza wymagań funkcjonalnych
-# Recepcjonista
+## Recepcjonista
 - moze zarezerwowac gosciowi hotelowemu pokoj
 - moze dodac zadanie dla kucharza 
 - moze dodac zadanie dla sprzatacza
 - moze przegladnac liste aktualnych rezerwacji
 - moze przegladnac liste wszystkich rezerwacji dla danego pokoju
-# Kucharz
+## Kucharz
 - moze wykonywac dania zadane przez recepcjoniste
 - moze anulowac dania zadane przez recepcjoniste
-# Sprzatacz
+## Sprzatacz
 - moze wykonywac dania zadane przez recepcjoniste
 - moze anulowac dania zadane przez recepcjoniste
 - sprawdza stan barku i informuje o brakach w barku w skutek czego dodawane sa do rachunku
-# Manager
+## Manager
 - moze sprawdzic statystyki finansowe, jakie zyski przynosi poszczegolna usługa
 - widzi calkowity przychód firmy
 - moze wygenerowac statystyki do pliku pdf
 - moze sprawdzic dokladne rachunki gosci hotelowych ile jaki gość wydał na co
 - moze sprawdzic ile jaki pokoj był razy rezerwowany
-# Admin
+## Admin
 - moze tworzyc konta pracownikow
 - moze usuwac/edytowac dane pracowników
 - widzi liste wszystkich pracownikow
 
 # Diagramy UML
 
-# Diagram aktywnosci
+## Diagram aktywnosci
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_aktywnosci.JPG)
 
-# Diagram przypadkow uzycia
+## Diagram przypadkow uzycia
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_przypadkow_uzycia.JPG)
 
-# Diagram Klas
+## Diagram Klas
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_klas.JPG)
 
-# Diagram Sekwencji
+## Diagram Sekwencji
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/diagram_sekwencji.png)
 
 # Obsługa aplikacji
@@ -66,7 +66,7 @@ Domyślne dane logowania:
 
 Po uruchomieniu aplikacji wyświetlone zostanie menu główne aplikacji.
 
-# Obsługa aplikacji z konta recepcjonisty.
+## Obsługa aplikacji z konta recepcjonisty.
 
 Recepcjonista w swoim głównym oknie widzi pokoje które znajdują się w hotelu. Po
 rozwinięciu plusem z prawej strony, ukażą się aktualne rezerwacje dla danego pokoju. Po
@@ -92,7 +92,7 @@ Po zatwierdzeniu zadania ukaża się wybranemu użytkownikowi.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Recepcjonista%20-%20rezerwacja%202.JPG)
 
-# Obsługa aplikacji z konta kucharza.
+## Obsługa aplikacji z konta kucharza.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/zadania.JPG)\
 
@@ -101,7 +101,7 @@ z nich, może zatwierdzić wykonanie zadania lub je anulować. Po zatwierdzeniu 
 automatycznie, doliczone do rachunku klienta który znajduje się aktualnie w pokoju
 zapisanym do zamówienia.
 
-# Obsługa aplikacji z konta sprzątacza.
+## Obsługa aplikacji z konta sprzątacza.
 
 Sprzątacz działa na takiej samej zasadzie co kucharz ale po zamówieniu uzupełnia
 produkty które zniknęły z barku. Są one wtedy doliczane do rachunku.
@@ -109,13 +109,13 @@ produkty które zniknęły z barku. Są one wtedy doliczane do rachunku.
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/Barek.jpg)\
 
-# Obsługa aplikacji z konta administratora.
+## Obsługa aplikacji z konta administratora.
 Administrator może tworzyć, edytować lub usuwać konta użytkowników.
 
 
 ![alt text](https://github.com/krzychurogs/20L2GR3/blob/master/diagramy/stw%C3%B3rz%20konto.jpg)\
 
-# Obsługa aplikacji z konta managera.
+## Obsługa aplikacji z konta managera.
 
 Manager może przeglądać statystyki. Znajdują się tam wykres sprzedaży usług
 hotelowych oraz najczęściej wybierane pokoje. Ten użytkownik ma możliwość
