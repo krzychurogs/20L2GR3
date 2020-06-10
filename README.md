@@ -1,6 +1,6 @@
 # 20L2GR3
 
-Opis Projektu
+# Opis Projektu
 Aplikacja dla pracowników hotelu ma na celu usprawnienie i monitorowanie pracy wykonywanej przez pracowników 
 firmy oraz zarządzaniu zasobami.
 
@@ -15,3 +15,30 @@ Sprzątacz również posiada listę zadań lecz w jego przypadku są to pokoje d
 Manager posiada wgląd do rachunków klientów, jak i również do statystyk związanych z zasobami hotelu. Każde wykonane zadanie trafia do niego co pozwala mu zarządzać biznesową stroną projektu. Może on również generować raport finansowy oraz zarobków hotelu.
 
 Administrator może zarządzać kontami użytkowników. Może zarówno tworzyć, usuwać jak i edytować wszystkie konta znajdujące się w systemie. Może również tworzyć innych administratorów. 
+
+# Analiza wymagań funkcjonalnych
+# Recepcjonista
+- moze zarezerwowac gosciowi hotelowemu pokoj
+- moze dodac zadanie dla kucharza 
+- moze dodac zadanie dla sprzatacza
+- moze przegladnac liste aktualnych rezerwacji
+- moze przegladnac liste wszystkich rezerwacji dla danego pokoju
+# Kucharz
+- moze wykonywac dania zadane przez recepcjoniste
+- moze anulowac dania zadane przez recepcjoniste
+# Sprzatacz
+- moze wykonywac dania zadane przez recepcjoniste
+- moze anulowac dania zadane przez recepcjoniste
+- sprawdza stan barku i informuje o brakach w barku w skutek czego dodawane sa do rachunku
+# Manager
+- moze sprawdzic statystyki finansowe, jakie zyski przynosi poszczegolna usługa
+- widzi calkowity przychód firmy
+- moze wygenerowac statystyki do pliku pdf
+- moze sprawdzic dokladne rachunki gosci hotelowych ile jaki gość wydał na co
+- moze sprawdzic ile jaki pokoj był razy rezerwowany
+# Admin
+- moze tworzyc konta pracownikow
+- moze usuwac/edytowac dane pracowników
+- widzi liste wszystkich pracownikow
+
+
